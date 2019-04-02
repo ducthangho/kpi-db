@@ -1,0 +1,40 @@
+#index .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+#index .trigger:hover {
+  color: #1890ff;
+}
+
+#index .logo {
+  height: 40px;
+  width: 40px;
+  background-image: url(logo2.png);
+  background-size: 100%;
+  background-position: center;
+  margin: 10px 10px 10px 20px;
+}
+
+#my-sider .ant-menu-inline,#my-sider  .ant-menu-vertical,#my-sider  .ant-menu-vertical-left {
+  border-right: 1px solid #bbb !important;
+}
+.ant-table-row-level-0 {
+  font-weight: bold !important;
+}
+.ant-layout-sider-light {
+  background: #fff;
+  border-right: 1px solid #bbb !important;
+}
+
+#my-sider .ant-layout-sider-trigger {
+  width: 79px !important;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+}
