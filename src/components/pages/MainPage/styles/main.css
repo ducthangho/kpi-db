@@ -34,7 +34,7 @@
   width: 79px !important;
 }
 
-body {
-  width: 100vw;
-  height: 100vh;
+html, body {
+  width: 100%;
+  height: 100%;
 }

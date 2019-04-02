@@ -71,11 +71,20 @@ export class PBIStore {
   }
 
   clearPages(){
-    this.pages.length = 0;
+    this.store.pages.length = 0;
   } 
 
   addPage = (page) => {
-    this.pages.push(page);
+    console.log(page.name + " - " + page.displayName);
+    this.store.pages.push(page);
+  }
+
+  setCurrentPage = (page) => {
+    this.store.currentPage = page;
+  }
+
+  getPages = () => {
+    return this.store.pages;
   }
 }
 
@@ -85,8 +94,10 @@ decorate(PBIStore, {
   saveEmbed: action,
   toggleLoaded: action,
   clearPages: action,
-  addPage: action
+  addPage: action,
+  setCurrentPage: action
 
 })
 
-export const getStore = () => createContext(new PBIStore())
+var Store = createContext(new PBIStore());
+export const getStore = () => Store;
