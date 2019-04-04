@@ -80,7 +80,7 @@ const MainSidebar = observer ( () => {
              navigateTo(Layer1);   
           }}          
         >
-          <Icon type="experiment" />
+          <Icon type="appstore" />
           <span>Thông tin chung</span>
         </Menu.Item>
         <Menu.Item
@@ -90,7 +90,7 @@ const MainSidebar = observer ( () => {
             navigateTo(TTKT);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="rise" />
           <span>Tăng trưởng kinh tế</span>
         </Menu.Item>
 
@@ -101,7 +101,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="deployment-unit" />
           <span>Ổn định kinh tế vĩ mô</span>
         </Menu.Item>
 
@@ -112,7 +112,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="dollar" />
           <span>Tài chính công</span>
         </Menu.Item>
 
@@ -123,7 +123,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="shopping" />
           <span>Môi trường kinh doanh</span>
         </Menu.Item>
 
@@ -134,7 +134,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="bank" />
           <span>Bộ máy hành chính</span>
         </Menu.Item>
 
@@ -145,7 +145,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="tool" />
           <span>Lao động việc làm</span>
         </Menu.Item>
 
@@ -156,7 +156,7 @@ const MainSidebar = observer ( () => {
             navigateTo(VĐXH);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="usergroup-add" />
           <span>Các vấn đề xã hội</span>
         </Menu.Item>
 
@@ -167,7 +167,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="rest" />
           <span>Môi trường</span>
         </Menu.Item>
 
@@ -178,7 +178,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="reload" />
+          <Icon type="build" />
           <span>Kết cấu hạ tầng và khoa học công nghệ</span>
         </Menu.Item>
       </Menu>
