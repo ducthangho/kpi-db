@@ -56,10 +56,10 @@ const powerbi = new pbi.service.Service(
 // const reportURL = "https://app.powerbi.com/reportEmbed?reportId=037d51e1-7d74-48ac-b066-389ddb9796b1&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
 // const reportID = "5b65576a-3027-4c09-9270-2992c709b379";
 // const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
-const reportURL = "https://app.powerbi.com/reportEmbed?reportId=e24a387d-3a3f-496a-bbe8-57bea4d19d7f&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
-const reportID = "e24a387d-3a3f-496a-bbe8-57bea4d19d7f";
+const reportURL = "https://app.powerbi.com/reportEmbed?reportId=3f558192-1d40-4d12-949d-7176f5fe3310&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
+const reportID = "3f558192-1d40-4d12-949d-7176f5fe3310";
 const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
-const datasetID ="6f15a837-92de-48ab-ad42-29de5aa0e691"
+const datasetID ="6f15a837-92de-48ab-ad42-29de5aa0e691";
 
 const getEmbedToken = "https://getembedfuncapp.azurewebsites.net/api/HttpTrigger1?code=MWakS6g9stuWnb1syRFdjqWDUZvmyYIYg3JeYFp23IUd6J/9jRTaSQ==&reportID=" + reportID + "&groupId=" + groupID;
 const source = fromEvent(root, 'resize');

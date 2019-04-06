@@ -14,8 +14,8 @@ import {
 injectGlobal`
 #app .logo {
   height: 32px;
-  background: rgba(255,255,255,.2);
-  margin: 16px;
+  background-color: #21224d;
+  margin: 0px;
 }
 `;
 
@@ -57,22 +57,28 @@ const MainSidebar = observer ( () => {
   return (
     <Sider
       id="my-sider"
-      theme="light"
+      theme="dark"
       collapsible
       collapsed={isExpand}
+      vertical="true"
       style={{
+        backgroundColor: "#21224d",
         height: "100vh"
       }}
       onCollapse={onCollapse}
     >
       <div className="logo" />
       <Menu
-        theme="light"
+        theme="dark"
         mode="inline"
         onSelect={selectedKeys => {
           console.log(selectedKeys);
         }}
-        style={{ height: "100%" }}
+        style={{ 
+          backgroundColor: "#21224d",
+          height: "100%",
+          border: 0 
+        }}
       >
         <Menu.Item
           key="1"
