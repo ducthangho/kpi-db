@@ -53,9 +53,14 @@ const powerbi = new pbi.service.Service(
     pbi.factories.hpmFactory,
     pbi.factories.wpmpFactory,
     pbi.factories.routerFactory)
-const reportURL = "https://app.powerbi.com/reportEmbed?reportId=037d51e1-7d74-48ac-b066-389ddb9796b1&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
-const reportID = "5b65576a-3027-4c09-9270-2992c709b379";
+// const reportURL = "https://app.powerbi.com/reportEmbed?reportId=037d51e1-7d74-48ac-b066-389ddb9796b1&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
+// const reportID = "5b65576a-3027-4c09-9270-2992c709b379";
+// const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
+const reportURL = "https://app.powerbi.com/reportEmbed?reportId=e24a387d-3a3f-496a-bbe8-57bea4d19d7f&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
+const reportID = "e24a387d-3a3f-496a-bbe8-57bea4d19d7f";
 const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
+const datasetID ="6f15a837-92de-48ab-ad42-29de5aa0e691"
+
 const getEmbedToken = "https://getembedfuncapp.azurewebsites.net/api/HttpTrigger1?code=MWakS6g9stuWnb1syRFdjqWDUZvmyYIYg3JeYFp23IUd6J/9jRTaSQ==&reportID=" + reportID + "&groupId=" + groupID;
 const source = fromEvent(root, 'resize');
 
@@ -142,6 +147,34 @@ export const PBIScreen = observer((props) => {
       }     
     }
 
+    const embedQNA = (configQNA) => {
+      var panel = document.getElementById("search-panel");
+      let qna = powerbi.embed(panel, configQNA);
+      console.log('store.saveEmbed(powerbi,config,report);');
+      store.saveEmbedQNA(powerbi, configQNA, qna);
+      // qna.off removes a given event listener if it exists.
+      qna.off("visualRendered");
+
+      // qna.on will add an event listener.
+      qna.on("visualRendered", function(event) {
+            console.log(event.detail);
+      })
+      // report.setAccessToken(configQNA.accessToken)
+      //     .then(() => {
+      //         // Set token expiration listener
+      //         // result.expiration is in ISO format
+      //         setTokenExpirationListener(json.Ellapse, 2 /*minutes before expiration*/ );
+      //     });
+      // const height = rootElement.current.clientHeight;
+      // const width = rootElement.current.clientWidth;   
+      // performOnEmbed(report, { height, width });
+      // if (props.onEmbedded) {
+      //   props.onEmbedded(report, { height, width });
+      // }     
+    }
+
+    
+
     const updateToken = (reportId, groupId) => {
         // Generate new EmbedToken
         const url = "https://getembedfuncapp.azurewebsites.net/api/HttpTrigger1?code=MWakS6g9stuWnb1syRFdjqWDUZvmyYIYg3JeYFp23IUd6J/9jRTaSQ==&reportID=" + reportId + "&groupId=" + groupId;
@@ -173,10 +206,24 @@ export const PBIScreen = observer((props) => {
                     pageView: PAGEVIEW
                 });
 
+                 var configQNA= {
+                    type: 'qna',
+                    isLoaded: true,
+                    width: 800,
+                    height: 800,
+                    tokenType: models.TokenType.Embed,
+                    accessToken: json.EmbedToken,
+                    embedUrl: json.EmbedUrl,
+                    datasetIds: [datasetID],
+                    viewMode: models.QnaMode.Interactive,
+                    question: ""
+                };
+
                 // updateState(config);
                 const errors = validateConfig(config);
                 if (!errors) {
                     embed(config);
+                    store.saveEmbedQNAConfig(configQNA);
                 } else if (store.report !== null) {
                     reset();
                 } else console.log(errors);

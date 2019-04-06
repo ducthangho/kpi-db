@@ -9,6 +9,12 @@ const dashboardReducer = (state = { initState }, action) => {
         ...state,
         showDrawer: action.showDrawer
       };
+
+    case "loadedDrawer":
+      return {
+        ...state,
+        loaded: action.loaded
+      };
     case "currentPage":
       return {
         ...state,

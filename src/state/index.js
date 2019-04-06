@@ -39,11 +39,26 @@ export class PBIStore {
   {
     powerbi : null,
     config : {},
+    qnaConfig : {},
     report : null,
+    reportQNA : null,
     currentPage : null,
     pages : [],
     error : "",
     loaded : false
+  }
+
+  tabs = {
+    activeKey : null,
+    panes: [],
+  }
+
+  addTab = (tab) => {
+    this.tabs.panes.push(tab);
+  }
+
+  setActiveKey = (key) => {
+    this.tabs.activeKey = key;
   }
   
   isLoaded = () => {
@@ -65,9 +80,20 @@ export class PBIStore {
 
   saveEmbed = (pbi,config, rp) => {
     this.store.powerbi = pbi;
-    this.store.config = config;
+    this.store.config = config;    
     this.store.report = rp;
     this.store.loaded = true;
+  }
+
+  saveEmbedQNA= (pbi,configQNA, rp) => {
+    this.store.powerbi = pbi;
+    this.store.qnaConfig = configQNA;    
+    this.store.reportQNA = rp;
+    this.store.loaded = true;
+  }
+
+  saveEmbedQNAConfig = (cfg) => {
+    this.store.qnaConfig = cfg;    
   }
 
   clearPages(){
@@ -95,7 +121,10 @@ decorate(PBIStore, {
   toggleLoaded: action,
   clearPages: action,
   addPage: action,
-  setCurrentPage: action
+  setCurrentPage: action,
+  saveEmbedQNA: action,
+  addTab: action,
+  setActiveKey: action
 
 })
 

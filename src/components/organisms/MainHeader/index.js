@@ -1,16 +1,27 @@
-import React from "react";
+import React, {    
+    useState,
+    useContext    
+} from "react";
+
 // import styled from "styled-components";
 // import { size } from "styled-theme";
-import { getState } from "../../../state";
+import { getState, getStore } from "../../../state";
 import { Switch, Row, Col, Typography, Layout, Input } from "antd";
+import {
+    observer,    
+} from 'mobx-react-lite';
 
 const Search = Input.Search;
 const { Header } = Layout;
 const { Title } = Typography;
 
-const MainHeader = props => {
-  const [dashboard, dispatch] = getState();
+const PBIStore = getStore();
 
+const MainHeader = observer(props => {
+  const [dashboard, dispatch] = getState();
+  const [loaded, setLoaded] = useState(false);
+  const store = useContext(PBIStore);
+  
   const onShowColor = checked => {
     dispatch({
       type: "showColor",
@@ -18,11 +29,17 @@ const MainHeader = props => {
     });
   };
 
-  const onSearch = value => {
-    dispatch({
-      type: "doSearch",
-      searchText: value
-    });
+  const onSearch = value => {    
+    alert("onSearch");
+    let tabs = store.tabs.panes;
+    //console.log('Tab length', tabs.length);
+    if (tabs.length==0){
+      console.log('Adding tab');
+      const key = "Tab1";
+      store.setActiveKey(key);
+      store.addTab({ title: 'New Tab', content: 'New Tab Pane', key: key });
+    }
+
   };
 
   return (
@@ -42,7 +59,7 @@ const MainHeader = props => {
         </Col>
         <Col span={18}>
           <Search
-            placeholder="Search Address.."
+            placeholder="Ask a question"
             onSearch={onSearch}
             style={{ width: 250, paddingTop: 14 }}
             enterButton
@@ -54,6 +71,6 @@ const MainHeader = props => {
       </Row>
     </Header>
   );
-};
+});
 
 export default MainHeader;

@@ -27,8 +27,10 @@ import { MainPage } from "components";
 // export default App
 const initialState = {
   theme: { primary: "green" },
+  popover : {visible: false},
   dashboard: {
     showDrawer: false,
+    loaded: false,
     currentPage: {
       id: 1,
       name: "Test page 1"
