@@ -5,6 +5,16 @@ import { Layout, Menu, Icon, Divider } from "antd";
 //import "antd/dist/antd.css";
 import styled,{ injectGlobal,css } from "styled-components";
 import triggerImg from "../../pages/MainPage/styles/trigger.svg";
+import generalImg from "../../pages/MainPage/styles/general.svg";
+import riseImg from "../../pages/MainPage/styles/rise.svg";
+import balanceImg from "../../pages/MainPage/styles/balance.svg";
+import institutionImg from "../../pages/MainPage/styles/institution.svg";
+import PFinanceImg from "../../pages/MainPage/styles/PublicFinance.svg";
+import BusinessEnvImg from "../../pages/MainPage/styles/BusinessEnv.svg";
+import LabourImg from "../../pages/MainPage/styles/Labour.svg";
+import SocialImg from "../../pages/MainPage/styles/Social.svg";
+import EnvImg from "../../pages/MainPage/styles/environment.svg";
+import InfraImg from "../../pages/MainPage/styles/infrastructure.svg";
 const { Sider } = Layout;
 import { getState, getStore } from "../../../state";
 import {
@@ -52,8 +62,52 @@ const ImgSvg = () => (
 );
 
 const TriggerIcon = props => (
-  <Icon component={ImgSvg} {...props} />
+  <Icon component={ImgSvg()} {...props} />
 );
+
+const GeneralInfoIcon = props => (
+  <Icon component={ () => <img src={generalImg}/>  } {...props} />
+);
+
+
+const RiseIcon = props => (
+  <Icon component={ () => <img src={riseImg}/>  } {...props} />
+);
+
+const BalanceIcon = props => (
+  <Icon component={ () => <img src={balanceImg}/>  } {...props} />
+);
+
+
+const FinanceIcon = props => (
+  <Icon component={ () => <img src={PFinanceImg}/>  } {...props} />
+);
+
+const InstitutionIcon = props => (
+  <Icon component={ () => <img src={institutionImg}/>  } {...props} />
+);
+
+
+const BusinessEnvIcon = props => (
+  <Icon component={ () => <img src={BusinessEnvImg}/>  } {...props} />
+);
+
+const LabourIcon = props => (
+  <Icon component={ () => <img src={LabourImg}/>  } {...props} />
+);
+
+const SocialIcon = props => (
+  <Icon component={ () => <img src={SocialImg}/>  } {...props} />
+);
+
+const EnvIcon = props => (
+  <Icon component={ () => <img src={EnvImg}/>  } {...props} />
+);
+
+const InfraIcon = props => (
+  <Icon component={ () => <img src={InfraImg}/>  } {...props} />
+);
+
 
 const MainSidebar = observer ( () => {
   const [isExpand, setExpand] = useState(true);
@@ -122,7 +176,7 @@ const MainSidebar = observer ( () => {
              navigateTo(Layer1);   
           }}                  
         >
-          <Icon type="appstore" style={{fontSize:FONTSIZE}} />
+          <GeneralInfoIcon style={{fontSize:FONTSIZE,opacity : '0.7',color: 'gray'}} />
           <span>Thông tin chung</span>
         </Menu.Item>
         <Menu.Item
@@ -132,7 +186,7 @@ const MainSidebar = observer ( () => {
             navigateTo(TTKT);            
           }}
         >
-          <Icon type="rise" style={{fontSize:FONTSIZE}}/>
+          <RiseIcon style={{fontSize:FONTSIZE}}/>
           <span>Tăng trưởng kinh tế</span>
         </Menu.Item>
 
@@ -143,7 +197,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="deployment-unit" style={{fontSize:FONTSIZE}} />
+          <BalanceIcon style={{fontSize:FONTSIZE}} />
           <span>Ổn định kinh tế vĩ mô</span>
         </Menu.Item>
 
@@ -154,7 +208,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="dollar" style={{fontSize:FONTSIZE}}/>
+          <FinanceIcon style={{fontSize:FONTSIZE}}/>
           <span>Tài chính công</span>
         </Menu.Item>
 
@@ -165,7 +219,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="shopping" style={{fontSize:FONTSIZE}}/>
+          <BusinessEnvIcon style={{fontSize:FONTSIZE}}/>
           <span>Môi trường kinh doanh</span>
         </Menu.Item>
 
@@ -176,7 +230,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="bank" style={{fontSize:FONTSIZE}}/>
+          <InstitutionIcon style={{fontSize:FONTSIZE}}/>
           <span>Bộ máy hành chính</span>
         </Menu.Item>
 
@@ -187,7 +241,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="tool" style={{fontSize:FONTSIZE}}/>
+          <LabourIcon style={{fontSize:FONTSIZE}}/>
           <span>Lao động việc làm</span>
         </Menu.Item>
 
@@ -198,7 +252,7 @@ const MainSidebar = observer ( () => {
             navigateTo(VĐXH);            
           }}
         >
-          <Icon type="usergroup-add" style={{fontSize:FONTSIZE}}/>
+          <SocialIcon style={{fontSize:FONTSIZE}}/>
           <span>Các vấn đề xã hội</span>
         </Menu.Item>
 
@@ -209,7 +263,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="rest" style={{fontSize:FONTSIZE}}/>
+          <EnvIcon style={{fontSize:FONTSIZE}}/>
           <span>Môi trường</span>
         </Menu.Item>
 
@@ -220,7 +274,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="build" style={{fontSize:FONTSIZE}}/>
+          <InfraIcon style={{fontSize:FONTSIZE}}/>
           <span>Kết cấu hạ tầng và khoa học công nghệ</span>
         </Menu.Item>
       </Menu>
