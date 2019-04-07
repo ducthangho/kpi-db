@@ -1,7 +1,9 @@
 import React, { useState,useContext,useRef } from "react";
 import ReactDom from "react-dom";
 import { Layout, Menu, Icon } from "antd";
-import { injectGlobal } from "styled-components";
+//import "../../pages/MainPage/styles/main.css";
+//import "antd/dist/antd.css";
+import styled,{ injectGlobal,css } from "styled-components";
 const { Sider } = Layout;
 import { getState, getStore } from "../../../state";
 import {
@@ -13,9 +15,29 @@ import {
 
 injectGlobal`
 #app .logo {
-  height: 32px;
+  width: 40px;
+  height: 40px;
   background-color: #21224d;
   margin: 0px;
+}
+
+li.ant-menu-item .ant-menu-item-active {
+  width: 50px;
+  padding : 0px;
+  padding-left: 0px;
+  margin: 0px
+}
+
+.categoryNav .ant-menu-submenu-title {
+  padding: 0 !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+
+div.ant-menu-submenu-title {
+  padding: 0 !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
 }
 `;
 
@@ -30,14 +52,54 @@ const DuplicateOfLayer2 = 7;
 const Layer2 = 8;
 const SoSanhQuocTe = 9;
 
+
+const StyledMenu = styled(Menu)`
+    background-color: #21224d;
+    height: 100%;
+    width: 'auto';
+    padding-left: 0px;
+    padding: 0px;
+   
+    .ant-menu-submenu-horizontal > .ant-menu {
+        margin-top: -2px;
+    }
+    .ant-menu-item:hover {
+        border-bottom: 2px solid #21224d;
+        padding: 0px;
+    }
+    .about-dropdown {
+        border-bottom: none;
+        &:hover {
+            border-bottom: none;
+        }
+        li:hover {
+            border-bottom: none;
+        }
+    }
+    .ant-menu-item-group-list {
+        padding: 0 0 0px 0;
+    }
+    .ant-menu-item:li {
+        padding: 0 0 0px 0;
+        margin : 0;
+    }
+    `
+const StyledMenuItem = styled(Menu.Item)`
+  li {
+    padding: 0px;
+    padding-left: 0px;
+    margin : 0;  
+  }
+  
+`
+
 const MainSidebar = observer ( () => {
-  const [isExpand, setExpand] = useState(false);
+  const [isExpand, setExpand] = useState(true);
   const [{ dashboard, theme }, dispatch] = getState();
 
   const store = useContext(getStore());
 
-  const onCollapse = collapsed => {
-    console.log(collapsed);
+  const onCollapse = collapsed => {    
     setExpand(collapsed);
   };
 
@@ -58,33 +120,35 @@ const MainSidebar = observer ( () => {
     <Sider
       id="my-sider"
       theme="dark"
-      collapsible
+      collapsible      
       collapsed={isExpand}
-      vertical="true"
       style={{
         backgroundColor: "#21224d",
-        height: "100vh"
-      }}
+        height: "100vh",        
+      }}      
       onCollapse={onCollapse}
+      collapsedWidth="50px"      
     >
       <div className="logo" />
       <Menu
         theme="dark"
-        mode="inline"
+        mode="inline"        
+        inlineIndent={0}
         onSelect={selectedKeys => {
           console.log(selectedKeys);
-        }}
-        style={{ 
-          backgroundColor: "#21224d",
-          height: "100%",
-          border: 0 
-        }}
+        }}       
+         style={{
+            backgroundColor: "#21224d",       
+            marginLeft: (isExpand) ? '-15px' : '10px',
+            paddingLeft: '0px',
+            width : 'auto'
+          }}           
       >
-        <Menu.Item
-          key="1"
+        <Menu.Item          
+          key="1"            
           onClick={() => {
              navigateTo(Layer1);   
-          }}          
+          }}                  
         >
           <Icon type="appstore" />
           <span>Thông tin chung</span>

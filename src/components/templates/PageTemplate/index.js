@@ -7,6 +7,7 @@ import { Layout, Drawer, Card, Divider, Popover, Tabs } from "antd";
 const { Meta } = Card;
 
 import "antd/dist/antd.css";
+
 const { Content } = Layout;
 import { getState,getStore } from "../../../state";
 

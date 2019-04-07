@@ -13,10 +13,8 @@
 #index .logo {
   height: 40px;
   width: 40px;
-  background-image: url(logo2.png);
-  background-size: 100%;
   background-position: center;
-  margin: 10px 10px 10px 20px;
+  margin: 0px 0px 0px 0px;
 }
 
 #my-sider .ant-menu-inline,#my-sider  .ant-menu-vertical,#my-sider  .ant-menu-vertical-left {
@@ -31,7 +29,24 @@
 }
 
 #my-sider .ant-layout-sider-trigger {
-  width: 79px !important;
+  width: 60px !important;
+}
+
+.ant-menu-item .ant-menu-item-active {
+  width: 50px;
+  padding : 0px;
+  padding-left: 0px;
+  margin: 0px;
+}
+
+.categoryNav .ant-menu-submenu-title {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+div.ant-menu-submenu-title {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 html, body {
