@@ -1,9 +1,10 @@
 import React, { useState,useContext,useRef } from "react";
 import ReactDom from "react-dom";
-import { Layout, Menu, Icon } from "antd";
+import { Layout, Menu, Icon, Divider } from "antd";
 //import "../../pages/MainPage/styles/main.css";
 //import "antd/dist/antd.css";
 import styled,{ injectGlobal,css } from "styled-components";
+import triggerImg from "../../pages/MainPage/styles/trigger.svg";
 const { Sider } = Layout;
 import { getState, getStore } from "../../../state";
 import {
@@ -17,28 +18,21 @@ injectGlobal`
 #app .logo {
   width: 40px;
   height: 40px;
-  background-color: #21224d;
+  background-color: #21224d;  
+  padding: 0px;
   margin: 0px;
 }
 
-li.ant-menu-item .ant-menu-item-active {
-  width: 50px;
-  padding : 0px;
-  padding-left: 0px;
-  margin: 0px
+.custom-icons-list > .anticon {
+  margin-right: 6px;
+  margin-left: 15px;
+  font-size:28px;
 }
 
-.categoryNav .ant-menu-submenu-title {
-  padding: 0 !important;
-  padding-left: 0 !important;
-  margin: 0 !important;
+.menu-item{
+  fontSize : 24px;
 }
 
-div.ant-menu-submenu-title {
-  padding: 0 !important;
-  padding-left: 0 !important;
-  margin: 0 !important;
-}
 `;
 
 const CoverPage = 0;
@@ -51,47 +45,15 @@ const TaoBaoCao = 6;
 const DuplicateOfLayer2 = 7;
 const Layer2 = 8;
 const SoSanhQuocTe = 9;
+const FONTSIZE='24px'
 
+const ImgSvg = () => (
+  <img src={triggerImg}/>
+);
 
-const StyledMenu = styled(Menu)`
-    background-color: #21224d;
-    height: 100%;
-    width: 'auto';
-    padding-left: 0px;
-    padding: 0px;
-   
-    .ant-menu-submenu-horizontal > .ant-menu {
-        margin-top: -2px;
-    }
-    .ant-menu-item:hover {
-        border-bottom: 2px solid #21224d;
-        padding: 0px;
-    }
-    .about-dropdown {
-        border-bottom: none;
-        &:hover {
-            border-bottom: none;
-        }
-        li:hover {
-            border-bottom: none;
-        }
-    }
-    .ant-menu-item-group-list {
-        padding: 0 0 0px 0;
-    }
-    .ant-menu-item:li {
-        padding: 0 0 0px 0;
-        margin : 0;
-    }
-    `
-const StyledMenuItem = styled(Menu.Item)`
-  li {
-    padding: 0px;
-    padding-left: 0px;
-    margin : 0;  
-  }
-  
-`
+const TriggerIcon = props => (
+  <Icon component={ImgSvg} {...props} />
+);
 
 const MainSidebar = observer ( () => {
   const [isExpand, setExpand] = useState(true);
@@ -102,6 +64,10 @@ const MainSidebar = observer ( () => {
   const onCollapse = collapsed => {    
     setExpand(collapsed);
   };
+
+  const toggle = () => {    
+    setExpand(!isExpand);
+  }
 
 
   const navigateTo = (pageIndx) => {
@@ -116,7 +82,7 @@ const MainSidebar = observer ( () => {
     }
   }
 
-  return (
+  return (     
     <Sider
       id="my-sider"
       theme="dark"
@@ -124,12 +90,18 @@ const MainSidebar = observer ( () => {
       collapsed={isExpand}
       style={{
         backgroundColor: "#21224d",
-        height: "100vh",        
+        height: "100vh",
+
       }}      
       onCollapse={onCollapse}
-      collapsedWidth="50px"      
+      collapsedWidth="50px"
+      trigger={null}
     >
-      <div className="logo" />
+      <div className="logo" > 
+      <a onClick={toggle}> <Icon type={isExpand ? 'menu-unfold' : 'menu-fold'} style={{fontSize:'28px',paddingLeft: '0px', margin: '10px',color:'white'}} /> </a>      
+      </div>
+      <Divider style={{margin : '10px 0px 5px 0px'}}/>
+
       <Menu
         theme="dark"
         mode="inline"        
@@ -139,7 +111,7 @@ const MainSidebar = observer ( () => {
         }}       
          style={{
             backgroundColor: "#21224d",       
-            marginLeft: (isExpand) ? '-15px' : '10px',
+            marginLeft: (isExpand) ? '-20px' : '10px',
             paddingLeft: '0px',
             width : 'auto'
           }}           
@@ -150,7 +122,7 @@ const MainSidebar = observer ( () => {
              navigateTo(Layer1);   
           }}                  
         >
-          <Icon type="appstore" />
+          <Icon type="appstore" style={{fontSize:FONTSIZE}} />
           <span>Thông tin chung</span>
         </Menu.Item>
         <Menu.Item
@@ -160,7 +132,7 @@ const MainSidebar = observer ( () => {
             navigateTo(TTKT);            
           }}
         >
-          <Icon type="rise" />
+          <Icon type="rise" style={{fontSize:FONTSIZE}}/>
           <span>Tăng trưởng kinh tế</span>
         </Menu.Item>
 
@@ -171,7 +143,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="deployment-unit" />
+          <Icon type="deployment-unit" style={{fontSize:FONTSIZE}} />
           <span>Ổn định kinh tế vĩ mô</span>
         </Menu.Item>
 
@@ -182,7 +154,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="dollar" />
+          <Icon type="dollar" style={{fontSize:FONTSIZE}}/>
           <span>Tài chính công</span>
         </Menu.Item>
 
@@ -193,7 +165,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="shopping" />
+          <Icon type="shopping" style={{fontSize:FONTSIZE}}/>
           <span>Môi trường kinh doanh</span>
         </Menu.Item>
 
@@ -204,7 +176,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="bank" />
+          <Icon type="bank" style={{fontSize:FONTSIZE}}/>
           <span>Bộ máy hành chính</span>
         </Menu.Item>
 
@@ -215,7 +187,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="tool" />
+          <Icon type="tool" style={{fontSize:FONTSIZE}}/>
           <span>Lao động việc làm</span>
         </Menu.Item>
 
@@ -226,7 +198,7 @@ const MainSidebar = observer ( () => {
             navigateTo(VĐXH);            
           }}
         >
-          <Icon type="usergroup-add" />
+          <Icon type="usergroup-add" style={{fontSize:FONTSIZE}}/>
           <span>Các vấn đề xã hội</span>
         </Menu.Item>
 
@@ -237,7 +209,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="rest" />
+          <Icon type="rest" style={{fontSize:FONTSIZE}}/>
           <span>Môi trường</span>
         </Menu.Item>
 
@@ -248,7 +220,7 @@ const MainSidebar = observer ( () => {
             navigateTo(MTKD);            
           }}
         >
-          <Icon type="build" />
+          <Icon type="build" style={{fontSize:FONTSIZE}}/>
           <span>Kết cấu hạ tầng và khoa học công nghệ</span>
         </Menu.Item>
       </Menu>
