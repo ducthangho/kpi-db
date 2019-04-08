@@ -28,7 +28,8 @@ import {
     useDisposable
 } from 'mobx-react-lite';
 
-
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 injectGlobal`
 #app .logo {
@@ -39,11 +40,20 @@ injectGlobal`
   margin: 0px;
 }
 
+.sub-menu li{
+    background: #21224d !important;
+}
 
 .modified-item:hover {
   border-bottom: 2px solid transparent !important;
   color: inherit !important;  
   border-color: white !important;  
+  background-color: #21224d;
+}
+
+.modified-item:ant-menu-item{
+  padding: 10px;  
+  background-color: #21224d;  
 }
 
 .custom-icons-list > .anticon {
@@ -54,6 +64,7 @@ injectGlobal`
 
 .menu-item{
   fontSize : 24px;
+  padding: 10px;  
 }
 
 `;
@@ -187,6 +198,7 @@ const MainSidebar = observer ( () => {
       onCollapse={onCollapse}
       collapsedWidth="50px"
       trigger={null}
+      mode='inline'   
     >
       <div className="logo" > 
       <a onClick={toggle}> <Icon type={isExpand ? 'menu-unfold' : 'menu-fold'} style={{fontSize:'28px',paddingLeft: '0px', margin: '10px',color:'white'}} /> </a>      
@@ -195,7 +207,7 @@ const MainSidebar = observer ( () => {
 
       <Menu
         theme="dark"
-        mode="inline"        
+        mode='inline'        
         inlineIndent={0}
         onSelect={selectedKeys => {
           console.log(selectedKeys);
@@ -217,16 +229,68 @@ const MainSidebar = observer ( () => {
           <GeneralInfoIcon style={{fontSize:FONTSIZE,opacity : '0.7',color: 'gray',marginTop : MARGINTOP}} />
           <span>Thông tin chung</span>
         </Menu.Item>
-        <Menu.Item className="modified-item"         
-          selectable
-          key="2"
-          onClick={() => {
-            navigateTo(TTKT);            
+
+        <SubMenu key="TTKT"      
+          style={{
+            backgroundColor: "#21224d",                  
+            marginTop: '0px',
+            padding: '0px',            
+            width : 'auto'
           }}
-        >
-          <RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Tăng trưởng kinh tế</span>
-        </Menu.Item>
+
+          title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>Tăng trưởng kinh tế</span></span>}>           
+
+              <Menu.Item className="modified-item"         
+                selectable
+                key="2"
+                onClick={() => {
+                  navigateTo(TTKT);            
+                }}
+              >                  
+                <span>Tăng trưởng GDP</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                key="2.1"
+                onClick={() => {
+                  navigateTo(TTKT);            
+                }}
+              >                  
+                <span>Ngoại thương</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                key="2.2"
+                onClick={() => {
+                  navigateTo(TTKT);            
+                }}
+              >                  
+                <span>Đầu tư</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                key="2.3"
+                onClick={() => {
+                  navigateTo(TTKT);            
+                }}
+              >                  
+                <span>Tiêu dùng và du lịch</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                key="2.4"
+                onClick={() => {
+                  navigateTo(TTKT);            
+                }}
+              >                  
+                <span>Chất lượng tăng trưởng</span>
+              </Menu.Item>
+          
+        </SubMenu>
 
         <Menu.Item className="modified-item"         
           selectable
@@ -325,7 +389,7 @@ const MainSidebar = observer ( () => {
           selectable
           key="11"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(SoSanhQuocTe);            
           }}
         >
           <InternationalIcon style={{fontSize:FONTSIZE, marginLeft: '-12px', marginRight: '0px', marginTop: '-20px' , padding:'0px'}} />
@@ -347,7 +411,7 @@ const MainSidebar = observer ( () => {
           selectable
           key="13"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(Dubao);            
           }}
         >
           <InfoIcon style={{fontSize:FONTSIZE,marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
@@ -358,7 +422,7 @@ const MainSidebar = observer ( () => {
           selectable
           key="14"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(TaoBaoCao);            
           }}
         >
           <EditIcon style={{fontSize:FONTSIZE,  marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
