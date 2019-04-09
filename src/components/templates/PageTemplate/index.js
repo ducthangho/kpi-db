@@ -115,10 +115,20 @@ const PageTemplate = observer( props => {
       <Layout style={{ background: "#eee", padding: 0 }}>
         <MainHeader />        
         <Content>{props.children}</Content>
-      </Layout>
-
-     
-    </Layout>
+          <Drawer
+            title="Search Panel"
+            placement="top"
+            closable={true}
+            onClose={() => store.hideSearchDrawer()
+            }
+            visible={store.searchDrawer.visible}
+            width="1200px"
+            height="800px"
+          >
+          <div id="search-panel" style={{height:"700px", width:"1300px"}}> </div>
+          </Drawer>     
+        </Layout>
+      </Layout>   
   );
 });
 

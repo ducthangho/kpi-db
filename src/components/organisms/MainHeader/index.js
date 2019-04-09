@@ -30,15 +30,17 @@ const MainHeader = observer(props => {
   };
 
   const onSearch = value => {    
-    alert("onSearch");
-    let tabs = store.tabs.panes;
+    //alert("onSearch 123");
+    console.log(store.searchDrawer);
+    store.showSearchDrawer();
+    // let tabs = store.tabs.panes;
     //console.log('Tab length', tabs.length);
-    if (tabs.length==0){
-      console.log('Adding tab');
-      const key = "Tab1";
-      store.setActiveKey(key);
-      store.addTab({ title: 'New Tab', content: 'New Tab Pane', key: key });
-    }
+    // if (tabs.length==0){
+    //   console.log('Adding tab');
+    //   const key = "Tab1";
+    //   store.setActiveKey(key);
+    //   store.addTab({ title: 'New Tab', content: 'New Tab Pane', key: key });
+    // }
 
   };
 

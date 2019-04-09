@@ -48,6 +48,10 @@ export class PBIStore {
     loaded : false
   }
 
+  searchDrawer = {
+    visible: false,
+  }
+
   tabs = {
     activeKey : null,
     panes: [],
@@ -112,10 +116,19 @@ export class PBIStore {
   getPages = () => {
     return this.store.pages;
   }
+
+  showSearchDrawer = () => {
+    this.searchDrawer.visible = true;
+  }
+
+  hideSearchDrawer = () => {
+    this.searchDrawer.visible = false;
+  }
 }
 
 decorate(PBIStore, {
-  store: observable,  
+  store: observable,
+  searchDrawer: observable,   
   setError: action,
   saveEmbed: action,
   toggleLoaded: action,
@@ -124,8 +137,9 @@ decorate(PBIStore, {
   setCurrentPage: action,
   saveEmbedQNA: action,
   addTab: action,
-  setActiveKey: action
-
+  setActiveKey: action,
+  showSearchDrawer: action,
+  hideSearchDrawer: action
 })
 
 var Store = createContext(new PBIStore());
