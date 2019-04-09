@@ -102,6 +102,7 @@ const ChitietSS = 15;
 
 const FONTSIZE='24px'
 const MARGINTOP='-40px'
+const MENUITEMPADDING="0 0 0 10px";
 
 const ImgSvg = () => (
   <img src={triggerImg}/>
@@ -221,14 +222,15 @@ const MainSidebar = observer ( () => {
 
       <Menu
         theme="dark"
-        mode='inline'        
+        mode='vertical-left'        
         inlineIndent={1}
         onSelect={selectedKeys => {
           console.log(selectedKeys);
         }}       
+
          style={{
             backgroundColor: "#21224d",       
-            marginLeft: (isExpand) ? '-20px' : '10px',
+            marginLeft: (isExpand) ? '-22px' : '-10px',
             marginTop: '  0px',
             padding: '0px',            
             width : 'auto'
@@ -250,7 +252,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -261,7 +263,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.1"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -272,7 +274,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.2"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -283,7 +285,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.3"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -294,7 +296,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.4"
                 onClick={() => {
                   navigateTo(TTKT);            
