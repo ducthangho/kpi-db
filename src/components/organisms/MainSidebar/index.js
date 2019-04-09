@@ -49,11 +49,19 @@ injectGlobal`
   color: inherit !important;  
   border-color: white !important;  
   background-color: #21224d;
+  margin: 0px  
 }
 
-.modified-item:ant-menu-item{
+.submenu-item{
   padding: 10px;  
-  background-color: #21224d;  
+  background-color: #21224d;
+  margin: 0px  
+}
+
+.modified-item{
+  padding: 10px;  
+  background-color: #21224d;
+  margin: 0px  
 }
 
 .custom-icons-list > .anticon {
@@ -65,6 +73,12 @@ injectGlobal`
 .menu-item{
   fontSize : 24px;
   padding: 10px;  
+}
+
+.ant-menu-item{
+  fontSize : 24px;
+  padding: 10px;
+  background-color: #21224d;    
 }
 
 `;
@@ -198,7 +212,7 @@ const MainSidebar = observer ( () => {
       onCollapse={onCollapse}
       collapsedWidth="50px"
       trigger={null}
-      mode='inline'   
+      mode='vertical'   
     >
       <div className="logo" > 
       <a onClick={toggle}> <Icon type={isExpand ? 'menu-unfold' : 'menu-fold'} style={{fontSize:'28px',paddingLeft: '0px', margin: '10px',color:'white'}} /> </a>      
@@ -208,7 +222,7 @@ const MainSidebar = observer ( () => {
       <Menu
         theme="dark"
         mode='inline'        
-        inlineIndent={0}
+        inlineIndent={1}
         onSelect={selectedKeys => {
           console.log(selectedKeys);
         }}       
@@ -230,18 +244,13 @@ const MainSidebar = observer ( () => {
           <span>Thông tin chung</span>
         </Menu.Item>
 
-        <SubMenu key="TTKT"      
-          style={{
-            backgroundColor: "#21224d",                  
-            marginTop: '0px',
-            padding: '0px',            
-            width : 'auto'
-          }}
+        <SubMenu key="TTKT"            
 
-          title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>Tăng trưởng kinh tế</span></span>}>           
+              title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>Tăng trưởng kinh tế</span></span>}>           
 
               <Menu.Item className="modified-item"         
                 selectable
+                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
                 key="2"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -252,6 +261,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
+                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
                 key="2.1"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -262,6 +272,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
+                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
                 key="2.2"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -272,6 +283,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
+                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
                 key="2.3"
                 onClick={() => {
                   navigateTo(TTKT);            
@@ -282,6 +294,7 @@ const MainSidebar = observer ( () => {
 
               <Menu.Item className="modified-item"         
                 selectable
+                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
                 key="2.4"
                 onClick={() => {
                   navigateTo(TTKT);            
