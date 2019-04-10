@@ -22,5 +22,18 @@
   "BUSINESS_DEVELOPMENT":"Phát triển doanh nghiệp",
   "BUSINESS_ADVANTAGES":"Thuận lợi kinh doanh",
   "NATIONAL_COMPETITIVENESS":"Năng lực cạnh tranh quốc gia",
-  "PROVINCIAL_COMPETITIVENESS": "Năng lực cạnh tranh cấp tỉnh"
+  "PROVINCIAL_COMPETITIVENESS": "Năng lực cạnh tranh cấp tỉnh",
+  "PUBLIC_FINANCE" : "Tài chính công",
+  "PUBLIC_ADMINISTRATION" : "Bộ máy hành chính",
+  "LABOUR_AND_WORKFORCE" : "Lao động, việc làm",
+  "SOCIAL_ISSUES": "Các vấn đề xã hội",
+  "ENVIRONMENT": "Môi trường",
+  "INFRASTRUCTURE": "Hạ tầng và KHCN",
+  "POVERTY_REDUCTION" : "Giảm nghèo",
+  "HEALTHCARE": "Y tế",
+  "EDUCATION": "Giáo dục",
+  "TRANSPORTATION": "Giao thông",
+  "SOCIAL_SECURITY": "An toàn xã hội",
+  "URBAN": "Đô thị",
+  "WELFARE": "Phúc lợi khác"
 }

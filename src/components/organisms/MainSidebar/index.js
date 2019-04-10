@@ -41,16 +41,34 @@ injectGlobal`
   margin: 0px;
 }
 
+.popup_submenu{
+  resize: both;
+  min-width: 180px;
+  max-width:400px;  
+  width: auto;
+}
+
+.collapsed_popup_submenu{
+  resize: both;
+  min-width: 50px;
+  max-width:300px;  
+  width: auto;
+  margin: auto;    
+}
+
 .sub-menu li{
     background: #21224d !important;
 }
 
-.modified-item:hover {
+.modified-item:hover {  
   border-bottom: 2px solid transparent !important;
   color: inherit !important;  
   border-color: white !important;  
-  background-color: #21224d;
-  margin: 0px  
+  background-color: #21224d;  
+  min-width: 50px;
+  max-width:300px;  
+  width: auto;
+  margin: auto;  
 }
 
 .submenu-item{
@@ -59,10 +77,13 @@ injectGlobal`
   margin: 0px  
 }
 
-.modified-item{
+.modified-item{  
   padding: 10px;  
-  background-color: #21224d;
-  margin: 0px  
+  background-color: #21224d;  
+  min-width: 50px;
+  max-width:300px;  
+  width: auto;
+  margin: auto;
 }
 
 .custom-icons-list > .anticon {
@@ -210,7 +231,7 @@ const MainSidebar = observer ( () => {
         backgroundColor: "#21224d",
         height: "100vh",        
       }}
-      width = "250"
+      width = "250px"
       onCollapse={onCollapse}
       collapsedWidth="50px"
       trigger={null}
@@ -232,7 +253,7 @@ const MainSidebar = observer ( () => {
          style={{
             backgroundColor: "#21224d",       
             marginLeft: (isExpand) ? '-22px' : '-10px',
-            marginTop: '  0px',
+            marginTop: '0px',
             padding: '0px',            
             width : 'auto'
           }}           
@@ -248,7 +269,7 @@ const MainSidebar = observer ( () => {
         </Menu.Item>
 
         <SubMenu key="TTKT"            
-
+              className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
               title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("ECO_GROWTH")}</span></span>}>           
 
               <Menu.Item className="modified-item"         
@@ -327,12 +348,12 @@ const MainSidebar = observer ( () => {
           }}
         >
           <FinanceIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Tài chính công</span>
+          <span>{intl.get("PUBLIC_FINANCE")}</span>
         </Menu.Item>
        
 
         <SubMenu key="MTKD"            
-
+              className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
               title={<span><BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("BUSINESS_ENVIRONMENT")}</span></span>}>           
              
               <Menu.Item className="modified-item"         
@@ -391,7 +412,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InstitutionIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Bộ máy hành chính</span>
+          <span>{intl.get("PUBLIC_ADMINISTRATION")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -402,13 +423,13 @@ const MainSidebar = observer ( () => {
           }}
         >
           <LabourIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Lao động việc làm</span>
+          <span>{intl.get("LABOUR_AND_WORKFORCE")}</span>
         </Menu.Item>
 
       
         <SubMenu key="VĐXH"            
-
-              title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>Các vấn đề xã hội</span></span>}>           
+              className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
+              title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("SOCIAL_ISSUES")}</span></span>}>           
              
               <Menu.Item className="modified-item"         
                 selectable
@@ -418,7 +439,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH);            
                 }}
               >                  
-                <span>Giảm nghèo</span>
+                <span>{intl.get("POVERTY_REDUCTION")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -429,7 +450,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>Y tế</span>
+                <span>{intl.get("HEALTHCARE")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -440,7 +461,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>Giáo dục</span>
+                <span>{intl.get("EDUCATION")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -451,7 +472,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>Giao thông</span>
+                <span>{intl.get("TRANSPORTATION")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -462,7 +483,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>An toàn xã hội</span>
+                <span>{intl.get("SOCIAL_SECURITY")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -473,7 +494,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>Đô thị</span>
+                <span>{intl.get("URBAN")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -484,7 +505,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>Phúc lợi khác</span>
+                <span>{intl.get("WELFARE")}</span>
               </Menu.Item>
           
         </SubMenu>
@@ -497,7 +518,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <EnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Môi trường</span>
+          <span>{intl.get("ENVIRONMENT")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -508,7 +529,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InfraIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Kết cấu hạ tầng và khoa học công nghệ</span>
+          <span>{intl.get("WELFARE")}</span>
         </Menu.Item>
 
 
