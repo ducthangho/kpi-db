@@ -102,6 +102,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-hot-loader": "^4.6.3",
+    "react-intl-universal": "^1.15.5",
     "react-modal": "^3.1.11",
     "react-router-dom": "^4.3.1",
     "rxjs": "^6.4.0",
