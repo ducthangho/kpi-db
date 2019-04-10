@@ -194,6 +194,10 @@ const EditIcon = props => (
 );
 
 
+const ADDSPACE = props => (
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+);
+
 const MainSidebar = observer ( () => {
   const [isExpand, setExpand] = useState(true);
   const [{ dashboard, theme }, dispatch] = getState();
@@ -314,6 +318,7 @@ const MainSidebar = observer ( () => {
                 }}
               >                  
                 <span>{intl.get("CONSUMPTION")}</span>
+                <ADDSPACE />
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -398,6 +403,7 @@ const MainSidebar = observer ( () => {
                 }}
               >                  
                 <span>{intl.get("PROVINCIAL_COMPETITIVENESS")}</span>
+                <ADDSPACE />
               </Menu.Item>
           
         </SubMenu>
