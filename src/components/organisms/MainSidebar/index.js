@@ -21,6 +21,7 @@ import InternationalImg from "../../pages/MainPage/styles/ssqt.svg";
 import SearchImg from "../../pages/MainPage/styles/ic-search.svg";
 import EditImg from "../../pages/MainPage/styles/edit.svg";
 import InfoImg from "../../pages/MainPage/styles/info.svg";
+import intl from 'react-intl-universal';
 const { Sider } = Layout;
 import { getState, getStore } from "../../../state";
 import {
@@ -40,16 +41,34 @@ injectGlobal`
   margin: 0px;
 }
 
+.popup_submenu{
+  resize: both;
+  min-width: 180px;
+  max-width:400px;  
+  width: auto;
+}
+
+.collapsed_popup_submenu{
+  resize: both;
+  min-width: 50px;
+  max-width:300px;  
+  width: auto;
+  margin: auto;    
+}
+
 .sub-menu li{
     background: #21224d !important;
 }
 
-.modified-item:hover {
+.modified-item:hover {  
   border-bottom: 2px solid transparent !important;
   color: inherit !important;  
   border-color: white !important;  
-  background-color: #21224d;
-  margin: 0px  
+  background-color: #21224d;  
+  min-width: 50px;
+  max-width:300px;  
+  width: auto;
+  margin: auto;  
 }
 
 .submenu-item{
@@ -58,10 +77,13 @@ injectGlobal`
   margin: 0px  
 }
 
-.modified-item{
+.modified-item{  
   padding: 10px;  
-  background-color: #21224d;
-  margin: 0px  
+  background-color: #21224d;  
+  min-width: 50px;
+  max-width:300px;  
+  width: auto;
+  margin: auto;
 }
 
 .custom-icons-list > .anticon {
@@ -102,6 +124,7 @@ const ChitietSS = 15;
 
 const FONTSIZE='24px'
 const MARGINTOP='-40px'
+const MENUITEMPADDING="0 0 0 10px";
 
 const ImgSvg = () => (
   <img src={triggerImg}/>
@@ -206,9 +229,9 @@ const MainSidebar = observer ( () => {
       collapsed={isExpand}
       style={{
         backgroundColor: "#21224d",
-        height: "100vh",
-
-      }}      
+        height: "100vh",        
+      }}
+      width = "250px"
       onCollapse={onCollapse}
       collapsedWidth="50px"
       trigger={null}
@@ -221,15 +244,16 @@ const MainSidebar = observer ( () => {
 
       <Menu
         theme="dark"
-        mode='inline'        
+        mode='vertical-left'        
         inlineIndent={1}
         onSelect={selectedKeys => {
           console.log(selectedKeys);
         }}       
+
          style={{
             backgroundColor: "#21224d",       
-            marginLeft: (isExpand) ? '-20px' : '10px',
-            marginTop: '  0px',
+            marginLeft: (isExpand) ? '-22px' : '-10px',
+            marginTop: '0px',
             padding: '0px',            
             width : 'auto'
           }}           
@@ -241,66 +265,66 @@ const MainSidebar = observer ( () => {
           }}                  
         >
           <GeneralInfoIcon style={{fontSize:FONTSIZE,opacity : '0.7',color: 'gray',marginTop : MARGINTOP}} />
-          <span>Thông tin chung</span>
+          <span>{intl.get("GENERAL_INFO")}</span>
         </Menu.Item>
 
         <SubMenu key="TTKT"            
-
-              title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>Tăng trưởng kinh tế</span></span>}>           
+              className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
+              title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("ECO_GROWTH")}</span></span>}>           
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2"
                 onClick={() => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>Tăng trưởng GDP</span>
+                <span>{intl.get("GDP_GROWTH")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.1"
                 onClick={() => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>Ngoại thương</span>
+                <span>{intl.get("FOREIGN_TRADE")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.2"
                 onClick={() => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>Đầu tư</span>
+                <span>{intl.get("INVEST")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.3"
                 onClick={() => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>Tiêu dùng và du lịch</span>
+                <span>{intl.get("CONSUMPTION")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
                 selectable
-                style={{ margin: '0px', padding:'0 0 0 24px',backgroundColor: "#21224d"}}
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.4"
                 onClick={() => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>Chất lượng tăng trưởng</span>
+                <span>{intl.get("GROWTH_QUALITY")}</span>
               </Menu.Item>
           
         </SubMenu>
@@ -313,7 +337,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <BalanceIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}} />
-          <span>Ổn định kinh tế vĩ mô</span>
+          <span>{intl.get("MACROECONOMIC_STABILITY")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -324,19 +348,61 @@ const MainSidebar = observer ( () => {
           }}
         >
           <FinanceIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Tài chính công</span>
+          <span>{intl.get("PUBLIC_FINANCE")}</span>
         </Menu.Item>
+       
 
-        <Menu.Item className="modified-item"         
-          selectable
-          key="5"
-          onClick={() => {
-            navigateTo(MTKD);            
-          }}
-        >
-          <BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Môi trường kinh doanh</span>
-        </Menu.Item>
+        <SubMenu key="MTKD"            
+              className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
+              title={<span><BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("BUSINESS_ENVIRONMENT")}</span></span>}>           
+             
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="5.1"
+                onClick={() => {
+                  navigateTo(MTKD2_1);            
+                }}
+              >                  
+                <span>{intl.get("BUSINESS_DEVELOPMENT")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="5.2"
+                onClick={() => {
+                  navigateTo(MTKD2_1);            
+                }}
+              >                  
+                <span>{intl.get("BUSINESS_ADVANTAGES")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="5.3"
+                onClick={() => {
+                  navigateTo(MTKD2_1);            
+                }}
+              >                  
+                <span>{intl.get("NATIONAL_COMPETITIVENESS")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="5.4"
+                onClick={() => {
+                  navigateTo(MTKD2_1);            
+                }}
+              >                  
+                <span>{intl.get("PROVINCIAL_COMPETITIVENESS")}</span>
+              </Menu.Item>
+          
+        </SubMenu>
+
+       
 
         <Menu.Item className="modified-item"         
           selectable
@@ -346,7 +412,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InstitutionIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Bộ máy hành chính</span>
+          <span>{intl.get("PUBLIC_ADMINISTRATION")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -357,19 +423,92 @@ const MainSidebar = observer ( () => {
           }}
         >
           <LabourIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Lao động việc làm</span>
+          <span>{intl.get("LABOUR_AND_WORKFORCE")}</span>
         </Menu.Item>
 
-        <Menu.Item className="modified-item"         
-          selectable
-          key="8"
-          onClick={() => {
-            navigateTo(VĐXH);            
-          }}
-        >
-          <SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Các vấn đề xã hội</span>
-        </Menu.Item>
+      
+        <SubMenu key="VĐXH"            
+              className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
+              title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("SOCIAL_ISSUES")}</span></span>}>           
+             
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="8.1"
+                onClick={() => {
+                  navigateTo(VĐXH);            
+                }}
+              >                  
+                <span>{intl.get("POVERTY_REDUCTION")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="8.2"
+                onClick={() => {
+                  navigateTo(VĐXH2_1);            
+                }}
+              >                  
+                <span>{intl.get("HEALTHCARE")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="8.3"
+                onClick={() => {
+                  navigateTo(VĐXH2_1);            
+                }}
+              >                  
+                <span>{intl.get("EDUCATION")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="8.4"
+                onClick={() => {
+                  navigateTo(VĐXH2_1);            
+                }}
+              >                  
+                <span>{intl.get("TRANSPORTATION")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="8.5"
+                onClick={() => {
+                  navigateTo(VĐXH2_1);            
+                }}
+              >                  
+                <span>{intl.get("SOCIAL_SECURITY")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="8.6"
+                onClick={() => {
+                  navigateTo(VĐXH2_1);            
+                }}
+              >                  
+                <span>{intl.get("URBAN")}</span>
+              </Menu.Item>
+
+              <Menu.Item className="modified-item"         
+                selectable
+                style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
+                key="8.7"
+                onClick={() => {
+                  navigateTo(VĐXH2_1);            
+                }}
+              >                  
+                <span>{intl.get("WELFARE")}</span>
+              </Menu.Item>
+          
+        </SubMenu>
 
         <Menu.Item className="modified-item"         
           selectable
@@ -379,7 +518,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <EnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Môi trường</span>
+          <span>{intl.get("ENVIRONMENT")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -390,7 +529,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InfraIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>Kết cấu hạ tầng và khoa học công nghệ</span>
+          <span>{intl.get("WELFARE")}</span>
         </Menu.Item>
 
 

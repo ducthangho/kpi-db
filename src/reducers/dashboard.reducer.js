@@ -1,5 +1,6 @@
 const initState = {
-  showDrawer: false
+  showDrawer: false,
+  searchText: ""
 };
 
 const dashboardReducer = (state = { initState }, action) => {
