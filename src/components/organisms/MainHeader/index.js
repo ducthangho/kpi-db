@@ -29,17 +29,15 @@ const MainHeader = observer(props => {
     });
   };
 
-  const onSearch = value => {    
-    alert("onSearch");
-    let tabs = store.tabs.panes;
-    //console.log('Tab length', tabs.length);
-    if (tabs.length==0){
-      console.log('Adding tab');
-      const key = "Tab1";
-      store.setActiveKey(key);
-      store.addTab({ title: 'New Tab', content: 'New Tab Pane', key: key });
-    }
-
+  const onSearch = value => {
+    dispatch({
+      type: "doSearch",
+      searchText: value
+    });    
+    dispatch({
+      type: "toggleDrawer",
+      showDrawer: true
+    });
   };
 
   return (
