@@ -90,7 +90,7 @@ const MainHeader = observer(props => {
 
   return (
     <Header style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>
-      <Row style={{ background: "#21224d", padding: 0, height: 50, margin: -5 }} type="flex" justify="center" align="middle">
+      <Row style={{ background: "#21224d", padding: 0, height: 50, margin: -5 }} type="flex" justify="center"  align="middle">
         <Col span={9}>
           <Title
             level={3}
@@ -107,17 +107,15 @@ const MainHeader = observer(props => {
         </Col>
 
         <Col span={5} >
-          <Radio.Group defaultValue={currentLocale} onChange={onSelectLocale} buttonStyle="solid">
+          <Radio.Group defaultValue={currentLocale} onChange={onSelectLocale} buttonStyle="solid" style={{verticalAlign: 'middle'}}>
             {SUPPOER_LOCALES.map(locale => (
               <Radio.Button key={locale.value} value={locale.value} style={{ margin:0,padding:5}} >{locale.name}</Radio.Button>
             ))}
           </Radio.Group>
         </Col>
 
-        <Col span={1}>
-        <img style={{ padding: 0, height: 30,margin:0 }} src={BannerImg}/>
-        </Col>
-        <Col span={9}>
+        
+        <Col span={10}>
         <Title style={{
           fontFamily: 'SegoeUI',
           fontSize: '20px',
@@ -127,9 +125,12 @@ const MainHeader = observer(props => {
           lineHeight: 'normal',
           letterSpacing: 'normal',
           color: '#f5c923',
-          margin:0          
+          margin:0,
+          verticalAlign: 'middle',
+          textAlign: 'right',
+          paddingRight: 50
         }}>          
-          {intl.get("BANNER_TITLE")}
+          <img style={{ paddingRight: 50, height: 30,margin:0, verticalAlign: 'middle' }} src={BannerImg}/> {intl.get("BANNER_TITLE")}
         </Title>
 
         </Col>
