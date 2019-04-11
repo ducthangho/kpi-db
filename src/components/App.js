@@ -6,6 +6,7 @@ import { StateProvider } from "../state";
 import reducers from "../reducers";
 import { MainPage } from "components";
 import IntlPolyfill from "intl";
+import { observable } from 'mobx'
 
 // For Node.js, common locales should be added in the application
 global.Intl = IntlPolyfill;
@@ -21,7 +22,7 @@ const SUPPOER_LOCALES = [
   {
     name: "Tiếng Việt",
     value: "vi-VN"
-  },  
+  },
   {
     name: "日本の",
     value: "ja-JP"
@@ -63,13 +64,21 @@ const initialState = {
   }
 };
 
+const getCurrentLocale = () => {
+  const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+  const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
+  if (checkedLocale.length > 0)
+    return currentLocale;
+  else
+    location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
+};
+
 
 const App = () => {
 
   useEffect(() => {
     //const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
-    const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
-    console.log(currentLocale);
+    const currentLocale = getCurrentLocale();
       intl.init({
         currentLocale,
         locales: {
