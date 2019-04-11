@@ -9,6 +9,8 @@ import { getState, getStore } from "../../../state";
 import { Switch, Row, Col, Typography, Layout, Input,Divider,Radio } from "antd";
 import intl from 'react-intl-universal';
 
+import BannerImg from "../../pages/MainPage/styles/ic-quoc-huy.png";
+
 import {
     observer,    
 } from 'mobx-react-lite';
@@ -33,6 +35,7 @@ const SUPPOER_LOCALES = [
     value: "ja-JP"
   }
 ];
+
 
 const MainHeader = observer(props => {
   const [dashboard, dispatch] = getState();
@@ -66,12 +69,11 @@ const MainHeader = observer(props => {
   return (
     <Header style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>
       <Row style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>
-        <Col span={6}>
+        <Col span={9}>
           <Title
             level={3}
             style={{
-              margin: 0,
-              borderRight: "#ccc 2px solid",
+              margin: 0,              
               paddingLeft: 30,
               paddingTop: 5,
               color: "white",
@@ -83,16 +85,12 @@ const MainHeader = observer(props => {
         </Col>
 
         <Col span={9}>
-          <Search
-            placeholder="Ask a question"
-            onSearch={onSearch}
-            style={{ width: 250, paddingTop: 14 }}
-            enterButton
-          />
-          <span className="ant-divider" style={{ margin: "0 1em" }} />
-          <strong>SHOW COLOR</strong> &nbsp;
-          <Switch defaultChecked={dashboard.showColor} onChange={onShowColor} />
-          </Col>
+          <Radio.Group defaultValue={currentLocale} onChange={onSelectLocale} buttonStyle="solid" style={{height:40, margin:0,padding:0}}>
+            {SUPPOER_LOCALES.map(locale => (
+              <Radio.Button key={locale.value} value={locale.value} style={{ margin:0,padding:5}} >{locale.name}</Radio.Button>
+            ))}
+          </Radio.Group>
+        </Col>
 
         <Col>
         <Title style={{
@@ -105,17 +103,11 @@ const MainHeader = observer(props => {
           letterSpacing: 'normal',
           color: '#f5c923'
         }}>          
-          <span>{intl.get("BANNER_TITLE")}</span>
+          <span><img src={BannerImg}/></span><span>{intl.get("BANNER_TITLE")}</span>
         </Title>
 
         </Col>
-        <Col span={9}>
-          <Radio.Group defaultValue={currentLocale} onChange={onSelectLocale} buttonStyle="solid">
-            {SUPPOER_LOCALES.map(locale => (
-              <Radio.Button key={locale.value} value={locale.value}>{locale.name}</Radio.Button>
-            ))}
-          </Radio.Group>
-        </Col>
+        
       </Row>
     </Header>
   );

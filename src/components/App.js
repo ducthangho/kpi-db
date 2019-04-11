@@ -64,12 +64,21 @@ const initialState = {
   }
 };
 
+const getCurrentLocale = () => {
+  const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+  const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
+  if (checkedLocale.length > 0)
+    return currentLocale;
+  else
+    location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
+};
+
 
 const App = () => {
 
   useEffect(() => {
-    //const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
-    const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+    const currentLocale = getCurrentLocale();
+    // const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
     console.log(currentLocale);
       intl.init({
         currentLocale,
