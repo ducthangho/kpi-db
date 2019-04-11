@@ -90,19 +90,21 @@ const MainHeader = observer(props => {
 
   return (
     <Header style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>
-      <Row style={{ background: "#21224d", padding: 0, height: 50, margin: -5 }} type="flex" justify="center"  align="middle">
+      <Row style={{ background: "#21224d", padding: 0, height: 50, margin: -5 }} type="flex" justify="center">
         <Col span={9}>
           <Title
             level={3}
             style={{
               margin: 0,              
               paddingLeft: 30,
-              paddingTop: 5,
+              paddingTop: 10,
               color: "white",
-              height: 50
+              height: 50,
+              textAlign: 'left',
+              verticalAlign: 'middle',
             }}
           >
-            Tăng trưởng kinh tế
+            {store.store.currentTitle}
           </Title>
         </Col>
 
@@ -130,7 +132,7 @@ const MainHeader = observer(props => {
           textAlign: 'right',
           paddingRight: 50
         }}>          
-          <img style={{ paddingRight: 50, height: 30,margin:0, verticalAlign: 'middle' }} src={BannerImg}/> {intl.get("BANNER_TITLE")}
+          <img style={{ paddingRight: 40, height: 30,margin:15, verticalAlign: 'middle' }} src={BannerImg}/> {intl.get("BANNER_TITLE")}
         </Title>
 
         </Col>

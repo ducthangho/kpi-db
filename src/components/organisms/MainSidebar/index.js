@@ -233,8 +233,77 @@ const MainSidebar = observer ( () => {
       let page = pages[pageIndx];
       console.log(page.name + " - " + page.displayName);
       // console.log('Goto : ',pages);
-      report.setPage(page.name);
+      report.setPage(page.name);    
     }
+
+    switch (pageIndx) {
+        case CoverPage: 
+          console.log(intl.get("GENERAL_INFO"));
+          store.saveTitle(intl.get("GENERAL_INFO"));
+        break;
+        case MenuPage:
+          console.log(intl.get("GENERAL_INFO"));
+          store.saveTitle(intl.get("GENERAL_INFO")); 
+        break;
+        case Layer1: 
+          console.log(intl.get("GENERAL_INFO"));
+          store.saveTitle(intl.get("GENERAL_INFO"));
+        break;
+        case TaoBaoCao: 
+          console.log(intl.get("REPORT_CREATION"));
+          store.saveTitle(intl.get("REPORT_CREATION"));
+        break;
+        case TTKT: 
+          console.log(intl.get("ECO_GROWTH"));
+          store.saveTitle(intl.get("ECO_GROWTH"));
+        break;
+        case MTKD: 
+          console.log(intl.get("BUSINESS_ENVIRONMENT"));          
+          store.saveTitle(intl.get("BUSINESS_ENVIRONMENT"));
+        break;
+        case VĐXH:
+          console.log(intl.get("SOCIAL_ISSUES"));          
+          store.saveTitle(intl.get("SOCIAL_ISSUES"));          
+        break;
+        case SoSanhQuocTe: 
+          console.log(intl.get("INTERNATIONAL_COMPARISON"));    
+          store.saveTitle(intl.get("INTERNATIONAL_COMPARISON"));
+        break;
+        case VĐXH2_1:
+          console.log(intl.get("POVERTY_REDUCTION"));    
+          store.saveTitle(intl.get("POVERTY_REDUCTION"));          
+        break;
+        case TTKT2_1:         
+          console.log(intl.get("GDP_GROWTH"));    
+          store.saveTitle(intl.get("GDP_GROWTH"));
+        break;
+        case MTKD2_1: 
+          console.log(intl.get("BUSINESS_DEVELOPMENT"));          
+          store.saveTitle(intl.get("BUSINESS_DEVELOPMENT"));          
+        break;
+        case PageNen:
+          console.log(intl.get("BUSINESS_DEVELOPMENT"));     
+          store.saveTitle(intl.get("GENERAL_INFO"));
+        break;
+        case ChiTiet: 
+          store.saveTitle(intl.get("GENERAL_INFO"));
+        break;
+        case ChiTietDP: 
+          store.saveTitle(intl.get("GENERAL_INFO"));
+        break;
+        case Dubao: 
+          console.log(intl.get("INSTRUCTION"));    
+          store.saveTitle(intl.get("INSTRUCTION"));
+        break;
+        case ChitietSS: 
+          console.log(intl.get("INSTRUCTION"));   
+          store.saveTitle(intl.get("INTERNATIONAL_COMPARISON"));
+        break;
+        default:
+          // statements_def
+          break;
+      }
+     
   }
 
   return (     
