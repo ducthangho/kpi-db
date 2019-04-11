@@ -3,6 +3,7 @@ import { decorate, observable, computed, action } from 'mobx'
 import PropTypes from 'prop-types';
 import  {service, Report, Page, IEmbedConfiguration } from 'powerbi-client';
 import { useObservable } from "mobx-react-lite"
+import intl from 'react-intl-universal';
 
 
 export const StateContext = createContext();
@@ -52,9 +53,19 @@ export class PBIStore {
     visible: false,
   }
 
+  locales = {
+    obj: intl,
+    initDone: false
+  }
+
   tabs = {
     activeKey : null,
     panes: [],
+  }
+
+  saveIntl = (intl) => {
+    this.locales.obj = intl;
+    this.locales.initDone = true;
   }
 
   addTab = (tab) => {
@@ -129,6 +140,8 @@ export class PBIStore {
 decorate(PBIStore, {
   store: observable,
   searchDrawer: observable,   
+  locales: observable,
+  saveIntl: action,
   setError: action,
   saveEmbed: action,
   toggleLoaded: action,
@@ -144,3 +157,4 @@ decorate(PBIStore, {
 
 var Store = createContext(new PBIStore());
 export const getStore = () => Store;
+

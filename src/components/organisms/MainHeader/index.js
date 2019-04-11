@@ -7,7 +7,7 @@ import React, {
 // import { size } from "styled-theme";
 import { getState, getStore } from "../../../state";
 import { Switch, Row, Col, Typography, Layout, Input,Divider,Radio } from "antd";
-import intl from 'react-intl-universal';
+//import intl from 'react-intl-universal';
 
 import BannerImg from "../../pages/MainPage/styles/ic-quoc-huy.png";
 
@@ -36,12 +36,34 @@ const SUPPOER_LOCALES = [
   }
 ];
 
+const getCurrentLocale = () => {
+  const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+  const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
+  if (checkedLocale.length > 0)
+    return currentLocale;
+  else
+    location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
+};
+
 
 const MainHeader = observer(props => {
   const [dashboard, dispatch] = getState();
   const [loaded, setLoaded] = useState(false);
   const store = useContext(PBIStore);
+  const intl = store.locales.obj;
   const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+  const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
+  console.log('CURRENT LOCALE',currentLocale);
+  const initDone = store.locales.initDone;
+  if (!initDone){
+    intl.init({
+      currentLocale,
+      locales: {
+        [currentLocale]: require(`../../locales/${currentLocale}`)
+      }
+    })
+    store.saveIntl(intl);
+  }
 
   const onShowColor = checked => {
     dispatch({

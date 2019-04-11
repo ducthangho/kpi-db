@@ -1,12 +1,12 @@
-import React,{ useEffect} from "react";
-import intl from 'react-intl-universal';
+import React,{ useEffect, useContext} from "react";
 import { Switch, Route } from "react-router-dom";
 // import { injectGlobal, ThemeProvider } from "styled-components";
-import { StateProvider } from "../state";
+import { StateProvider,getStore } from "../state";
 import reducers from "../reducers";
 import { MainPage } from "components";
 import IntlPolyfill from "intl";
 import { observable } from 'mobx'
+import intl from 'react-intl-universal';
 
 // For Node.js, common locales should be added in the application
 global.Intl = IntlPolyfill;
@@ -29,6 +29,7 @@ const SUPPOER_LOCALES = [
   }
 ];
 
+const PBIStore = getStore();
 
 // https://github.com/diegohaz/arc/wiki/Styling
 // import theme from './themes/default'
@@ -78,17 +79,22 @@ const getCurrentLocale = () => {
 
 const App = () => {
 
+  const store = useContext(PBIStore);    
   useEffect(() => {
     // const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
     // const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
     const currentLocale = getCurrentLocale();
     console.log(currentLocale);
-      intl.init({
-        currentLocale,
-        locales: {
-          [currentLocale]: require(`./locales/${currentLocale}`)
-        }
-    });
+    const initDone = store.locales.initDone;
+    if (!initDone){
+        intl.init({
+          currentLocale,
+          locales: {
+            [currentLocale]: require(`./locales/${currentLocale}`)
+          }
+        });
+        store.saveIntl(intl);
+    };
   })
 
 
