@@ -2,7 +2,7 @@ import React, {
     useState,
     useContext    
 } from "react";
-import intl from 'react-intl-universal';
+
 // import styled from "styled-components";
 // import { size } from "styled-theme";
 import { getState, getStore } from "../../../state";
@@ -92,6 +92,7 @@ const MainHeader = observer(props => {
           <span className="ant-divider" style={{ margin: "0 1em" }} />
           <strong>SHOW COLOR</strong> &nbsp;
           <Switch defaultChecked={dashboard.showColor} onChange={onShowColor} />
+          </Col>
 
         <Col>
         <Title style={{
