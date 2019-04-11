@@ -64,6 +64,7 @@ const initialState = {
   }
 };
 
+
 const getCurrentLocale = () => {
   const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
   const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
@@ -74,11 +75,13 @@ const getCurrentLocale = () => {
 };
 
 
+
 const App = () => {
 
   useEffect(() => {
-    const currentLocale = getCurrentLocale();
+    // const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
     // const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+    const currentLocale = getCurrentLocale();
     console.log(currentLocale);
       intl.init({
         currentLocale,
