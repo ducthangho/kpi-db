@@ -67,7 +67,9 @@ const initialState = {
 const App = () => {
 
   useEffect(() => {
-    const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
+    //const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
+    const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+    console.log(currentLocale);
       intl.init({
         currentLocale,
         locales: {
