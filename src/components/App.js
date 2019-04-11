@@ -22,7 +22,7 @@ const SUPPOER_LOCALES = [
   {
     name: "Tiếng Việt",
     value: "vi-VN"
-  },  
+  },
   {
     name: "日本の",
     value: "ja-JP"
