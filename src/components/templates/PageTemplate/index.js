@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 
 import { MainSidebar, MainHeader } from "components";
 
-import { Layout, Drawer, Card, Divider, Popover, Tabs } from "antd";
+import { Layout, Drawer, Card, Divider, Popover, Tabs,Modal, Button  } from "antd";
 const { Meta } = Card;
 
 import "antd/dist/antd.css";
@@ -37,7 +37,16 @@ const getEmbedToken = "https://getembedfuncapp.azurewebsites.net/api/HttpTrigger
 const PageTemplate = observer( props => {
   const [{ dashboard,popover, theme }, dispatch] = getState();
   const store = useContext(PBIStore);
+  const [visible, setVisible] = useState(false);
   var question = "";
+
+  const showModal = () => {
+    setVisible(true);
+  }
+
+  const hideModal = () => {
+    setVisible(false);
+  }
   
   const onChange = (activeKey) => {
     console.log('OnChange');
@@ -104,6 +113,7 @@ const PageTemplate = observer( props => {
 
   const embedQNA = (configQNA) => {
       var panel = document.getElementById("search-panel");
+
       let qna = powerbi.embed(panel, configQNA);
       console.log('store.saveEmbed(powerbi,config,report);');
       store.saveEmbedQNA(powerbi, configQNA, qna);
@@ -129,9 +139,10 @@ const PageTemplate = observer( props => {
     }
 
     useEffect(() => {
-      var qst = dashboard.searchText;
-      if (qst !== undefined && qst !== "")
-        loadQNA(qst);
+      // var qst = dashboard.searchText;
+      // if (qst !== undefined && qst !== "")
+      // loadQNA("");
+      console.log('HEHEHE');
     });
 
 
@@ -180,29 +191,29 @@ const PageTemplate = observer( props => {
    //          </TabPane>)}>
    //        </Observer>
    //      </Tabs>
+       // <Drawer
+       //      title="Search Panel"
+       //      placement="top"
+       //      closable={true}
+       //      onClose={() =>
+       //        dispatch({
+       //          type: "toggleDrawer",
+       //          showDrawer: false
+       //        })
+       //      }
+       //      visible={dashboard.showDrawer}
+       //      width="1200px"
+       //      height="720px"
+       //    >
+       // </Drawer>  
 
    return (
     <Layout>
       <MainSidebar />
       <Layout style={{ background: "#eee", padding: 0 }}>
         <MainHeader />        
-        <Content>{props.children}</Content>
-          <Drawer
-            title="Search Panel"
-            placement="bottom"
-            closable={true}
-            onClose={() =>
-              dispatch({
-                type: "toggleDrawer",
-                showDrawer: false
-              })
-            }
-            visible={dashboard.showDrawer}
-            width="1200px"
-            height="720px"
-          >
-          <div id="search-panel" style={{height:"500px", width:"1300px"}}> </div>
-          </Drawer>     
+        <Content>{props.children}</Content>                            
+             
         </Layout>
       </Layout>   
   );

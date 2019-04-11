@@ -195,8 +195,9 @@ const EditIcon = props => (
 
 
 const ADDSPACE = props => (
-  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <span>&nbsp;&nbsp;&nbsp;&nbsp; </span>
 );
+
 
 const MainSidebar = observer ( () => {
   const [isExpand, setExpand] = useState(true);
@@ -211,6 +212,17 @@ const MainSidebar = observer ( () => {
   const toggle = () => {    
     setExpand(!isExpand);
   }
+
+  const onSearch = value => {
+    dispatch({
+      type: "doSearch",
+      searchText: value
+    });    
+    dispatch({
+      type: "toggleDrawer",
+      showDrawer: true
+    });
+  };
 
 
   const navigateTo = (pageIndx) => {
@@ -551,18 +563,18 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InternationalIcon style={{fontSize:FONTSIZE, marginLeft: '-12px', marginRight: '0px', marginTop: '-20px' , padding:'0px'}} />
-          <span>So sánh quốc tế</span>
+          <span>{intl.get("INTERNATIONAL_COMPARISON")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
           selectable
           key="12"
           onClick={() => {
-            navigateTo(MTKD);            
+            onSearch("");
           }}
         >
           <SearchIcon style={{fontSize:FONTSIZE, marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
-          <span>Tìm kiếm</span>
+          <span>{intl.get("SEARCH")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -573,7 +585,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InfoIcon style={{fontSize:FONTSIZE,marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
-          <span>Hướng dẫn</span>
+          <span>{intl.get("INSTRUCTION")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -584,7 +596,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <EditIcon style={{fontSize:FONTSIZE,  marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
-          <span>Tạo báo cáo</span>
+          <span>{intl.get("REPORT_CREATION")}</span>
         </Menu.Item>
 
       </Menu>

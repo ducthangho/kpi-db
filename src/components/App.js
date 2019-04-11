@@ -6,6 +6,7 @@ import { StateProvider } from "../state";
 import reducers from "../reducers";
 import { MainPage } from "components";
 import IntlPolyfill from "intl";
+import { observable } from 'mobx'
 
 // For Node.js, common locales should be added in the application
 global.Intl = IntlPolyfill;
