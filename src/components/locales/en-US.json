@@ -34,5 +34,10 @@
   "TRANSPORTATION": "Transportation",
   "SOCIAL_SECURITY": "Social safety",
   "URBAN": "Urban",
-  "WELFARE": "Welfare"
+  "WELFARE": "Welfare",
+  "INTERNATIONAL_COMPARISON": "International comparison",
+  "SEARCH": "Search",
+  "INSTRUCTION": "Instruction",
+  "REPORT_CREATION": "Report creation",
+  "BANNER_TITLE" : "GOVERNMENT KPI DASHBOARD"
 }
