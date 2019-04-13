@@ -21,7 +21,6 @@ import InternationalImg from "../../pages/MainPage/styles/ssqt.svg";
 import SearchImg from "../../pages/MainPage/styles/ic-search.svg";
 import EditImg from "../../pages/MainPage/styles/edit.svg";
 import InfoImg from "../../pages/MainPage/styles/info.svg";
-import intl from 'react-intl-universal';
 const { Sider } = Layout;
 import { getState, getStore } from "../../../state";
 import {
@@ -203,8 +202,6 @@ const ADDSPACE = props => (
 const MainSidebar = observer ( () => {
   const [isExpand, setExpand] = useState(true);
   const [{ dashboard, theme }, dispatch] = getState();
-  const firstTime = useRef(true);
-
   const store = useContext(getStore());
  
   const onCollapse = collapsed => {    
@@ -242,79 +239,79 @@ const MainSidebar = observer ( () => {
 
     switch (pageIndx) {
         case CoverPage: 
-          console.log(intl.get("GENERAL_INFO"));
-          store.saveTitle(intl.get("GENERAL_INFO"));
+          console.log(store.text.get("GENERAL_INFO"));
+          store.saveTitle(store.text.get("GENERAL_INFO"));
         break;
         case MenuPage:
-          console.log(intl.get("GENERAL_INFO"));
-          store.saveTitle(intl.get("GENERAL_INFO")); 
+          console.log(store.text.get("GENERAL_INFO"));
+          store.saveTitle(store.text.get("GENERAL_INFO")); 
         break;
         case Layer1: 
-          console.log(intl.get("GENERAL_INFO"));
-          store.saveTitle(intl.get("GENERAL_INFO"));
+          console.log(store.text.get("GENERAL_INFO"));
+          store.saveTitle(store.text.get("GENERAL_INFO"));
         break;
         case TaoBaoCao: 
-          console.log(intl.get("REPORT_CREATION"));
-          store.saveTitle(intl.get("REPORT_CREATION"));
+          console.log(store.text.get("REPORT_CREATION"));
+          store.saveTitle(store.text.get("REPORT_CREATION"));
         break;
         case TTKT: 
-          console.log(intl.get("ECO_GROWTH"));
-          store.saveTitle(intl.get("ECO_GROWTH"));
+          console.log(store.text.get("ECO_GROWTH"));
+          store.saveTitle(store.text.get("ECO_GROWTH"));
         break;
         case MTKD: 
-          console.log(intl.get("BUSINESS_ENVIRONMENT"));          
-          store.saveTitle(intl.get("BUSINESS_ENVIRONMENT"));
+          console.log(store.text.get("BUSINESS_ENVIRONMENT"));          
+          store.saveTitle(store.text.get("BUSINESS_ENVIRONMENT"));
         break;
         case VĐXH:
-          console.log(intl.get("SOCIAL_ISSUES"));          
-          store.saveTitle(intl.get("SOCIAL_ISSUES"));          
+          console.log(store.text.get("SOCIAL_ISSUES"));          
+          store.saveTitle(store.text.get("SOCIAL_ISSUES"));          
         break;
         case SoSanhQuocTe: 
-          console.log(intl.get("INTERNATIONAL_COMPARISON"));    
-          store.saveTitle(intl.get("INTERNATIONAL_COMPARISON"));
+          console.log(store.text.get("INTERNATIONAL_COMPARISON"));    
+          store.saveTitle(store.text.get("INTERNATIONAL_COMPARISON"));
         break;
         case VĐXH2_1:
-          console.log(intl.get("POVERTY_REDUCTION"));    
-          store.saveTitle(intl.get("POVERTY_REDUCTION"));          
+          console.log(store.text.get("POVERTY_REDUCTION"));    
+          store.saveTitle(store.text.get("POVERTY_REDUCTION"));          
         break;
         case TTKT2_1:         
-          console.log(intl.get("GDP_GROWTH"));    
-          store.saveTitle(intl.get("GDP_GROWTH"));
+          console.log(store.text.get("GDP_GROWTH"));    
+          store.saveTitle(store.text.get("GDP_GROWTH"));
         break;
         case MTKD2_1: 
-          console.log(intl.get("BUSINESS_DEVELOPMENT"));          
-          store.saveTitle(intl.get("BUSINESS_DEVELOPMENT"));          
+          console.log(store.text.get("BUSINESS_DEVELOPMENT"));          
+          store.saveTitle(store.text.get("BUSINESS_DEVELOPMENT"));          
         break;
         case PageNen:
-          console.log(intl.get("BUSINESS_DEVELOPMENT"));     
-          store.saveTitle(intl.get("GENERAL_INFO"));
+          console.log(store.text.get("BUSINESS_DEVELOPMENT"));     
+          store.saveTitle(store.text.get("GENERAL_INFO"));
         break;
         case ChiTiet: 
-          store.saveTitle(intl.get("GENERAL_INFO"));
+          store.saveTitle(store.text.get("GENERAL_INFO"));
         break;
         case ChiTietDP: 
-          store.saveTitle(intl.get("GENERAL_INFO"));
+          store.saveTitle(store.text.get("GENERAL_INFO"));
         break;
         case Dubao: 
-          console.log(intl.get("INSTRUCTION"));    
-          store.saveTitle(intl.get("INSTRUCTION"));
+          console.log(store.text.get("INSTRUCTION"));    
+          store.saveTitle(store.text.get("INSTRUCTION"));
         break;
         case ChitietSS: 
-          console.log(intl.get("INSTRUCTION"));   
-          store.saveTitle(intl.get("INTERNATIONAL_COMPARISON"));
+          console.log(store.text.get("INSTRUCTION"));   
+          store.saveTitle(store.text.get("INTERNATIONAL_COMPARISON"));
         break;
         default:
           // statements_def
-          console.log(intl.get("GENERAL_INFO"));
-          store.saveTitle(intl.get("GENERAL_INFO"));
+          console.log(store.text.get("GENERAL_INFO"));
+          store.saveTitle(store.text.get("GENERAL_INFO"));
           break;
       }
       console.log('CURRENT STRING IS ',store.Title);
   }
 
   useLayoutEffect(() => {        
-      console.log("Set title ",intl.get("GENERAL_INFO"))
-      store.saveTitle(intl.get("GENERAL_INFO"));  
+      console.log("Set title ",store.text.get("GENERAL_INFO"))
+      store.saveTitle(store.text.get("GENERAL_INFO"));  
       console.log("Title is now ",store.Title);    
   })
 
@@ -362,12 +359,12 @@ const MainSidebar = observer ( () => {
           }}                  
         >
           <GeneralInfoIcon style={{fontSize:FONTSIZE,opacity : '0.7',color: 'gray',marginTop : MARGINTOP}} />
-          <span>{intl.get("GENERAL_INFO")}</span>
+          <span>{store.text.get("GENERAL_INFO")}</span>
         </Menu.Item>
 
         <SubMenu key="TTKT"            
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
-              title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("ECO_GROWTH")}</span></span>}>           
+              title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("ECO_GROWTH")}</span></span>}>           
 
               <Menu.Item className="modified-item"         
                 selectable
@@ -377,7 +374,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>{intl.get("GDP_GROWTH")}</span>
+                <span>{store.text.get("GDP_GROWTH")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -388,7 +385,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>{intl.get("FOREIGN_TRADE")}</span>
+                <span>{store.text.get("FOREIGN_TRADE")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -399,7 +396,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>{intl.get("INVEST")}</span>
+                <span>{store.text.get("INVEST")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -410,7 +407,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>{intl.get("CONSUMPTION")}</span>
+                <span>{store.text.get("CONSUMPTION")}</span>
                 <ADDSPACE />
               </Menu.Item>
 
@@ -422,7 +419,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(TTKT);            
                 }}
               >                  
-                <span>{intl.get("GROWTH_QUALITY")}</span>
+                <span>{store.text.get("GROWTH_QUALITY")}</span>
               </Menu.Item>
           
         </SubMenu>
@@ -435,7 +432,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <BalanceIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}} />
-          <span>{intl.get("MACROECONOMIC_STABILITY")}</span>
+          <span>{store.text.get("MACROECONOMIC_STABILITY")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -446,13 +443,13 @@ const MainSidebar = observer ( () => {
           }}
         >
           <FinanceIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>{intl.get("PUBLIC_FINANCE")}</span>
+          <span>{store.text.get("PUBLIC_FINANCE")}</span>
         </Menu.Item>
        
 
         <SubMenu key="MTKD"            
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
-              title={<span><BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("BUSINESS_ENVIRONMENT")}</span></span>}>           
+              title={<span><BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("BUSINESS_ENVIRONMENT")}</span></span>}>           
              
               <Menu.Item className="modified-item"         
                 selectable
@@ -462,7 +459,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(MTKD2_1);            
                 }}
               >                  
-                <span>{intl.get("BUSINESS_DEVELOPMENT")}</span>
+                <span>{store.text.get("BUSINESS_DEVELOPMENT")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -473,7 +470,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(MTKD2_1);            
                 }}
               >                  
-                <span>{intl.get("BUSINESS_ADVANTAGES")}</span>
+                <span>{store.text.get("BUSINESS_ADVANTAGES")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -484,7 +481,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(MTKD2_1);            
                 }}
               >                  
-                <span>{intl.get("NATIONAL_COMPETITIVENESS")}</span>
+                <span>{store.text.get("NATIONAL_COMPETITIVENESS")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -495,7 +492,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(MTKD2_1);            
                 }}
               >                  
-                <span>{intl.get("PROVINCIAL_COMPETITIVENESS")}</span>
+                <span>{store.text.get("PROVINCIAL_COMPETITIVENESS")}</span>
                 <ADDSPACE />
               </Menu.Item>
           
@@ -511,7 +508,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InstitutionIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>{intl.get("PUBLIC_ADMINISTRATION")}</span>
+          <span>{store.text.get("PUBLIC_ADMINISTRATION")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -522,13 +519,13 @@ const MainSidebar = observer ( () => {
           }}
         >
           <LabourIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>{intl.get("LABOUR_AND_WORKFORCE")}</span>
+          <span>{store.text.get("LABOUR_AND_WORKFORCE")}</span>
         </Menu.Item>
 
       
         <SubMenu key="VĐXH"            
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
-              title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{intl.get("SOCIAL_ISSUES")}</span></span>}>           
+              title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("SOCIAL_ISSUES")}</span></span>}>           
              
               <Menu.Item className="modified-item"         
                 selectable
@@ -538,7 +535,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH);            
                 }}
               >                  
-                <span>{intl.get("POVERTY_REDUCTION")}</span>
+                <span>{store.text.get("POVERTY_REDUCTION")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -549,7 +546,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>{intl.get("HEALTHCARE")}</span>
+                <span>{store.text.get("HEALTHCARE")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -560,7 +557,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>{intl.get("EDUCATION")}</span>
+                <span>{store.text.get("EDUCATION")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -571,7 +568,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>{intl.get("TRANSPORTATION")}</span>
+                <span>{store.text.get("TRANSPORTATION")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -582,7 +579,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>{intl.get("SOCIAL_SECURITY")}</span>
+                <span>{store.text.get("SOCIAL_SECURITY")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -593,7 +590,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>{intl.get("URBAN")}</span>
+                <span>{store.text.get("URBAN")}</span>
               </Menu.Item>
 
               <Menu.Item className="modified-item"         
@@ -604,7 +601,7 @@ const MainSidebar = observer ( () => {
                   navigateTo(VĐXH2_1);            
                 }}
               >                  
-                <span>{intl.get("WELFARE")}</span>
+                <span>{store.text.get("WELFARE")}</span>
               </Menu.Item>
           
         </SubMenu>
@@ -617,7 +614,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <EnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>{intl.get("ENVIRONMENT")}</span>
+          <span>{store.text.get("ENVIRONMENT")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -628,7 +625,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InfraIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
-          <span>{intl.get("WELFARE")}</span>
+          <span>{store.text.get("WELFARE")}</span>
         </Menu.Item>
 
 
@@ -644,7 +641,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InternationalIcon style={{fontSize:FONTSIZE, marginLeft: '-12px', marginRight: '0px', marginTop: '-20px' , padding:'0px'}} />
-          <span>{intl.get("INTERNATIONAL_COMPARISON")}</span>
+          <span>{store.text.get("INTERNATIONAL_COMPARISON")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -655,7 +652,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <SearchIcon style={{fontSize:FONTSIZE, marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
-          <span>{intl.get("SEARCH")}</span>
+          <span>{store.text.get("SEARCH")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -666,7 +663,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <InfoIcon style={{fontSize:FONTSIZE,marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
-          <span>{intl.get("INSTRUCTION")}</span>
+          <span>{store.text.get("INSTRUCTION")}</span>
         </Menu.Item>
 
         <Menu.Item className="modified-item"         
@@ -677,7 +674,7 @@ const MainSidebar = observer ( () => {
           }}
         >
           <EditIcon style={{fontSize:FONTSIZE,  marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
-          <span>{intl.get("REPORT_CREATION")}</span>
+          <span>{store.text.get("REPORT_CREATION")}</span>
         </Menu.Item>
 
       </Menu>

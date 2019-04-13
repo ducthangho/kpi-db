@@ -9,7 +9,7 @@ import React, {
 // import { size } from "styled-theme";
 import { getState, getStore } from "../../../state";
 import { Switch, Row, Col, Typography, Layout, Input,Divider,Radio } from "antd";
-import intl from 'react-intl-universal';
+// import intl from 'react-intl-universal';
 
 import BannerImg from "../../pages/MainPage/styles/ic-quoc-huy.png";
 
@@ -40,30 +40,30 @@ const SUPPOER_LOCALES = [
   }
 ];
 
-const getCurrentLocale = () => {
-  const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
-  const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
-  if (checkedLocale.length > 0)
-    return currentLocale;
-  else
-    location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
-};
+// const getCurrentLocale = () => {
+//   const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+//   const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
+//   if (checkedLocale.length > 0)
+//     return currentLocale;
+//   else
+//     location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
+// };
 
 
 const MainHeader = observer(props => {
   const [dashboard, dispatch] = getState();
   const [loaded, setLoaded] = useState(false);
   const store = useContext(PBIStore);
-  const intl = store.locales.obj;
-  const currentLocale = getCurrentLocale();  
-  console.log('CURRENT LOCALE',currentLocale);
+  // const intl = store.locales.obj;
+  // const currentLocale = getCurrentLocale();  
+  // console.log('CURRENT LOCALE',currentLocale);
   
-  autorun((reation) => {
-    console.log('Caught ',store.getTitle);
-    reation.dispose();
-  });
+  // autorun((reation) => {
+  //   console.log('Caught ',store.getTitle);
+  //   reation.dispose();
+  // });
   
-  const initDone = store.locales.initDone;
+  // const initDone = store.locales.initDone;
     
   const onShowColor = checked => {
     dispatch({
@@ -85,19 +85,12 @@ const MainHeader = observer(props => {
 
   const onSelectLocale = (e) => {
     let lang = e.target.value;
-    location.search = `?lang=${lang}`;
+    // location.search = `?lang=${lang}`;
+    store.changeLanguage(lang);
   }
 
 
-  if (!initDone){
-    intl.init({
-      currentLocale,
-      locales: {
-        [currentLocale]: require(`../../locales/${currentLocale}`)
-      }
-    })
-    store.saveIntl(intl);
-  }
+  store.changeLanguage();
 
   return (
     <Header style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>
@@ -115,12 +108,12 @@ const MainHeader = observer(props => {
               verticalAlign: 'middle',
             }}
           >
-            <Observer>{() => store.Title}</Observer>
+            {store.Title}
           </Title>
         </Col>
 
         <Col span={5} >
-          <Radio.Group defaultValue={currentLocale} onChange={onSelectLocale} buttonStyle="solid" style={{verticalAlign: 'middle'}}>
+          <Radio.Group defaultValue={store.language} onChange={onSelectLocale} buttonStyle="solid" style={{verticalAlign: 'middle'}}>
             {SUPPOER_LOCALES.map(locale => (
               <Radio.Button key={locale.value} value={locale.value} style={{ margin:0,padding:5}} >{locale.name}</Radio.Button>
             ))}
@@ -143,7 +136,7 @@ const MainHeader = observer(props => {
           textAlign: 'right',
           paddingRight: 50
         }}>          
-          <img style={{ paddingRight: 40, height: 30,margin:15, verticalAlign: 'middle' }} src={BannerImg}/> {intl.get("BANNER_TITLE")}
+          <img style={{ paddingRight: 40, height: 30,margin:15, verticalAlign: 'middle' }} src={BannerImg}/> {store.text.get("BANNER_TITLE")}
         </Title>
 
         </Col>

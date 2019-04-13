@@ -6,6 +6,11 @@ import { useObservable } from "mobx-react-lite"
 import intl from 'react-intl-universal';
 
 
+require('intl/locale-data/jsonp/en.js');
+require('intl/locale-data/jsonp/vi.js');
+require('intl/locale-data/jsonp/ja.js');
+
+
 export const StateContext = createContext();
 
 export const StateProvider = ({ reducer, initialState, children }) => (
@@ -35,6 +40,15 @@ StateProvider.propTypes = {
 
 export const getState = () => useContext(StateContext);
 
+const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+
+const locales = {
+  "en-US": require('../components/locales/en-US'),
+  "vi-VN": require('../components/locales/vi-VN'),
+  "ja-JP": require('../components/locales/ja-JP')
+};
+
+
 export class PBIStore {
   store = 
   {
@@ -58,11 +72,12 @@ export class PBIStore {
 
   locales = {
     obj: intl,
+    lang: "vi-VN",
     initDone: false
   }
 
   get text(){
-    return this.obj.intl;
+    return this.locales.obj;
   }
 
   tabs = {
@@ -70,6 +85,25 @@ export class PBIStore {
     panes: [],
   }
 
+  changeLanguage = (lang) => {
+    let l = (!lang || !this.locales.initDone) ? currentLocale : lang;
+    if (!l) l = "vi-VN";        
+    if (!this.locales.initDone || this.locales.lang!=l){
+      console.log('Change language to ',l);
+      this.locales.lang = l;
+      this.locales.initDone = true;
+      this.locales.obj.init(
+        { 
+          currentLocale:l,
+          locales: locales
+        }
+      );
+    }
+  }
+
+  get language(){
+    return this.locales.lang;
+  }
   
   saveTitle = (tit) => {
     this.title.set(tit);    
@@ -157,6 +191,7 @@ decorate(PBIStore, {
   store: observable,
   searchDrawer: observable,   
   locales: observable,
+  changeLanguage: action,
   saveIntl: action,
   saveTitle: action,  
   setError: action,
