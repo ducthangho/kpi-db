@@ -1,4 +1,4 @@
-import React, { useState,useContext,useRef, useEffect,useLayoutEffect } from "react";
+import React, { useState,useContext,useRef, useEffect,useLayoutEffect, memo } from "react";
 import ReactDom from "react-dom";
 import { Layout, Menu, Icon, Divider } from "antd";
 //import "../../pages/MainPage/styles/main.css";
@@ -25,9 +25,10 @@ const { Sider } = Layout;
 import { getState, getStore } from "../../../state";
 import {
     observer,
-    useDisposable
+    useDisposable,
+    useObserver
 } from 'mobx-react-lite';
-import {autorun} from 'mobx';
+// import {autorun} from 'mobx';
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -199,7 +200,7 @@ const ADDSPACE = props => (
 );
 
 
-const MainSidebar = observer ( () => {
+const MainSidebar = observer ( ( {lang} ) => {
   const [isExpand, setExpand] = useState(true);
   const [{ dashboard, theme }, dispatch] = getState();
   const store = useContext(getStore());
@@ -681,4 +682,9 @@ const MainSidebar = observer ( () => {
     </Sider>
   );
 })
+
+// function arePropsEqual(prevProps, nextProps) {
+//   return prevProps.lang === nextProps.lang; 
+// }
+
 export default MainSidebar;

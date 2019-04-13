@@ -4,15 +4,11 @@ import { Switch, Route } from "react-router-dom";
 import { StateProvider,getStore } from "../state";
 import reducers from "../reducers";
 import { MainPage } from "components";
-import IntlPolyfill from "intl";
+
 import { observable } from 'mobx'
 import intl from 'react-intl-universal';
 
 // For Node.js, common locales should be added in the application
-global.Intl = IntlPolyfill;
-require('intl/locale-data/jsonp/en.js');
-require('intl/locale-data/jsonp/vi.js');
-require('intl/locale-data/jsonp/ja.js');
 
 const SUPPOER_LOCALES = [
   {
@@ -66,36 +62,21 @@ const initialState = {
 };
 
 
-const getCurrentLocale = () => {
-  const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
-  const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
-  if (checkedLocale.length > 0)
-    return currentLocale;
-  else
-    location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
-};
+// const getCurrentLocale = () => {
+//   const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
+//   const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
+//   if (checkedLocale.length > 0)
+//     return currentLocale;
+//   else
+//     location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
+// };
 
 
 
 const App = () => {
 
   const store = useContext(PBIStore);    
-  // useEffect(() => {
-    // const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
-    // const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
-    const currentLocale = getCurrentLocale();
-    console.log(currentLocale);
-    const initDone = store.locales.initDone;
-    if (!initDone){
-        intl.init({
-          currentLocale,
-          locales: {
-            [currentLocale]: require(`./locales/${currentLocale}`)
-          }
-        });
-        store.saveIntl(intl);
-    };
-  // })
+  
 
 
   return (

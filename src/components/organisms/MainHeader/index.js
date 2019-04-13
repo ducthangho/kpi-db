@@ -86,11 +86,12 @@ const MainHeader = observer(props => {
   const onSelectLocale = (e) => {
     let lang = e.target.value;
     // location.search = `?lang=${lang}`;
+    console.log('onSelectLocale ',lang);
     store.changeLanguage(lang);
   }
 
 
-  store.changeLanguage();
+  if (!store.locales.initDone) store.changeLanguage();
 
   return (
     <Header style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>

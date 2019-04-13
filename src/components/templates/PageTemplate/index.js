@@ -209,7 +209,7 @@ const PageTemplate = observer( props => {
 
    return (
     <Layout>
-      <MainSidebar />
+      <MainSidebar lang={store.language}/>
       <Layout style={{ background: "#eee", padding: 0 }}>
         <MainHeader />        
         <Content>{props.children}</Content>                            

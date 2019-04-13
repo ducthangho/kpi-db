@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import  {service, Report, Page, IEmbedConfiguration } from 'powerbi-client';
 import { useObservable } from "mobx-react-lite"
 import intl from 'react-intl-universal';
+import IntlPolyfill from "intl";
+global.Intl = IntlPolyfill;
 
 
-require('intl/locale-data/jsonp/en.js');
-require('intl/locale-data/jsonp/vi.js');
-require('intl/locale-data/jsonp/ja.js');
+require('intl/locale-data/jsonp/en-US.js');
+require('intl/locale-data/jsonp/vi-VN.js');
+require('intl/locale-data/jsonp/ja-JP.js');
 
 
 export const StateContext = createContext();
@@ -72,7 +74,7 @@ export class PBIStore {
 
   locales = {
     obj: intl,
-    lang: "vi-VN",
+    lang: observable.box("vi-VN"),
     initDone: false
   }
 
@@ -90,7 +92,7 @@ export class PBIStore {
     if (!l) l = "vi-VN";        
     if (!this.locales.initDone || this.locales.lang!=l){
       console.log('Change language to ',l);
-      this.locales.lang = l;
+      this.locales.lang.set(l);
       this.locales.initDone = true;
       this.locales.obj.init(
         { 
@@ -102,7 +104,7 @@ export class PBIStore {
   }
 
   get language(){
-    return this.locales.lang;
+    return this.locales.lang.get();
   }
   
   saveTitle = (tit) => {
