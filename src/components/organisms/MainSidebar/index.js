@@ -241,80 +241,82 @@ const MainSidebar = observer ( ( {lang} ) => {
     switch (pageIndx) {
         case CoverPage: 
           console.log(store.text.get("GENERAL_INFO"));
-          store.saveTitle(store.text.get("GENERAL_INFO"));
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
         case MenuPage:
           console.log(store.text.get("GENERAL_INFO"));
-          store.saveTitle(store.text.get("GENERAL_INFO")); 
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO")); 
         break;
         case Layer1: 
           console.log(store.text.get("GENERAL_INFO"));
-          store.saveTitle(store.text.get("GENERAL_INFO"));
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
         case TaoBaoCao: 
           console.log(store.text.get("REPORT_CREATION"));
-          store.saveTitle(store.text.get("REPORT_CREATION"));
+          store.saveTitle("REPORT_CREATION",store.text.get("REPORT_CREATION"));
         break;
         case TTKT: 
           console.log(store.text.get("ECO_GROWTH"));
-          store.saveTitle(store.text.get("ECO_GROWTH"));
+          store.saveTitle("ECO_GROWTH",store.text.get("ECO_GROWTH"));
         break;
         case MTKD: 
           console.log(store.text.get("BUSINESS_ENVIRONMENT"));          
-          store.saveTitle(store.text.get("BUSINESS_ENVIRONMENT"));
+          store.saveTitle("BUSINESS_ENVIRONMENT",store.text.get("BUSINESS_ENVIRONMENT"));
         break;
         case VĐXH:
           console.log(store.text.get("SOCIAL_ISSUES"));          
-          store.saveTitle(store.text.get("SOCIAL_ISSUES"));          
+          store.saveTitle("SOCIAL_ISSUES",store.text.get("SOCIAL_ISSUES"));          
         break;
         case SoSanhQuocTe: 
           console.log(store.text.get("INTERNATIONAL_COMPARISON"));    
-          store.saveTitle(store.text.get("INTERNATIONAL_COMPARISON"));
+          store.saveTitle("INTERNATIONAL_COMPARISON",store.text.get("INTERNATIONAL_COMPARISON"));
         break;
         case VĐXH2_1:
           console.log(store.text.get("POVERTY_REDUCTION"));    
-          store.saveTitle(store.text.get("POVERTY_REDUCTION"));          
+          store.saveTitle("POVERTY_REDUCTION",store.text.get("POVERTY_REDUCTION"));          
         break;
         case TTKT2_1:         
           console.log(store.text.get("GDP_GROWTH"));    
-          store.saveTitle(store.text.get("GDP_GROWTH"));
+          store.saveTitle("GDP_GROWTH",store.text.get("GDP_GROWTH"));
         break;
         case MTKD2_1: 
           console.log(store.text.get("BUSINESS_DEVELOPMENT"));          
-          store.saveTitle(store.text.get("BUSINESS_DEVELOPMENT"));          
+          store.saveTitle("BUSINESS_DEVELOPMENT",store.text.get("BUSINESS_DEVELOPMENT"));          
         break;
         case PageNen:
           console.log(store.text.get("BUSINESS_DEVELOPMENT"));     
-          store.saveTitle(store.text.get("GENERAL_INFO"));
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
         case ChiTiet: 
-          store.saveTitle(store.text.get("GENERAL_INFO"));
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
         case ChiTietDP: 
-          store.saveTitle(store.text.get("GENERAL_INFO"));
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
         case Dubao: 
           console.log(store.text.get("INSTRUCTION"));    
-          store.saveTitle(store.text.get("INSTRUCTION"));
+          store.saveTitle("INSTRUCTION",store.text.get("INSTRUCTION"));
         break;
         case ChitietSS: 
           console.log(store.text.get("INSTRUCTION"));   
-          store.saveTitle(store.text.get("INTERNATIONAL_COMPARISON"));
+          store.saveTitle("INTERNATIONAL_COMPARISON",store.text.get("INTERNATIONAL_COMPARISON"));
         break;
         default:
           // statements_def
           console.log(store.text.get("GENERAL_INFO"));
-          store.saveTitle(store.text.get("GENERAL_INFO"));
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
           break;
       }
       console.log('CURRENT STRING IS ',store.Title);
   }
 
-  useLayoutEffect(() => {        
+  // useLayoutEffect(() => {        
+    if (!store.locales.initDone){
       console.log("Set title ",store.text.get("GENERAL_INFO"))
-      store.saveTitle(store.text.get("GENERAL_INFO"));  
+      store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));  
       console.log("Title is now ",store.Title);    
-  })
+    }
+  // })
 
   return (     
     <Sider

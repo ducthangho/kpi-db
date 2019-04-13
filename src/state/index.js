@@ -66,6 +66,7 @@ export class PBIStore {
   }
 
   title = observable.box("");
+  titleKey = observable.box("GENERAL_INFO");
   
 
   searchDrawer = {
@@ -100,6 +101,14 @@ export class PBIStore {
           locales: locales
         }
       );
+      let key = this.titleKey.get();
+      if (key){
+        console.log('Saved key is ',key);
+        let tit = this.locales.obj.get( key );
+        console.log('Replacing title to ',tit);
+        this.title.set(tit);   
+      }
+      
     }
   }
 
@@ -107,8 +116,18 @@ export class PBIStore {
     return this.locales.lang.get();
   }
   
-  saveTitle = (tit) => {
+  saveTitle = (key,tit) => {
     this.title.set(tit);    
+    this.titleKey.set(key);
+  }
+
+  get TitleKey(){
+    return this.titleKey.get();
+  }
+
+  restoreTitle = () => {
+    let tit = this.locales.obj.get( this.titleKey.get() );
+    this.title.set(tit);
   }
 
   get Title(){
@@ -196,6 +215,7 @@ decorate(PBIStore, {
   changeLanguage: action,
   saveIntl: action,
   saveTitle: action,  
+  restoreTitle: action,
   setError: action,
   saveEmbed: action,
   toggleLoaded: action,
