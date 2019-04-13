@@ -80,7 +80,7 @@ const getCurrentLocale = () => {
 const App = () => {
 
   const store = useContext(PBIStore);    
-  useEffect(() => {
+  // useEffect(() => {
     // const currentLocale = SUPPOER_LOCALES[0].value; // Determine user's locale here
     // const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
     const currentLocale = getCurrentLocale();
@@ -95,7 +95,7 @@ const App = () => {
         });
         store.saveIntl(intl);
     };
-  })
+  // })
 
 
   return (

@@ -46,9 +46,11 @@ export class PBIStore {
     currentPage : null,
     pages : [],
     error : "",
-    loaded : false,
-    currentTitle: ""
+    loaded : false,    
   }
+
+  title = observable.box("");
+  
 
   searchDrawer = {
     visible: false,
@@ -59,6 +61,10 @@ export class PBIStore {
     initDone: false
   }
 
+  get text(){
+    return this.obj.intl;
+  }
+
   tabs = {
     activeKey : null,
     panes: [],
@@ -66,7 +72,11 @@ export class PBIStore {
 
   
   saveTitle = (tit) => {
-    this.store.currentTitle = tit;    
+    this.title.set(tit);    
+  }
+
+  get Title(){
+    return this.title.get();
   }  
 
   saveIntl = (intl) => {
@@ -148,7 +158,7 @@ decorate(PBIStore, {
   searchDrawer: observable,   
   locales: observable,
   saveIntl: action,
-  saveTitle: action,
+  saveTitle: action,  
   setError: action,
   saveEmbed: action,
   toggleLoaded: action,

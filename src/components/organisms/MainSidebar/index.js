@@ -1,4 +1,4 @@
-import React, { useState,useContext,useRef } from "react";
+import React, { useState,useContext,useRef, useEffect,useLayoutEffect } from "react";
 import ReactDom from "react-dom";
 import { Layout, Menu, Icon, Divider } from "antd";
 //import "../../pages/MainPage/styles/main.css";
@@ -28,6 +28,7 @@ import {
     observer,
     useDisposable
 } from 'mobx-react-lite';
+import {autorun} from 'mobx';
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -202,9 +203,10 @@ const ADDSPACE = props => (
 const MainSidebar = observer ( () => {
   const [isExpand, setExpand] = useState(true);
   const [{ dashboard, theme }, dispatch] = getState();
+  const firstTime = useRef(true);
 
   const store = useContext(getStore());
-
+ 
   const onCollapse = collapsed => {    
     setExpand(collapsed);
   };
@@ -235,6 +237,8 @@ const MainSidebar = observer ( () => {
       // console.log('Goto : ',pages);
       report.setPage(page.name);    
     }
+
+    console.log('DISPLAYING');
 
     switch (pageIndx) {
         case CoverPage: 
@@ -301,10 +305,18 @@ const MainSidebar = observer ( () => {
         break;
         default:
           // statements_def
+          console.log(intl.get("GENERAL_INFO"));
+          store.saveTitle(intl.get("GENERAL_INFO"));
           break;
       }
-     
+      console.log('CURRENT STRING IS ',store.Title);
   }
+
+  useLayoutEffect(() => {        
+      console.log("Set title ",intl.get("GENERAL_INFO"))
+      store.saveTitle(intl.get("GENERAL_INFO"));  
+      console.log("Title is now ",store.Title);    
+  })
 
   return (     
     <Sider

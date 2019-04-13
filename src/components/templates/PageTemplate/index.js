@@ -138,12 +138,12 @@ const PageTemplate = observer( props => {
       // }     
     }
 
-    useEffect(() => {
-      // var qst = dashboard.searchText;
-      // if (qst !== undefined && qst !== "")
-      // loadQNA("");
-      console.log('HEHEHE');
-    });
+    // useEffect(() => {
+    //   // var qst = dashboard.searchText;
+    //   // if (qst !== undefined && qst !== "")
+    //   // loadQNA("");
+    //   console.log('HEHEHE');
+    // });
 
 
   // state = {

@@ -1,6 +1,8 @@
 import React, {    
     useState,
-    useContext    
+    useEffect,
+    useContext,
+    useRef
 } from "react";
 
 // import styled from "styled-components";
@@ -12,8 +14,10 @@ import intl from 'react-intl-universal';
 import BannerImg from "../../pages/MainPage/styles/ic-quoc-huy.png";
 
 import {
-    observer,    
+    observer, Observer    
 } from 'mobx-react-lite';
+
+import {autorun} from 'mobx';
 
 const Search = Input.Search;
 const { Header } = Layout;
@@ -51,20 +55,16 @@ const MainHeader = observer(props => {
   const [loaded, setLoaded] = useState(false);
   const store = useContext(PBIStore);
   const intl = store.locales.obj;
-  const currentLocale = getCurrentLocale();
-  
+  const currentLocale = getCurrentLocale();  
   console.log('CURRENT LOCALE',currentLocale);
+  
+  autorun((reation) => {
+    console.log('Caught ',store.getTitle);
+    reation.dispose();
+  });
+  
   const initDone = store.locales.initDone;
-  if (!initDone){
-    intl.init({
-      currentLocale,
-      locales: {
-        [currentLocale]: require(`../../locales/${currentLocale}`)
-      }
-    })
-    store.saveIntl(intl);
-  }
-
+    
   const onShowColor = checked => {
     dispatch({
       type: "showColor",
@@ -88,6 +88,17 @@ const MainHeader = observer(props => {
     location.search = `?lang=${lang}`;
   }
 
+
+  if (!initDone){
+    intl.init({
+      currentLocale,
+      locales: {
+        [currentLocale]: require(`../../locales/${currentLocale}`)
+      }
+    })
+    store.saveIntl(intl);
+  }
+
   return (
     <Header style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>
       <Row style={{ background: "#21224d", padding: 0, height: 50, margin: -5 }} type="flex" justify="center">
@@ -104,7 +115,7 @@ const MainHeader = observer(props => {
               verticalAlign: 'middle',
             }}
           >
-            {store.store.currentTitle}
+            <Observer>{() => store.Title}</Observer>
           </Title>
         </Col>
 
