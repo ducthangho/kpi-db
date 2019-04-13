@@ -4,30 +4,15 @@ import { Layout, Menu, Icon, Divider } from "antd";
 //import "../../pages/MainPage/styles/main.css";
 //import "antd/dist/antd.css";
 import styled,{ injectGlobal,css } from "styled-components";
-import triggerImg from "../../pages/MainPage/styles/trigger.svg";
-import generalImg from "../../pages/MainPage/styles/general.svg";
-import riseImg from "../../pages/MainPage/styles/rise.svg";
-import balanceImg from "../../pages/MainPage/styles/balance.svg";
-import institutionImg from "../../pages/MainPage/styles/institution.svg";
-import PFinanceImg from "../../pages/MainPage/styles/PublicFinance.svg";
-import BusinessEnvImg from "../../pages/MainPage/styles/BusinessEnv.svg";
-import LabourImg from "../../pages/MainPage/styles/Labour.svg";
-import SocialImg from "../../pages/MainPage/styles/Social.svg";
-import EnvImg from "../../pages/MainPage/styles/environment.svg";
-import InfraImg from "../../pages/MainPage/styles/infrastructure.svg";
 
-
-import InternationalImg from "../../pages/MainPage/styles/ssqt.svg";
-import SearchImg from "../../pages/MainPage/styles/ic-search.svg";
-import EditImg from "../../pages/MainPage/styles/edit.svg";
-import InfoImg from "../../pages/MainPage/styles/info.svg";
 const { Sider } = Layout;
-import { getState, getStore } from "../../../state";
+import { getState, getStore } from "state";
 import {
     observer,
     useDisposable,
     useObserver
 } from 'mobx-react-lite';
+import {GeneralInfoIcon,TriggerIcon,RiseIcon,BalanceIcon,FinanceIcon,InstitutionIcon,BusinessEnvIcon,LabourIcon,SocialIcon,EnvIcon,InfraIcon,InternationalIcon,SearchIcon,InfoIcon,EditIcon} from "components/icons";
 // import {autorun} from 'mobx';
 
 const SubMenu = Menu.SubMenu;
@@ -127,72 +112,6 @@ const FONTSIZE='24px'
 const MARGINTOP='-40px'
 const MENUITEMPADDING="0 0 0 10px";
 
-const ImgSvg = () => (
-  <img src={triggerImg}/>
-);
-
-const TriggerIcon = props => (
-  <Icon component={ImgSvg()} {...props} />
-);
-
-const GeneralInfoIcon = props => (
-  <Icon component={ () => <img src={generalImg}/>  } {...props} />
-);
-
-
-const RiseIcon = props => (
-  <Icon component={ () => <img src={riseImg}/>  } {...props} />
-);
-
-const BalanceIcon = props => (
-  <Icon component={ () => <img src={balanceImg}/>  } {...props} />
-);
-
-
-const FinanceIcon = props => (
-  <Icon component={ () => <img src={PFinanceImg}/>  } {...props} />
-);
-
-const InstitutionIcon = props => (
-  <Icon component={ () => <img src={institutionImg}/>  } {...props} />
-);
-
-
-const BusinessEnvIcon = props => (
-  <Icon component={ () => <img src={BusinessEnvImg}/>  } {...props} />
-);
-
-const LabourIcon = props => (
-  <Icon component={ () => <img src={LabourImg}/>  } {...props} />
-);
-
-const SocialIcon = props => (
-  <Icon component={ () => <img src={SocialImg}/>  } {...props} />
-);
-
-const EnvIcon = props => (
-  <Icon component={ () => <img src={EnvImg}/>  } {...props} />
-);
-
-const InfraIcon = props => (
-  <Icon component={ () => <img src={InfraImg}/>  } {...props} />
-);
-
-const InternationalIcon = props => (
-  <Icon component={ () => <img src={InternationalImg} width = '50px' height = '50px'/>  } {...props} />
-);
-
-const SearchIcon = props => (
-  <Icon component={ () => <img src={SearchImg}/>  } {...props} />
-);
-
-const InfoIcon = props => (
-  <Icon component={ () => <img src={InfoImg}/>  } {...props} />
-);
-
-const EditIcon = props => (
-  <Icon component={ () => <img src={EditImg}/>  } {...props} />
-);
 
 
 const ADDSPACE = props => (
@@ -235,56 +154,43 @@ const MainSidebar = observer ( ( {lang} ) => {
       // console.log('Goto : ',pages);
       report.setPage(page.name);    
     }
-
-    console.log('DISPLAYING');
+    
 
     switch (pageIndx) {
-        case CoverPage: 
-          console.log(store.text.get("GENERAL_INFO"));
+        case CoverPage:           
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case MenuPage:
-          console.log(store.text.get("GENERAL_INFO"));
+        case MenuPage:          
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO")); 
         break;
-        case Layer1: 
-          console.log(store.text.get("GENERAL_INFO"));
+        case Layer1:           
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case TaoBaoCao: 
-          console.log(store.text.get("REPORT_CREATION"));
+        case TaoBaoCao:           
           store.saveTitle("REPORT_CREATION",store.text.get("REPORT_CREATION"));
         break;
-        case TTKT: 
-          console.log(store.text.get("ECO_GROWTH"));
+        case TTKT:           
           store.saveTitle("ECO_GROWTH",store.text.get("ECO_GROWTH"));
         break;
-        case MTKD: 
-          console.log(store.text.get("BUSINESS_ENVIRONMENT"));          
+        case MTKD:           
           store.saveTitle("BUSINESS_ENVIRONMENT",store.text.get("BUSINESS_ENVIRONMENT"));
         break;
-        case VĐXH:
-          console.log(store.text.get("SOCIAL_ISSUES"));          
+        case VĐXH:          
           store.saveTitle("SOCIAL_ISSUES",store.text.get("SOCIAL_ISSUES"));          
         break;
-        case SoSanhQuocTe: 
-          console.log(store.text.get("INTERNATIONAL_COMPARISON"));    
+        case SoSanhQuocTe:           
           store.saveTitle("INTERNATIONAL_COMPARISON",store.text.get("INTERNATIONAL_COMPARISON"));
         break;
-        case VĐXH2_1:
-          console.log(store.text.get("POVERTY_REDUCTION"));    
+        case VĐXH2_1:          
           store.saveTitle("POVERTY_REDUCTION",store.text.get("POVERTY_REDUCTION"));          
         break;
-        case TTKT2_1:         
-          console.log(store.text.get("GDP_GROWTH"));    
+        case TTKT2_1:                   
           store.saveTitle("GDP_GROWTH",store.text.get("GDP_GROWTH"));
         break;
-        case MTKD2_1: 
-          console.log(store.text.get("BUSINESS_DEVELOPMENT"));          
+        case MTKD2_1:           
           store.saveTitle("BUSINESS_DEVELOPMENT",store.text.get("BUSINESS_DEVELOPMENT"));          
         break;
-        case PageNen:
-          console.log(store.text.get("BUSINESS_DEVELOPMENT"));     
+        case PageNen:          
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
         case ChiTiet: 
@@ -293,30 +199,26 @@ const MainSidebar = observer ( ( {lang} ) => {
         case ChiTietDP: 
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case Dubao: 
-          console.log(store.text.get("INSTRUCTION"));    
+        case Dubao:           
           store.saveTitle("INSTRUCTION",store.text.get("INSTRUCTION"));
         break;
-        case ChitietSS: 
-          console.log(store.text.get("INSTRUCTION"));   
+        case ChitietSS:           
           store.saveTitle("INTERNATIONAL_COMPARISON",store.text.get("INTERNATIONAL_COMPARISON"));
         break;
         default:
-          // statements_def
-          console.log(store.text.get("GENERAL_INFO"));
+          // statements_def          
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
           break;
       }
       console.log('CURRENT STRING IS ',store.Title);
   }
+  
+  if (!store.locales.initDone){
+    console.log("Set title ",store.text.get("GENERAL_INFO"))
+    store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));  
+    console.log("Title is now ",store.Title);    
+  }
 
-  // useLayoutEffect(() => {        
-    if (!store.locales.initDone){
-      console.log("Set title ",store.text.get("GENERAL_INFO"))
-      store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));  
-      console.log("Title is now ",store.Title);    
-    }
-  // })
 
   return (     
     <Sider

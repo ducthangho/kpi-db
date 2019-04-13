@@ -9,7 +9,7 @@ const { Meta } = Card;
 import "antd/dist/antd.css";
 
 const { Content } = Layout;
-import { getState,getStore } from "../../../state";
+import { getState,getStore } from "state";
 
 import {
     observer,Observer    

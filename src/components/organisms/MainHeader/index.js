@@ -7,17 +7,17 @@ import React, {
 
 // import styled from "styled-components";
 // import { size } from "styled-theme";
-import { getState, getStore } from "../../../state";
+import { getState, getStore } from "state";
 import { Switch, Row, Col, Typography, Layout, Input,Divider,Radio } from "antd";
 // import intl from 'react-intl-universal';
 
-import BannerImg from "../../pages/MainPage/styles/ic-quoc-huy.png";
 
 import {
     observer, Observer    
 } from 'mobx-react-lite';
 
-import {autorun} from 'mobx';
+import BannerImg from "components/icons";
+
 
 const Search = Input.Search;
 const { Header } = Layout;

@@ -27,25 +27,6 @@ const SUPPOER_LOCALES = [
 
 const PBIStore = getStore();
 
-// https://github.com/diegohaz/arc/wiki/Styling
-// import theme from './themes/default'
-
-// injectGlobal`
-//   body {
-//     margin: 0;
-//   }
-// `
-
-// const App = () => {
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <Switch>
-//         <Route path="/" component={HomePage} exact />
-//       </Switch>
-//     </ThemeProvider>
-//   )
-// }
-
 // export default App
 const initialState = {
   theme: { primary: "green" },
@@ -60,17 +41,6 @@ const initialState = {
     showColor:false
   }
 };
-
-
-// const getCurrentLocale = () => {
-//   const currentLocale = intl.determineLocale({ urlLocaleKey: "lang", cookieLocaleKey: "lang" });
-//   const checkedLocale = SUPPOER_LOCALES.filter(locale => currentLocale == locale.value);
-//   if (checkedLocale.length > 0)
-//     return currentLocale;
-//   else
-//     location.search = `?lang=${SUPPOER_LOCALES[0].value}`;
-// };
-
 
 
 const App = () => {

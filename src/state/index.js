@@ -187,7 +187,7 @@ export class PBIStore {
   } 
 
   addPage = (page) => {
-    console.log(page.name + " - " + page.displayName);
+    // console.log(page.name + " - " + page.displayName);
     this.store.pages.push(page);
   }
 

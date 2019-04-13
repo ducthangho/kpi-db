@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import {
     getState,
     getStore
-} from "../../../state";
+} from "state";
 import {
     Row,
     Col,
