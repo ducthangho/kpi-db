@@ -16,7 +16,7 @@ import {
     observer, Observer    
 } from 'mobx-react-lite';
 
-import BannerImg from "components/icons";
+import {BannerImg} from "components/icons";
 
 
 const Search = Input.Search;
@@ -113,7 +113,7 @@ const MainHeader = observer(props => {
           </Title>
         </Col>
 
-        <Col span={5} >
+        <Col span={4} >
           <Radio.Group defaultValue={store.language} onChange={onSelectLocale} buttonStyle="solid" style={{verticalAlign: 'middle'}}>
             {SUPPOER_LOCALES.map(locale => (
               <Radio.Button key={locale.value} value={locale.value} style={{ margin:0,padding:5}} >{locale.name}</Radio.Button>
@@ -122,7 +122,7 @@ const MainHeader = observer(props => {
         </Col>
 
         
-        <Col span={10}>
+        <Col span={11}>
         <Title style={{
           fontFamily: 'SegoeUI',
           fontSize: '20px',
@@ -137,7 +137,7 @@ const MainHeader = observer(props => {
           textAlign: 'right',
           paddingRight: 50
         }}>          
-          <img style={{ paddingRight: 40, height: 30,margin:15, verticalAlign: 'middle' }} src={BannerImg}/> {store.text.get("BANNER_TITLE")}
+          <img style={{ paddingRight: 40, height: 30,margin:15, verticalAlign: 'middle', algin:'middle' }} src={BannerImg}/> {store.text.get("BANNER_TITLE")}
         </Title>
 
         </Col>
