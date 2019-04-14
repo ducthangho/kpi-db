@@ -289,7 +289,10 @@ export const PBIScreen = observer(props => {
                         const firstPage = pages[0];
                         firstPage.isActive = true;
                         store.setCurrentPage(firstPage);
+
+                        // Ensure the pages array is empty before adding pages
                         store.clearPages();
+
                         pages.forEach(function(page) {
                             store.addPage(page);
                         });
@@ -298,6 +301,7 @@ export const PBIScreen = observer(props => {
                     if (onLoad) onLoad(report, dimensions);
                 });
 
+                // Fix report rendered that is called more than 1 time.
                 report.off("rendered");
             });
 
