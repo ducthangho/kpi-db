@@ -269,7 +269,9 @@ const MainSidebar = observer ( ( {lang} ) => {
 
         <SubMenu key="TTKT"            
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
-              title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("ECO_GROWTH")}</span></span>}>           
+              title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("ECO_GROWTH")}</span></span>}
+              onTitleClick={()=>{navigateTo(TTKT)}}
+              >
 
               <Menu.Item className="modified-item"         
                 selectable
@@ -354,9 +356,10 @@ const MainSidebar = observer ( ( {lang} ) => {
 
         <SubMenu key="MTKD"            
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
-              title={<span><BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("BUSINESS_ENVIRONMENT")}</span></span>}>           
-             
-              <Menu.Item className="modified-item"         
+              title={<span><BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("BUSINESS_ENVIRONMENT")}</span></span>}
+              onTitleClick={()=>{navigateTo(MTKD)}}>
+
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="5.1"
@@ -430,9 +433,10 @@ const MainSidebar = observer ( ( {lang} ) => {
       
         <SubMenu key="VĐXH"            
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
-              title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("SOCIAL_ISSUES")}</span></span>}>           
-             
-              <Menu.Item className="modified-item"         
+              title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("SOCIAL_ISSUES")}</span></span>}
+              onTitleClick={()=>{navigateTo(VĐXH)}}>
+
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.1"
