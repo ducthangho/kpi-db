@@ -26,10 +26,10 @@ const { Content } = Layout;
 // );
 
 const PBIStore = getStore();
-const PAGEVIEW = "fitToWidth";
+const PAGEVIEW = "fitToPage";
 const DEBUG = true;
 const W = "100%";
-const H = "800";
+const H = "90vh";
 const powerbi = new pbi.service.Service(
     pbi.factories.hpmFactory,
     pbi.factories.wpmpFactory,
@@ -86,7 +86,8 @@ export const PBIScreen = observer(props => {
             pageName: config && config.pageName ? config.pageName : undefined,
             width: W,
             // height: $(window).height()-rect.top,
-            height: dimension.current.height,
+            // height: dimension.current.height,
+            height: H,
             type: "report",
             id: config.id ? config.id : reportID,
             embedUrl: config.embedUrl ? config.embedUrl : reportURL,
@@ -190,7 +191,7 @@ export const PBIScreen = observer(props => {
                     var config = createConfig({
                         isLoaded: true,
                         width: W,
-                        height: dimension.current.height,
+                        height: H,
                         type: "report",
                         id: json.ReportId,
                         embedUrl: json.EmbedUrl,
@@ -209,8 +210,8 @@ export const PBIScreen = observer(props => {
                     var configQNA = {
                         type: "qna",
                         isLoaded: true,
-                        width: 800,
-                        height: 800,
+                        width: W,
+                        height: H,
                         tokenType: models.TokenType.Embed,
                         accessToken: json.EmbedToken,
                         embedUrl: json.EmbedUrl,
@@ -371,17 +372,19 @@ export const PBIScreen = observer(props => {
         savedHandler.current = source
             .pipe(debounceTime(1500))
             .subscribe(updateWindowDimensions);
-        let h = props.height ? props.height : $(window).height();
-        let rect = rootElement.current.getBoundingClientRect();
-        let top = rect.top + window.scrollY;
-        let height = h - 1.1 * (top - h) + "px";
-        dimension.current = {
-            height: height
-        };
+        // let h = props.height ? props.height : $(window).height();
+        // let rect = rootElement.current.getBoundingClientRect();
+        // let top = rect.top + window.scrollY;
+        // let height = h - 1.1 * (top - h) + "px";
+        // dimension.current = {
+        //     height: H
+        // };
+
+        store.setDimension( {width:W, height : H} );
         // var subscription = source.pipe(debounceTime(1500)).subscribe(updateWindowDimensions);
-        rootElement.current.style.height = height;
+        // rootElement.current.style.height = H;
         updateToken(reportID, groupID);
-        console.log("HH = ", h, top);
+        // console.log("HH = ", h, top);
 
         //Unsubscribe on clean up
         return () => {
@@ -391,29 +394,22 @@ export const PBIScreen = observer(props => {
     });
 
     return (
-        <div id="PBI" className="App" ref={rootElement}>
+        <div id="PBI" ref={rootElement} style={{width:W, height: H, margin:0 , padding:0}}>
             <h2> A Todo App yet again! </h2>{" "}
         </div>
     );
 });
 
 const TestScreen = props => {
-    const [columWidth, setColumnWidth] = useState({
-        left: 6,
-        right: 18,
-        rightContent: <div> No info </div>,
-        leftContent: <div> No info </div>
-    });
-    const [bgColor, setbgColor] = useState("white");
+    // const [columWidth, setColumnWidth] = useState({
+    //     left: 6,
+    //     right: 18,
+    //     rightContent: <div> No info </div>,
+    //     leftContent: <div> No info </div>
+    // });
+    // const [bgColor, setbgColor] = useState("white");
     const [{ dashboard, theme }, dispatch] = getState();
 
-    useEffect(() => {
-        if (dashboard.showColor) {
-            setbgColor(theme.primary);
-        } else {
-            setbgColor("white");
-        }
-    }, [dashboard.showColor]);
 
     return <PBIScreen embedType="report" />;
 };

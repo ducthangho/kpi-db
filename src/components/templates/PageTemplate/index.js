@@ -14,6 +14,7 @@ import {
   Button
 } from "antd";
 const { Meta } = Card;
+const TabPane = Tabs.TabPane;
 
 import "antd/dist/antd.css";
 
@@ -22,129 +23,37 @@ import { getState, getStore } from "state";
 
 import { observer, Observer } from "mobx-react-lite";
 
-import pbi, { models } from "powerbi-client";
-
-import jsonp from "jsonp";
 
 const PBIStore = getStore();
 
-const powerbi = new pbi.service.Service(
-  pbi.factories.hpmFactory,
-  pbi.factories.wpmpFactory,
-  pbi.factories.routerFactory
-);
+const StyledTabPane = styled(TabPane)`
+:hover {
+  font-color: white;
+  color: white;
+}
+`
 
-const reportId = "3f558192-1d40-4d12-949d-7176f5fe3310";
-const groupId = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
-const datasetId = "6f15a837-92de-48ab-ad42-29de5aa0e691";
-
-const getEmbedToken =
-  "https://getembedfuncapp.azurewebsites.net/api/HttpTrigger2?code=XTrzakL7nP2LfGXa53fwYxRNkiXVxJk9tHXAFnC7AmJDun63KO3zcg==";
-
-const PageTemplate = observer(props => {
+const PageTemplate = observer( props => {
   const [{ dashboard, popover, theme }, dispatch] = getState();
   const store = useContext(PBIStore);
   const [visible, setVisible] = useState(false);
-  var question = "";
-
-  const showModal = () => {
-    setVisible(true);
-  };
-
-  const hideModal = () => {
-    setVisible(false);
-  };
+  const tabPanes = [{title : 'Report Tab',key: 'Report',content:<Content>{props.children}</Content>}]
+  const [firstTime,setFirstTime] = useState(true);
+  const [newTabIndex,setNewTabIndex] = useState(1);
 
   const onChange = activeKey => {
-    console.log("OnChange");
+    console.log("OnChange ",activeKey );
+    store.setActiveKey(activeKey);
   };
 
   const onEdit = (targetKey, action) => {
     console.log("Action ", action);
     console.log("Target ", targetKey);
-    this[action](targetKey);
-  };
-
-  const loadQNA = qst => {
-    question = qst;
-    console.log("loadQNA");
-    console.log("Question: " + question);
-    updateToken(groupId, datasetId);
-  };
-
-  const updateToken = (groupId, datasetId) => {
-    // Generate new EmbedToken
-    const url =
-      getEmbedToken + "&datasetId=" + datasetId + "&groupId=" + groupId;
-    jsonp(
-      url,
-      {
-        name: "callback"
-      },
-      (error, json) => {
-        if (error) {
-          if (DEBUG) console.log("Error " + error);
-          store.setError(error);
-        } else {
-          //if (DEBUG) console.log('Here ---- '+json);
-          //var models = window['powerbi-client'].models;
-          //this.updateState(this.props);
-          // const obj = (this.status===null || this.status.length===0) ? null : JSON.parse(this.status);
-          //console.log('JSON = ',json);
-
-          var configQNA = {
-            type: "qna",
-            isLoaded: true,
-            width: 800,
-            height: 800,
-            tokenType: models.TokenType.Embed,
-            accessToken: json.EmbedToken,
-            embedUrl: json.EmbedUrl,
-            datasetIds: [datasetId],
-            viewMode: models.QnaMode.Interactive,
-            question: question
-          };
-
-          // updateState(config);
-          //const errors = validateConfig(config);
-          //if (!errors) {
-          store.saveEmbedQNAConfig(configQNA);
-          embedQNA(configQNA);
-          //} else console.log(errors);
-
-          //if (DEBUG) console.log('Result = '+ JSON.stringify(obj));
-          //this.status = obj;
-        }
-      }
-    );
-  };
-
-  const embedQNA = configQNA => {
-    var panel = document.getElementById("search-panel");
-
-    let qna = powerbi.embed(panel, configQNA);
-    console.log("store.saveEmbed(powerbi,config,report);");
-    store.saveEmbedQNA(powerbi, configQNA, qna);
-    // qna.off removes a given event listener if it exists.
-    qna.off("visualRendered");
-
-    // qna.on will add an event listener.
-    qna.on("visualRendered", function(event) {
-      console.log(event.detail);
-    });
-    // report.setAccessToken(configQNA.accessToken)
-    //     .then(() => {
-    //         // Set token expiration listener
-    //         // result.expiration is in ISO format
-    //         setTokenExpirationListener(json.Ellapse, 2 /*minutes before expiration*/ );
-    //     });
-    // const height = rootElement.current.clientHeight;
-    // const width = rootElement.current.clientWidth;
-    // performOnEmbed(report, { height, width });
-    // if (props.onEmbedded) {
-    //   props.onEmbedded(report, { height, width });
-    // }
-  };
+    if (action=='remove') 
+      store.removeTab(targetKey);
+    else if (action=='add')
+      add();
+  };  
 
   // useEffect(() => {
   //   // var qst = dashboard.searchText;
@@ -213,12 +122,48 @@ const PageTemplate = observer(props => {
   //    >
   // </Drawer>
 
+
+  if (firstTime) {
+    console.log('Add Tab ',firstTime)
+    let tab = tabPanes[0];
+    let stabPanes = store.tabPanes;
+
+    let found = false;
+    for (let i=0;i<stabPanes.length;++i){
+      let tb = stabPanes[i];
+      if (tb.key==tab.key) {
+        found=true;
+        break;
+      }
+    }
+
+    if (!found){
+      store.addTab(tab);
+      store.setActiveKey(tab.key);      
+      console.log('TAB PANE ',stabPanes);
+    }
+    setFirstTime(false);
+  }
+
   return (
     <Layout>
       <MainSidebar lang={store.language} />
       <Layout style={{ background: "#eee", padding: 0 }}>
         <MainHeader />
-        <Content>{props.children}</Content>
+        <Tabs
+          hideAdd
+          onChange={onChange}          
+          type="line"
+          size="default"    
+          tabPosition="bottom"
+          tabBarGutter={0}          
+          activeKey={store.activeTabKey}
+          tabBarStyle={{height: "5vh",margin:0,padding:0, color:"white",backgroundColor: "#21224d"}}
+        >
+
+        {store.tabPanes.map(pane => <StyledTabPane tab={pane.title} key={pane.key}>{pane.content}</StyledTabPane>)}        
+                  
+        </Tabs>
       </Layout>
     </Layout>
   );

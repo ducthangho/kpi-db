@@ -94,8 +94,8 @@ const MainHeader = observer(props => {
   if (!store.locales.initDone) store.changeLanguage();
 
   return (
-    <Header style={{ background: "#21224d", padding: 0, height: 50, margin: 0 }}>
-      <Row style={{ background: "#21224d", padding: 0, height: 50, margin: -5 }} type="flex" justify="center">
+    <Header style={{ background: "#21224d", padding: 0, height: "5vh", margin: 0 }}>
+      <Row style={{ background: "#21224d", padding: 0, height: "5vh", margin: -5 }} type="flex" justify="center">
         <Col span={9}>
           <Title
             level={3}
@@ -135,9 +135,9 @@ const MainHeader = observer(props => {
           margin:0,
           verticalAlign: 'middle',
           textAlign: 'right',
-          paddingRight: 50
+          paddingRight: 20
         }}>          
-          <img style={{ paddingRight: 40, height: 30,margin:15, verticalAlign: 'middle', algin:'middle' }} src={BannerImg}/> {store.text.get("BANNER_TITLE")}
+          <img style={{ paddingRight: 10, height: 30,margin:15, verticalAlign: 'middle', algin:'middle' }} src={BannerImg}/> {store.text.get("BANNER_TITLE")}
         </Title>
 
         </Col>
