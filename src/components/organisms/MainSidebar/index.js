@@ -22,7 +22,7 @@ injectGlobal`
 #app .logo {
   width: 40px;
   height: 40px;
-  background-color: #21224d;  
+  background-color: #21224d;
   padding: 0px;
   margin: 0px;
 }
@@ -30,44 +30,44 @@ injectGlobal`
 .popup_submenu{
   resize: both;
   min-width: 180px;
-  max-width:400px;  
+  max-width:400px;
   width: auto;
 }
 
 .collapsed_popup_submenu{
   resize: both;
   min-width: 50px;
-  max-width:300px;  
+  max-width:300px;
   width: auto;
-  margin: auto;    
+  margin: auto;
 }
 
 .sub-menu li{
     background: #21224d !important;
 }
 
-.modified-item:hover {  
+.modified-item:hover {
   border-bottom: 2px solid transparent !important;
-  color: inherit !important;  
-  border-color: white !important;  
-  background-color: #21224d;  
+  color: inherit !important;
+  border-color: white !important;
+  background-color: #21224d;
   min-width: 50px;
-  max-width:300px;  
+  max-width:300px;
   width: auto;
-  margin: auto;  
+  margin: auto;
 }
 
 .submenu-item{
-  padding: 10px;  
+  padding: 10px;
   background-color: #21224d;
-  margin: 0px  
+  margin: 0px
 }
 
-.modified-item{  
-  padding: 10px;  
-  background-color: #21224d;  
+.modified-item{
+  padding: 10px;
+  background-color: #21224d;
   min-width: 50px;
-  max-width:300px;  
+  max-width:300px;
   width: auto;
   margin: auto;
 }
@@ -80,13 +80,13 @@ injectGlobal`
 
 .menu-item{
   fontSize : 24px;
-  padding: 10px;  
+  padding: 10px;
 }
 
 .ant-menu-item{
   fontSize : 24px;
   padding: 10px;
-  background-color: #21224d;    
+  background-color: #21224d;
 }
 
 `;
@@ -104,7 +104,7 @@ const TTKT2_1 = 9;
 const MTKD2_1 = 10;
 const PageNen = 11;
 const ChiTiet = 12;
-const ChiTietDP = 13; 
+const ChiTietDP = 13;
 const Dubao = 14;
 const ChitietSS = 15;
 
@@ -123,12 +123,12 @@ const MainSidebar = observer ( ( {lang} ) => {
   const [isExpand, setExpand] = useState(true);
   const [{ dashboard, theme }, dispatch] = getState();
   const store = useContext(getStore());
- 
-  const onCollapse = collapsed => {    
+
+  const onCollapse = collapsed => {
     setExpand(collapsed);
   };
 
-  const toggle = () => {    
+  const toggle = () => {
     setExpand(!isExpand);
   }
 
@@ -136,7 +136,7 @@ const MainSidebar = observer ( ( {lang} ) => {
     dispatch({
       type: "doSearch",
       searchText: value
-    });    
+    });
     dispatch({
       type: "toggleDrawer",
       showDrawer: true
@@ -144,217 +144,246 @@ const MainSidebar = observer ( ( {lang} ) => {
   };
 
 
-  const navigateTo = (pageIndx) => {
+  const navigateTo = (pageIndx, bookmarkName = null) => {
     let pages = store.getPages();
 
     let report = store.store.report;
-    if (pageIndx<pages.length){
-      let page = pages[pageIndx];
-      console.log(page.name + " - " + page.displayName);
-      // console.log('Goto : ',pages);
-      report.setPage(page.name);    
+    if (bookmarkName == null) {
+      if (pageIndx<pages.length){
+        let page = pages[pageIndx];
+        console.log(page.name + " - " + page.displayName);
+        // console.log('Goto : ',pages);
+        report.setPage(page.name);
+      }
+    } else {
+      let bookmarks = store.store.bookmarks;
+      let arr = bookmarkName.split("/", 2);
+      let found = false;
+      for (let i=0; i<= bookmarks.length; i++) {
+        let bookmark = bookmarks[i];
+        if (arr[0] == bookmark.displayName) {
+          if (arr[1]) {
+            for (let j=0; j<= bookmark.children.length; j++) {
+              let bookmark2 = bookmark.children[j];
+              if (arr[1] == bookmark2.displayName) {
+                  console.log(bookmarkName);
+                  console.log(bookmark);
+                  console.log(bookmark2);
+                  report.bookmarksManager.apply(bookmark2.name);
+                  found = true;
+                  break;
+              }
+            }
+            if (found) break;
+          } else {
+            console.log(bookmarkName);
+            console.log(bookmark);
+            report.bookmarksManager.apply(bookmark.name);
+            break;
+          }
+        }
+      }
     }
-    
 
     switch (pageIndx) {
-        case CoverPage:           
+        case CoverPage:
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case MenuPage:          
-          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO")); 
-        break;
-        case Layer1:           
+        case MenuPage:
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case TaoBaoCao:           
+        case Layer1:
+          store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
+        break;
+        case TaoBaoCao:
           store.saveTitle("REPORT_CREATION",store.text.get("REPORT_CREATION"));
         break;
-        case TTKT:           
+        case TTKT:
           store.saveTitle("ECO_GROWTH",store.text.get("ECO_GROWTH"));
         break;
-        case MTKD:           
+        case MTKD:
           store.saveTitle("BUSINESS_ENVIRONMENT",store.text.get("BUSINESS_ENVIRONMENT"));
         break;
-        case VĐXH:          
-          store.saveTitle("SOCIAL_ISSUES",store.text.get("SOCIAL_ISSUES"));          
+        case VĐXH:
+          store.saveTitle("SOCIAL_ISSUES",store.text.get("SOCIAL_ISSUES"));
         break;
-        case SoSanhQuocTe:           
+        case SoSanhQuocTe:
           store.saveTitle("INTERNATIONAL_COMPARISON",store.text.get("INTERNATIONAL_COMPARISON"));
         break;
-        case VĐXH2_1:          
-          store.saveTitle("POVERTY_REDUCTION",store.text.get("POVERTY_REDUCTION"));          
+        case VĐXH2_1:
+          store.saveTitle("POVERTY_REDUCTION",store.text.get("POVERTY_REDUCTION"));
         break;
-        case TTKT2_1:                   
+        case TTKT2_1:
           store.saveTitle("GDP_GROWTH",store.text.get("GDP_GROWTH"));
         break;
-        case MTKD2_1:           
-          store.saveTitle("BUSINESS_DEVELOPMENT",store.text.get("BUSINESS_DEVELOPMENT"));          
+        case MTKD2_1:
+          store.saveTitle("BUSINESS_DEVELOPMENT",store.text.get("BUSINESS_DEVELOPMENT"));
         break;
-        case PageNen:          
+        case PageNen:
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case ChiTiet: 
+        case ChiTiet:
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case ChiTietDP: 
+        case ChiTietDP:
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
         break;
-        case Dubao:           
+        case Dubao:
           store.saveTitle("INSTRUCTION",store.text.get("INSTRUCTION"));
         break;
-        case ChitietSS:           
+        case ChitietSS:
           store.saveTitle("INTERNATIONAL_COMPARISON",store.text.get("INTERNATIONAL_COMPARISON"));
         break;
         default:
-          // statements_def          
+          // statements_def
           store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
           break;
       }
       console.log('CURRENT STRING IS ',store.Title);
   }
-  
+
   if (!store.locales.initDone){
     console.log("Set title ",store.text.get("GENERAL_INFO"))
-    store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));  
-    console.log("Title is now ",store.Title);    
+    store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));
+    console.log("Title is now ",store.Title);
   }
 
 
-  return (     
+  return (
     <Sider
       id="my-sider"
       theme="dark"
-      collapsible      
+      collapsible
       collapsed={isExpand}
       style={{
         backgroundColor: "#21224d",
-        height: "100vh",        
+        height: "100vh",
       }}
       width = "250px"
       onCollapse={onCollapse}
       collapsedWidth="50px"
       trigger={null}
-      mode='vertical'   
+      mode='vertical'
     >
-      <div className="logo" > 
-      <a onClick={toggle}> <Icon type={isExpand ? 'menu-unfold' : 'menu-fold'} style={{fontSize:'28px',paddingLeft: '0px', margin: '10px',color:'white'}} /> </a>      
+      <div className="logo" >
+      <a onClick={toggle}> <Icon type={isExpand ? 'menu-unfold' : 'menu-fold'} style={{fontSize:'28px',paddingLeft: '0px', margin: '10px',color:'white'}} /> </a>
       </div>
       <Divider style={{margin : '10px 0px 5px 0px'}}/>
 
       <Menu
         theme="dark"
-        mode='vertical-left'        
+        mode='vertical-left'
         inlineIndent={1}
         onSelect={selectedKeys => {
           console.log(selectedKeys);
-        }}       
+        }}
 
          style={{
-            backgroundColor: "#21224d",       
+            backgroundColor: "#21224d",
             marginLeft: (isExpand) ? '-22px' : '-10px',
             marginTop: '0px',
-            padding: '0px',            
+            padding: '0px',
             width : 'auto'
-          }}           
+          }}
       >
-        <Menu.Item className="modified-item"         
-          key="1"            
+        <Menu.Item className="modified-item"
+          key="1"
           onClick={() => {
-             navigateTo(Layer1);   
-          }}                  
+             navigateTo(Layer1);
+          }}
         >
           <GeneralInfoIcon style={{fontSize:FONTSIZE,opacity : '0.7',color: 'gray',marginTop : MARGINTOP}} />
           <span>{store.text.get("GENERAL_INFO")}</span>
         </Menu.Item>
 
-        <SubMenu key="TTKT"            
+        <SubMenu key="TTKT"
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
               title={<span><RiseIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("ECO_GROWTH")}</span></span>}
               onTitleClick={()=>{navigateTo(TTKT)}}
               >
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2"
                 onClick={() => {
-                  navigateTo(TTKT);            
+                  navigateTo(TTKT, "TTKT/TTKT 2");
                 }}
-              >                  
+              >
                 <span>{store.text.get("GDP_GROWTH")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.1"
                 onClick={() => {
-                  navigateTo(TTKT);            
+                  navigateTo(TTKT, "TTKT/TTKT 8");
                 }}
-              >                  
+              >
                 <span>{store.text.get("FOREIGN_TRADE")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.2"
                 onClick={() => {
-                  navigateTo(TTKT);            
+                  navigateTo(TTKT, "TTKT/TTKT 12");
                 }}
-              >                  
+              >
                 <span>{store.text.get("INVEST")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.3"
                 onClick={() => {
-                  navigateTo(TTKT);            
+                  navigateTo(TTKT, "TTKT/TTKT 6");
                 }}
-              >                  
+              >
                 <span>{store.text.get("CONSUMPTION")}</span>
                 <ADDSPACE />
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="2.4"
                 onClick={() => {
-                  navigateTo(TTKT);            
+                  navigateTo(TTKT, "TTKT/TTKT 14");
                 }}
-              >                  
+              >
                 <span>{store.text.get("GROWTH_QUALITY")}</span>
               </Menu.Item>
-          
+
         </SubMenu>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="3"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(MTKD);
           }}
         >
           <BalanceIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}} />
           <span>{store.text.get("MACROECONOMIC_STABILITY")}</span>
         </Menu.Item>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="4"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(MTKD);
           }}
         >
           <FinanceIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
           <span>{store.text.get("PUBLIC_FINANCE")}</span>
         </Menu.Item>
-       
 
-        <SubMenu key="MTKD"            
+
+        <SubMenu key="MTKD"
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
               title={<span><BusinessEnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("BUSINESS_ENVIRONMENT")}</span></span>}
               onTitleClick={()=>{navigateTo(MTKD)}}>
@@ -364,74 +393,74 @@ const MainSidebar = observer ( ( {lang} ) => {
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="5.1"
                 onClick={() => {
-                  navigateTo(MTKD2_1);            
+                  navigateTo(MTKD2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("BUSINESS_DEVELOPMENT")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="5.2"
                 onClick={() => {
-                  navigateTo(MTKD2_1);            
+                  navigateTo(MTKD2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("BUSINESS_ADVANTAGES")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="5.3"
                 onClick={() => {
-                  navigateTo(MTKD2_1);            
+                  navigateTo(MTKD2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("NATIONAL_COMPETITIVENESS")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="5.4"
                 onClick={() => {
-                  navigateTo(MTKD2_1);            
+                  navigateTo(MTKD2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("PROVINCIAL_COMPETITIVENESS")}</span>
                 <ADDSPACE />
               </Menu.Item>
-          
+
         </SubMenu>
 
-       
 
-        <Menu.Item className="modified-item"         
+
+        <Menu.Item className="modified-item"
           selectable
           key="6"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(MTKD);
           }}
         >
           <InstitutionIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
           <span>{store.text.get("PUBLIC_ADMINISTRATION")}</span>
         </Menu.Item>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="7"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(MTKD);
           }}
         >
           <LabourIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
           <span>{store.text.get("LABOUR_AND_WORKFORCE")}</span>
         </Menu.Item>
 
-      
-        <SubMenu key="VĐXH"            
+
+        <SubMenu key="VĐXH"
               className={!isExpand ? "popup_submenu" : "collapsed_popup_submenu"}
               title={<span><SocialIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/><span>{store.text.get("SOCIAL_ISSUES")}</span></span>}
               onTitleClick={()=>{navigateTo(VĐXH)}}>
@@ -441,96 +470,96 @@ const MainSidebar = observer ( ( {lang} ) => {
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.1"
                 onClick={() => {
-                  navigateTo(VĐXH);            
+                  navigateTo(VĐXH);
                 }}
-              >                  
+              >
                 <span>{store.text.get("POVERTY_REDUCTION")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.2"
                 onClick={() => {
-                  navigateTo(VĐXH2_1);            
+                  navigateTo(VĐXH2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("HEALTHCARE")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.3"
                 onClick={() => {
-                  navigateTo(VĐXH2_1);            
+                  navigateTo(VĐXH2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("EDUCATION")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.4"
                 onClick={() => {
-                  navigateTo(VĐXH2_1);            
+                  navigateTo(VĐXH2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("TRANSPORTATION")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.5"
                 onClick={() => {
-                  navigateTo(VĐXH2_1);            
+                  navigateTo(VĐXH2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("SOCIAL_SECURITY")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.6"
                 onClick={() => {
-                  navigateTo(VĐXH2_1);            
+                  navigateTo(VĐXH2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("URBAN")}</span>
               </Menu.Item>
 
-              <Menu.Item className="modified-item"         
+              <Menu.Item className="modified-item"
                 selectable
                 style={{ margin: '0px', padding: MENUITEMPADDING,backgroundColor: "#21224d"}}
                 key="8.7"
                 onClick={() => {
-                  navigateTo(VĐXH2_1);            
+                  navigateTo(VĐXH2_1);
                 }}
-              >                  
+              >
                 <span>{store.text.get("WELFARE")}</span>
               </Menu.Item>
-          
+
         </SubMenu>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="9"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(MTKD);
           }}
         >
           <EnvIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
           <span>{store.text.get("ENVIRONMENT")}</span>
         </Menu.Item>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="10"
           onClick={() => {
-            navigateTo(MTKD);            
+            navigateTo(MTKD);
           }}
         >
           <InfraIcon style={{fontSize:FONTSIZE,marginTop : MARGINTOP}}/>
@@ -538,22 +567,22 @@ const MainSidebar = observer ( ( {lang} ) => {
         </Menu.Item>
 
 
-         
+
 
          <div style= {{height:"145px"}}>&nbsp;</div>
 
-         <Menu.Item className="modified-item"         
+         <Menu.Item className="modified-item"
           selectable
           key="11"
           onClick={() => {
-            navigateTo(SoSanhQuocTe);            
+            navigateTo(SoSanhQuocTe);
           }}
         >
           <InternationalIcon style={{fontSize:FONTSIZE, marginLeft: '-12px', marginRight: '0px', marginTop: '-20px' , padding:'0px'}} />
           <span>{store.text.get("INTERNATIONAL_COMPARISON")}</span>
         </Menu.Item>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="12"
           onClick={() => {
@@ -564,22 +593,22 @@ const MainSidebar = observer ( ( {lang} ) => {
           <span>{store.text.get("SEARCH")}</span>
         </Menu.Item>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="13"
           onClick={() => {
-            navigateTo(Dubao);            
+            navigateTo(Dubao);
           }}
         >
           <InfoIcon style={{fontSize:FONTSIZE,marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
           <span>{store.text.get("INSTRUCTION")}</span>
         </Menu.Item>
 
-        <Menu.Item className="modified-item"         
+        <Menu.Item className="modified-item"
           selectable
           key="14"
           onClick={() => {
-            navigateTo(TaoBaoCao);            
+            navigateTo(TaoBaoCao);
           }}
         >
           <EditIcon style={{fontSize:FONTSIZE,  marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
@@ -592,7 +621,7 @@ const MainSidebar = observer ( ( {lang} ) => {
 })
 
 // function arePropsEqual(prevProps, nextProps) {
-//   return prevProps.lang === nextProps.lang; 
+//   return prevProps.lang === nextProps.lang;
 // }
 
 export default MainSidebar;

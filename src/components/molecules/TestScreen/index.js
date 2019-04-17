@@ -199,7 +199,11 @@ export const PBIScreen = observer(props => {
                         permissions: models.Permissions.All,
                         expiration: json.Expiry,
                         ellapse: json.Ellapse,
-                        pageView: PAGEVIEW
+                        pageView: PAGEVIEW,
+                        settings: {
+                            filterPaneEnabled: false,
+                            navContentPaneEnabled: false,
+                        }
                     });
 
                     var configQNA = {
@@ -301,6 +305,8 @@ export const PBIScreen = observer(props => {
                     if (onLoad) onLoad(report, dimensions);
                 });
 
+                // console.log(store.store.bookmarks);
+
                 // Fix report rendered that is called more than 1 time.
                 report.off("rendered");
             });
@@ -317,6 +323,14 @@ export const PBIScreen = observer(props => {
                     report.config.id,
                     report.config.groupId
                 );
+
+                let bookmarks = report.bookmarksManager.getBookmarks().then(function (bookmarks) {
+                  // console.log(bookmarks);
+                  store.clearBookmarks();
+                  bookmarks.forEach(function(bookmark) {
+                      store.addBookmark(bookmark);
+                  });
+                });
 
                 if (onLoad) onLoad(report, dimensions);
             });
