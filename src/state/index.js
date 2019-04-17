@@ -7,9 +7,9 @@ import intl from "react-intl-universal";
 import IntlPolyfill from "intl";
 global.Intl = IntlPolyfill;
 
-require("intl/locale-data/jsonp/en-US.js");
-require("intl/locale-data/jsonp/vi-VN.js");
-require("intl/locale-data/jsonp/ja-JP.js");
+import("intl/locale-data/jsonp/en-US.js");
+import("intl/locale-data/jsonp/vi-VN.js");
+import("intl/locale-data/jsonp/ja-JP.js");
 
 export const StateContext = createContext();
 
@@ -61,12 +61,16 @@ export class PBIStore {
     currentPage: null,
     pages: [],
     error: "",
-    loaded: false
+    loaded: false,
+    dimension: {}
   };
+
 
   title = observable.box("");
   titleKey = observable.box("GENERAL_INFO");
+  firstT = observable.box(true);
 
+  
   searchDrawer = {
     visible: false
   };
@@ -82,30 +86,52 @@ export class PBIStore {
   }
 
   tabs = {
-    activeKey: null,
+    activeKey: observable.box(""),
     panes: []
   };
+
+  get firstTime(){
+    return this.firstT.get();
+  }
+
+  setFirstTime = val => {
+    this.firstT.set(val);
+  }
+
 
   changeLanguage = lang => {
     let l = !lang || !this.locales.initDone ? currentLocale : lang;
     if (!l) l = "vi-VN";
     if (!this.locales.initDone || this.locales.lang != l) {
       console.log("Change language to ", l);
+      if (l!="vi-VN" && l!="en-US" && l != "ja-JP") l="vi-VN";
       this.locales.lang.set(l);
       this.locales.initDone = true;
       this.locales.obj.init({
         currentLocale: l,
         locales: locales
+      }).then( () => {
+        let key = this.titleKey.get();
+        if (key) {
+          console.log("Saved key is ", key);
+          let tit = this.locales.obj.get(key);
+          console.log("Replacing title to ", tit);
+          this.title.set(tit);
+        }  
+      } ).catch((err) => {
+        console.log('Caught err ',err);
       });
-      let key = this.titleKey.get();
-      if (key) {
-        console.log("Saved key is ", key);
-        let tit = this.locales.obj.get(key);
-        console.log("Replacing title to ", tit);
-        this.title.set(tit);
-      }
+      
     }
   };
+
+  get dimension(){
+    return this.store.dimension;
+  }
+
+  setDimension = (dim) => {
+    this.store.dimension = dim;
+  }
 
   get language() {
     return this.locales.lang.get();
@@ -135,12 +161,45 @@ export class PBIStore {
   };
 
   addTab = tab => {
-    this.tabs.panes.push(tab);
+    this.tabs.panes.push(tab);    
   };
 
+  clearTabPane = () =>{
+    this.tabs.panes = [];
+    this.tabs.activeKey.set("");
+  }
+
+  get activeTabKey(){
+    return this.tabs.activeKey.get();  
+  }
+
   setActiveKey = key => {
-    this.tabs.activeKey = key;
+    this.tabs.activeKey.set(key);
   };
+
+  removeTab = targetKey => {
+    let activeKey = tabs.activeKey.get();
+    let lastIndex;
+    this.tabs.panes.forEach((pane, i) => {
+      if (pane.key === targetKey) {
+        lastIndex = i - 1;
+      }
+    });
+    
+    const panes = tabs.panes.filter(pane => pane.key !== targetKey);
+    if (panes.length && activeKey === targetKey) {
+      if (lastIndex >= 0) {
+        activeKey = panes[lastIndex].key;
+      } else {
+        activeKey = panes[0].key;
+      }
+    }
+    this.tabs.panes = panes;
+  }
+
+  get tabPanes(){
+    return this.tabs.panes;
+  }
 
   isLoaded = () => {
     return this.store.loaded;
@@ -207,7 +266,11 @@ decorate(PBIStore, {
   store: observable,
   searchDrawer: observable,
   locales: observable,
+  tabs: observable,
+  firstT: observable,  
+  setFirstTime: action,
   changeLanguage: action,
+  setDimension: action,
   saveIntl: action,
   saveTitle: action,
   restoreTitle: action,
@@ -219,7 +282,9 @@ decorate(PBIStore, {
   setCurrentPage: action,
   saveEmbedQNA: action,
   addTab: action,
+  clearTabPane: action,
   setActiveKey: action,
+  removeTab: action,
   showSearchDrawer: action,
   hideSearchDrawer: action
 });

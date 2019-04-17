@@ -26,10 +26,10 @@ const { Content } = Layout;
 // );
 
 const PBIStore = getStore();
-const PAGEVIEW = "fitToWidth";
+const PAGEVIEW = "fitToPage";
 const DEBUG = true;
 const W = "100%";
-const H = "800";
+const H = "90vh";
 const powerbi = new pbi.service.Service(
     pbi.factories.hpmFactory,
     pbi.factories.wpmpFactory,
@@ -86,7 +86,8 @@ export const PBIScreen = observer(props => {
             pageName: config && config.pageName ? config.pageName : undefined,
             width: W,
             // height: $(window).height()-rect.top,
-            height: dimension.current.height,
+            // height: dimension.current.height,
+            height: H,
             type: "report",
             id: config.id ? config.id : reportID,
             embedUrl: config.embedUrl ? config.embedUrl : reportURL,
@@ -190,7 +191,7 @@ export const PBIScreen = observer(props => {
                     var config = createConfig({
                         isLoaded: true,
                         width: W,
-                        height: dimension.current.height,
+                        height: H,
                         type: "report",
                         id: json.ReportId,
                         embedUrl: json.EmbedUrl,
@@ -205,8 +206,8 @@ export const PBIScreen = observer(props => {
                     var configQNA = {
                         type: "qna",
                         isLoaded: true,
-                        width: 800,
-                        height: 800,
+                        width: W,
+                        height: H,
                         tokenType: models.TokenType.Embed,
                         accessToken: json.EmbedToken,
                         embedUrl: json.EmbedUrl,
@@ -362,10 +363,12 @@ export const PBIScreen = observer(props => {
         let top = rect.top + window.scrollY;
         let height = h - 1.1 * (top - h) + "px";
         dimension.current = {
-            height: height
+            height: H
         };
+
+        store.setDimension( {width:W, height : H} );
         // var subscription = source.pipe(debounceTime(1500)).subscribe(updateWindowDimensions);
-        rootElement.current.style.height = height;
+        rootElement.current.style.height = H;
         updateToken(reportID, groupID);
         console.log("HH = ", h, top);
 

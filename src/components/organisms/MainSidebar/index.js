@@ -13,7 +13,9 @@ import {
     useObserver
 } from 'mobx-react-lite';
 import {GeneralInfoIcon,TriggerIcon,RiseIcon,BalanceIcon,FinanceIcon,InstitutionIcon,BusinessEnvIcon,LabourIcon,SocialIcon,EnvIcon,InfraIcon,InternationalIcon,SearchIcon,InfoIcon,EditIcon} from "components/icons";
-// import {autorun} from 'mobx';
+import QNAPane from "components/pages/QNAPane";
+
+const { Content } = Layout;
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -123,6 +125,8 @@ const MainSidebar = observer ( ( {lang} ) => {
   const [isExpand, setExpand] = useState(true);
   const [{ dashboard, theme }, dispatch] = getState();
   const store = useContext(getStore());
+  const [newTabIndex,setNewTabIndex] = useState(1);
+
  
   const onCollapse = collapsed => {    
     setExpand(collapsed);
@@ -133,16 +137,39 @@ const MainSidebar = observer ( ( {lang} ) => {
   }
 
   const onSearch = value => {
-    dispatch({
-      type: "doSearch",
-      searchText: value
-    });    
-    dispatch({
-      type: "toggleDrawer",
-      showDrawer: true
-    });
-  };
+    // dispatch({
+    //   type: "doSearch",
+    //   searchText: value
+    // });    
+    // dispatch({
+    //   type: "toggleDrawer",
+    //   showDrawer: true
+    // });
 
+    console.log('On Search ',value);
+    const panes = store.tabs.panes;
+    const activeKey = "newTab"+newTabIndex;
+
+    let tabPanes = store.tabPanes;
+    let found = false;
+    for (let i=0;i<tabPanes.length;++i){
+      let tb = tabPanes[i];
+      if (tb.key==activeKey) {
+        found=true;
+        break;
+      }
+    }
+
+    if (!found){
+      setNewTabIndex(newTabIndex+1);
+      let tab = { title: 'Search Tab '+ newTabIndex, content: <Content style= {{ height:"90vh", overflow : 'hidden' }}><QNAPane /></Content>, key: activeKey };
+      store.addTab(tab);
+      console.log('Adding tab ',tab);
+      store.setActiveKey(tab.key);      
+    }
+    
+  };
+  
 
   const navigateTo = (pageIndx) => {
     let pages = store.getPages();
@@ -214,6 +241,7 @@ const MainSidebar = observer ( ( {lang} ) => {
   }
   
   if (!store.locales.initDone){
+    store.changeLanguage("vi-VN");
     console.log("Set title ",store.text.get("GENERAL_INFO"))
     store.saveTitle("GENERAL_INFO",store.text.get("GENERAL_INFO"));  
     console.log("Title is now ",store.Title);    
@@ -239,14 +267,14 @@ const MainSidebar = observer ( ( {lang} ) => {
       <div className="logo" > 
       <a onClick={toggle}> <Icon type={isExpand ? 'menu-unfold' : 'menu-fold'} style={{fontSize:'28px',paddingLeft: '0px', margin: '10px',color:'white'}} /> </a>      
       </div>
-      <Divider style={{margin : '10px 0px 5px 0px'}}/>
+      
 
       <Menu
         theme="dark"
         mode='vertical-left'        
         inlineIndent={1}
         onSelect={selectedKeys => {
-          console.log(selectedKeys);
+          console.log('onSelect');
         }}       
 
          style={{

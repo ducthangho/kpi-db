@@ -1,5 +1,5 @@
-import React from "react";
-// import { StateContext } from '../../state';
+import React,{  useContext } from "react";
+import { getStore } from 'state';
 // import { observable } from "mobx";
 
 import {
@@ -7,9 +7,13 @@ import {
   PageTemplate
 } from 'components'
 
+const PBIStore = getStore();
+
 function MainPage() {
+  const store = useContext(PBIStore);
+
   return (
-    <PageTemplate>
+    <PageTemplate key={store.activeTabKey}>
     <TestScreen/>
   </PageTemplate>
   )

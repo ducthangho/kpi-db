@@ -6,7 +6,7 @@ import reducers from "../reducers";
 import { MainPage } from "components";
 
 import { observable } from "mobx";
-import intl from "react-intl-universal";
+//import intl from "react-intl-universal";
 
 // For Node.js, common locales should be added in the application
 
