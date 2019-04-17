@@ -358,19 +358,19 @@ export const PBIScreen = observer(props => {
         savedHandler.current = source
             .pipe(debounceTime(1500))
             .subscribe(updateWindowDimensions);
-        let h = props.height ? props.height : $(window).height();
-        let rect = rootElement.current.getBoundingClientRect();
-        let top = rect.top + window.scrollY;
-        let height = h - 1.1 * (top - h) + "px";
-        dimension.current = {
-            height: H
-        };
+        // let h = props.height ? props.height : $(window).height();
+        // let rect = rootElement.current.getBoundingClientRect();
+        // let top = rect.top + window.scrollY;
+        // let height = h - 1.1 * (top - h) + "px";
+        // dimension.current = {
+        //     height: H
+        // };
 
         store.setDimension( {width:W, height : H} );
         // var subscription = source.pipe(debounceTime(1500)).subscribe(updateWindowDimensions);
-        rootElement.current.style.height = H;
+        // rootElement.current.style.height = H;
         updateToken(reportID, groupID);
-        console.log("HH = ", h, top);
+        // console.log("HH = ", h, top);
 
         //Unsubscribe on clean up
         return () => {
@@ -380,29 +380,22 @@ export const PBIScreen = observer(props => {
     });
 
     return (
-        <div id="PBI" className="App" ref={rootElement}>
+        <div id="PBI" ref={rootElement} style={{width:W, height: H, margin:0 , padding:0}}>
             <h2> A Todo App yet again! </h2>{" "}
         </div>
     );
 });
 
 const TestScreen = props => {
-    const [columWidth, setColumnWidth] = useState({
-        left: 6,
-        right: 18,
-        rightContent: <div> No info </div>,
-        leftContent: <div> No info </div>
-    });
-    const [bgColor, setbgColor] = useState("white");
+    // const [columWidth, setColumnWidth] = useState({
+    //     left: 6,
+    //     right: 18,
+    //     rightContent: <div> No info </div>,
+    //     leftContent: <div> No info </div>
+    // });
+    // const [bgColor, setbgColor] = useState("white");
     const [{ dashboard, theme }, dispatch] = getState();
 
-    useEffect(() => {
-        if (dashboard.showColor) {
-            setbgColor(theme.primary);
-        } else {
-            setbgColor("white");
-        }
-    }, [dashboard.showColor]);
 
     return <PBIScreen embedType="report" />;
 };

@@ -26,6 +26,12 @@ import { observer, Observer } from "mobx-react-lite";
 
 const PBIStore = getStore();
 
+const StyledTabPane = styled(TabPane)`
+:hover {
+  font-color: white;
+  color: white;
+}
+`
 
 const PageTemplate = observer( props => {
   const [{ dashboard, popover, theme }, dispatch] = getState();
@@ -148,13 +154,14 @@ const PageTemplate = observer( props => {
           hideAdd
           onChange={onChange}          
           type="line"
-          size="small"    
+          size="default"    
           tabPosition="bottom"
-          tabBarGutter={10}          
+          tabBarGutter={0}          
           activeKey={store.activeTabKey}
+          tabBarStyle={{height: "5vh",margin:0,padding:0, color:"white",backgroundColor: "#21224d"}}
         >
 
-        {store.tabPanes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}        
+        {store.tabPanes.map(pane => <StyledTabPane tab={pane.title} key={pane.key}>{pane.content}</StyledTabPane>)}        
                   
         </Tabs>
       </Layout>

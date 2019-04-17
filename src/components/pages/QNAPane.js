@@ -19,7 +19,7 @@ const groupId = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
 const datasetId = "6f15a837-92de-48ab-ad42-29de5aa0e691";
 
 const W = "100%";
-const H = "95vh";
+const H = "90vh";
 
 const getEmbedToken =
   "https://getembedfuncapp.azurewebsites.net/api/HttpTrigger2?code=XTrzakL7nP2LfGXa53fwYxRNkiXVxJk9tHXAFnC7AmJDun63KO3zcg==";
