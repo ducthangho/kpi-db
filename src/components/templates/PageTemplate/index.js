@@ -30,7 +30,7 @@ const PBIStore = getStore();
 const StyledTabs = styled(Tabs)`
 .ant-tabs-tab {
 	&:hover {
-	  color: yellow !important;
+	  color: #95b3e5 !important;
 	}
 
 	&:active {
@@ -38,7 +38,7 @@ const StyledTabs = styled(Tabs)`
 	}
 
 	&-active {
-	  color: red !important;
+	  color: yellow !important;
 	  font-weight: 500 !important;
 	}
 }
