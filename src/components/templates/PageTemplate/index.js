@@ -26,12 +26,22 @@ import { observer, Observer } from "mobx-react-lite";
 
 const PBIStore = getStore();
 
-const StyledTabPane = styled(TabPane)`
-:hover {
-  font-color: white;
-  color: white;
+const StyledTabs = styled(Tabs)`
+.ant-tabs-tab {
+	&:hover {
+	  color: yellow !important;
+	}
+
+	&:active {
+	  color: green !important;
+	}
+
+	&-active {
+	  color: red !important;
+	  font-weight: 500 !important;
+	}
 }
-`
+`;
 
 const PageTemplate = observer( props => {
   const [{ dashboard, popover, theme }, dispatch] = getState();
@@ -49,11 +59,11 @@ const PageTemplate = observer( props => {
   const onEdit = (targetKey, action) => {
     console.log("Action ", action);
     console.log("Target ", targetKey);
-    if (action=='remove') 
+    if (action=='remove')
       store.removeTab(targetKey);
     else if (action=='add')
       add();
-  };  
+  };
 
   // useEffect(() => {
   //   // var qst = dashboard.searchText;
@@ -139,7 +149,7 @@ const PageTemplate = observer( props => {
 
     if (!found){
       store.addTab(tab);
-      store.setActiveKey(tab.key);      
+      store.setActiveKey(tab.key);
       console.log('TAB PANE ',stabPanes);
     }
     setFirstTime(false);
@@ -150,20 +160,20 @@ const PageTemplate = observer( props => {
       <MainSidebar lang={store.language} />
       <Layout style={{ background: "#eee", padding: 0 }}>
         <MainHeader />
-        <Tabs
+        <StyledTabs
           hideAdd
-          onChange={onChange}          
+          onChange={onChange}
           type="line"
-          size="default"    
+          size="default"
           tabPosition="bottom"
-          tabBarGutter={0}          
+          tabBarGutter={0}
           activeKey={store.activeTabKey}
           tabBarStyle={{height: "5vh",margin:0,padding:0, color:"white",backgroundColor: "#21224d"}}
         >
 
-        {store.tabPanes.map(pane => <StyledTabPane tab={pane.title} key={pane.key}>{pane.content}</StyledTabPane>)}        
-                  
-        </Tabs>
+        {store.tabPanes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
+
+        </StyledTabs>
       </Layout>
     </Layout>
   );
