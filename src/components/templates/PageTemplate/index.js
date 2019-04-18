@@ -1,5 +1,5 @@
 import React, { Children, useContext, useState, useEffect } from "react";
-import styled, { css } from "styled-components";
+import styled, { css,injectGlobal } from "styled-components";
 
 import { MainSidebar, MainHeader } from "components";
 
@@ -26,10 +26,30 @@ import { observer, Observer } from "mobx-react-lite";
 
 const PBIStore = getStore();
 
+// injectGlobal`
+// ant-tabs {
+//   font-color: yellow !important;
+//   color: yellow !important;
+
+// }
+// ant-tabs:hover {
+//     background-color: #78bdb8;
+// }
+// `
+
 const StyledTabPane = styled(TabPane)`
 :hover {
-  font-color: white;
-  color: white;
+  font-color: yellow !important;
+  color: yellow !important;
+  background-color: #21224d;
+}
+`
+
+const StyledTabs = styled(Tabs)`
+:hover {
+  font-color: yellow !important;
+  color: yellow !important;
+  background-color: yellow !important;
 }
 `
 
@@ -150,7 +170,7 @@ const PageTemplate = observer( props => {
       <MainSidebar lang={store.language} />
       <Layout style={{ background: "#eee", padding: 0 }}>
         <MainHeader />
-        <Tabs
+        <StyledTabs
           hideAdd
           onChange={onChange}          
           type="line"
@@ -161,9 +181,9 @@ const PageTemplate = observer( props => {
           tabBarStyle={{height: "5vh",margin:0,padding:0, color:"white",backgroundColor: "#21224d"}}
         >
 
-        {store.tabPanes.map(pane => <StyledTabPane tab={pane.title} key={pane.key}>{pane.content}</StyledTabPane>)}        
+        {store.tabPanes.map(pane => <StyledTabPane className="ant-tabs" tab={pane.title} key={pane.key}>{pane.content}</StyledTabPane>)}        
                   
-        </Tabs>
+        </StyledTabs>
       </Layout>
     </Layout>
   );

@@ -93,6 +93,8 @@ export const PBIScreen = observer(props => {
             embedUrl: config.embedUrl ? config.embedUrl : reportURL,
             tokenType: 1, //EMBED = 1, AAD = 0
             accessToken: config.accessToken,
+            expiration: config.expiration,
+            ellapse: config.ellapse,
             pageView: PAGEVIEW,
             settings: {
                 filterPaneEnabled: false,
@@ -121,7 +123,7 @@ export const PBIScreen = observer(props => {
             // Set token expiration listener
             // result.expiration is in ISO format
             setTokenExpirationListener(
-                json.Ellapse,
+                config.Ellapse,
                 2 /*minutes before expiration*/
             );
         });
