@@ -596,9 +596,7 @@ const MainSidebar = observer ( ( {lang} ) => {
 
 
 
-
-         <div style= {{height:"145px"}}>&nbsp;</div>
-
+        <MenuItemGroup style={{position:"absolute", bottom:"0"}}>
          <Menu.Item className="modified-item"
           selectable
           key="11"
@@ -642,7 +640,7 @@ const MainSidebar = observer ( ( {lang} ) => {
           <EditIcon style={{fontSize:FONTSIZE,  marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
           <span>{store.text.get("REPORT_CREATION")}</span>
         </Menu.Item>
-
+        </MenuItemGroup>
       </Menu>
     </Sider>
   );
