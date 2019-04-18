@@ -26,32 +26,23 @@ import { observer, Observer } from "mobx-react-lite";
 
 const PBIStore = getStore();
 
-// injectGlobal`
-// ant-tabs {
-//   font-color: yellow !important;
-//   color: yellow !important;
-
-// }
-// ant-tabs:hover {
-//     background-color: #78bdb8;
-// }
-// `
-
-const StyledTabPane = styled(TabPane)`
-:hover {
-  font-color: yellow !important;
-  color: yellow !important;
-  background-color: #21224d;
-}
-`
 
 const StyledTabs = styled(Tabs)`
-:hover {
-  font-color: yellow !important;
-  color: yellow !important;
-  background-color: yellow !important;
+.ant-tabs-tab {
+	&:hover {
+	  color: yellow !important;
+	}
+
+	&:active {
+	  color: green !important;
+	}
+
+	&-active {
+	  color: red !important;
+	  font-weight: 500 !important;
+	}
 }
-`
+`;
 
 const PageTemplate = observer( props => {
   const [{ dashboard, popover, theme }, dispatch] = getState();
@@ -69,11 +60,11 @@ const PageTemplate = observer( props => {
   const onEdit = (targetKey, action) => {
     console.log("Action ", action);
     console.log("Target ", targetKey);
-    if (action=='remove') 
+    if (action=='remove')
       store.removeTab(targetKey);
     else if (action=='add')
       add();
-  };  
+  };
 
   // useEffect(() => {
   //   // var qst = dashboard.searchText;
@@ -159,7 +150,7 @@ const PageTemplate = observer( props => {
 
     if (!found){
       store.addTab(tab);
-      store.setActiveKey(tab.key);      
+      store.setActiveKey(tab.key);
       console.log('TAB PANE ',stabPanes);
     }
     setFirstTime(false);
@@ -172,17 +163,17 @@ const PageTemplate = observer( props => {
         <MainHeader />
         <StyledTabs
           hideAdd
-          onChange={onChange}          
+          onChange={onChange}
           type="line"
-          size="default"    
+          size="default"
           tabPosition="bottom"
-          tabBarGutter={0}          
+          tabBarGutter={0}
           activeKey={store.activeTabKey}
           tabBarStyle={{height: "5vh",margin:0,padding:0, color:"white",backgroundColor: "#21224d"}}
         >
 
-        {store.tabPanes.map(pane => <StyledTabPane className="ant-tabs" tab={pane.title} key={pane.key}>{pane.content}</StyledTabPane>)}        
-                  
+
+        {store.tabPanes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
         </StyledTabs>
       </Layout>
     </Layout>

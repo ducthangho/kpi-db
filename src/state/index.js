@@ -60,6 +60,7 @@ export class PBIStore {
     reportQNA: null,
     currentPage: null,
     pages: [],
+    bookmarks: [],
     error: "",
     loaded: false,
     dimension: {}
@@ -240,9 +241,18 @@ export class PBIStore {
     this.store.pages.length = 0;
   }
 
+  clearBookmarks() {
+    this.store.pages.length = 0;
+  }
+
   addPage = page => {
     // console.log(page.name + " - " + page.displayName);
     this.store.pages.push(page);
+  };
+
+  addBookmark = bookmark => {
+    // console.log(page.name + " - " + page.displayName);
+    this.store.bookmarks.push(bookmark);
   };
 
   setCurrentPage = page => {
@@ -278,7 +288,9 @@ decorate(PBIStore, {
   saveEmbed: action,
   toggleLoaded: action,
   clearPages: action,
+  clearBookmarks: action,
   addPage: action,
+  addBookmark: action,
   setCurrentPage: action,
   saveEmbedQNA: action,
   addTab: action,
