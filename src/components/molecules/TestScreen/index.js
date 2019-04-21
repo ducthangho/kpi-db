@@ -26,7 +26,7 @@ const { Content } = Layout;
 // );
 
 const PBIStore = getStore();
-const PAGEVIEW = "fitToPage";
+const PAGEVIEW = "fitToWidth";
 const DEBUG = true;
 const W = "100%";
 const H = "90vh";
@@ -40,7 +40,7 @@ const powerbi = new pbi.service.Service(
 // const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
 const reportURL =
     "https://app.powerbi.com/reportEmbed?reportId=3f558192-1d40-4d12-949d-7176f5fe3310&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
-const reportID = "3f558192-1d40-4d12-949d-7176f5fe3310";
+const reportID = "709a9eab-d8f6-4a65-bfb4-c7c49c46c50e";
 const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
 const datasetID = "6f15a837-92de-48ab-ad42-29de5aa0e691";
 
@@ -123,7 +123,7 @@ export const PBIScreen = observer(props => {
             // Set token expiration listener
             // result.expiration is in ISO format
             setTokenExpirationListener(
-                config.Ellapse,
+                config.ellapse,
                 2 /*minutes before expiration*/
             );
         });
