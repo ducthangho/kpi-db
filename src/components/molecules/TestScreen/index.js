@@ -40,7 +40,7 @@ const powerbi = new pbi.service.Service(
 // const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
 const reportURL =
     "https://app.powerbi.com/reportEmbed?reportId=3f558192-1d40-4d12-949d-7176f5fe3310&groupId=2a396477-75a8-40b2-b8ed-2bf8b8bd5d71&autoAuth=true&ctid=70fc4985-a127-466f-ab2a-8dac100b682b";
-const reportID = "709a9eab-d8f6-4a65-bfb4-c7c49c46c50e";
+const reportID = "1456f47a-cbd3-4d2e-b053-c420ede1751f";
 const groupID = "2a396477-75a8-40b2-b8ed-2bf8b8bd5d71";
 const datasetID = "6f15a837-92de-48ab-ad42-29de5aa0e691";
 
@@ -95,7 +95,7 @@ export const PBIScreen = observer(props => {
             accessToken: config.accessToken,
             expiration: config.expiration,
             ellapse: config.ellapse,
-            pageView: PAGEVIEW,
+            // pageView: PAGEVIEW,
             settings: {
                 filterPaneEnabled: false,
                 navContentPaneEnabled: false,
@@ -202,7 +202,7 @@ export const PBIScreen = observer(props => {
                         permissions: models.Permissions.All,
                         expiration: json.Expiry,
                         ellapse: json.Ellapse,
-                        pageView: PAGEVIEW,
+                        // pageView: PAGEVIEW,
                         settings: {
                             filterPaneEnabled: false,
                             navContentPaneEnabled: false,
