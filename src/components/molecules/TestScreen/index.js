@@ -117,6 +117,7 @@ export const PBIScreen = observer(props => {
 
     const embed = config => {
         let report = powerbi.embed(rootElement.current, config);
+        //let report = powerbi.load(rootElement.current, config);
         console.log("store.saveEmbed(powerbi,config,report);");
         store.saveEmbed(powerbi, config, report);
         report.setAccessToken(config.accessToken).then(() => {
@@ -274,8 +275,9 @@ export const PBIScreen = observer(props => {
         updateToken(reportID, groupID);
     };
 
-    let updateCustomLayout = (report, activePage, isResize = false) => {
+    const updateCustomLayout = (report, activePage, isResize = false) => {
       activePage.getVisuals().then(function (visuals) {
+        console.log(visuals);
         var reportVisuals = visuals.map(function (visual) {
             return {
                 name: visual.name,
@@ -287,7 +289,7 @@ export const PBIScreen = observer(props => {
                   (visual.title == "Lọc phía tiêu đề") ||
                   (visual.title == "active_ssqt") ||
                   (visual.title == "Active_BT VĐXH") ||
-                  ((visual.title !== undefined) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
+                  ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
                 )
             };
         });
@@ -303,40 +305,50 @@ export const PBIScreen = observer(props => {
           if (visuals[i].layout.y+visuals[i].layout.height > maxY)
             maxY = visuals[i].layout.y+visuals[i].layout.height;
         }
-        const rY = maxY / (height);
-        const rX = maxX / (width);
+        const rY = 1;//1.776; //maxY / (height);
+        const rX = 1;//1.776; //maxX / (width);
 
-        console.log(maxX/maxY);
-        const newWidth = height*1.776;
+        // console.log(maxX/maxY);
+        // const newWidth = height*1.776;
+        //
+        //
+        // $(rootElement.current).css("padding-left",(width-newWidth)/2);
+        // $(rootElement.current).css("padding-right",(width-newWidth)/2);
+        // $("iframe", rootElement.current).attr("frameborder", 0);
 
-        $(rootElement.current).css("padding-left",(width-newWidth)/2);
-        $(rootElement.current).css("padding-right",(width-newWidth)/2);
-        $("iframe", rootElement.current).attr("frameborder", 0);
 
 
-
-        for (let i = 0; i < checkedVisuals.length; i++) {
-          let visual = checkedVisuals[i];
+        for (let i = 0; i < visuals.length; i++) {
+          let visual = visuals[i];
+          let checked = !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
+            (visual.layout.x == 0) ||
+            (visual.title == "Language") ||
+            (visual.title == "active_BT_Thongtinchung") ||
+            (visual.title == "Lọc phía tiêu đề") ||
+            (visual.title == "active_ssqt") ||
+            (visual.title == "Active_BT VĐXH") ||
+            ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
+          );
           if (isResize)
-            visualsLayout[checkedVisuals[i].name] = {
+            visualsLayout[visual.name] = {
                 x: visual.layout.x/rX,
                 y: visual.layout.y/rY,
                 width: visual.layout.width/rX,
                 height: visual.layout.height/rY,
                 displayState: {
                     // Change the selected visuals display mode to visible
-                    mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+                    mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
                 }
             }
           else
-            visualsLayout[checkedVisuals[i].name] = {
+            visualsLayout[visual.name] = {
                 // x: visual.layout.x,
                 // y: visual.layout.y,
                 // width: visual.layout.width,
                 // height: visual.layout.height,
                 displayState: {
                     // Change the selected visuals display mode to visible
-                    mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+                    mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
                 }
             }
             // Calculating (x,y) position for the next visual
@@ -374,7 +386,7 @@ export const PBIScreen = observer(props => {
                 //     width: pageWidth,
                 //     height: pageHeight
                 // },
-                displayOption: isResize?models.DisplayOption.ActualSize:models.DisplayOption.FitToPage,
+                displayOption: isResize?models.DisplayOption.FitToPage:models.DisplayOption.FitToPage,
                 pagesLayout: pagesLayout
             }
         };
@@ -398,9 +410,11 @@ export const PBIScreen = observer(props => {
         } else {
           report.updateSettings(settings).then(function(){
             console.log("updateSettings-Resize");
+            // powerbi.get(rootElement.current).reload();
           });
           store.store.updateCustomLayout = false;
         }
+        return settings;
       });
     }
 
@@ -449,6 +463,14 @@ export const PBIScreen = observer(props => {
                     // }
                 });
 
+                let bookmarks = report.bookmarksManager.getBookmarks().then(function (bookmarks) {
+                  // console.log(bookmarks);
+                  store.clearBookmarks();
+                  bookmarks.forEach(function(bookmark) {
+                      store.addBookmark(bookmark);
+                  });
+                });
+
                 // Fix report rendered that is called more than 1 time.
                 // report.off("rendered");
             });
@@ -466,14 +488,6 @@ export const PBIScreen = observer(props => {
                     report.config.groupId
                 );
 
-                let bookmarks = report.bookmarksManager.getBookmarks().then(function (bookmarks) {
-                  // console.log(bookmarks);
-                  store.clearBookmarks();
-                  bookmarks.forEach(function(bookmark) {
-                      store.addBookmark(bookmark);
-                  });
-                });
-
                 report.getPages().then(function (pages) {
                     console.log("Set layoutPageName to active page name");
                     // Retrieve active page
@@ -483,8 +497,7 @@ export const PBIScreen = observer(props => {
                     let activePage = activePages[0];
 
                     // Retrieve active page visuals.
-                    updateCustomLayout(report, activePage);
-
+                    updateCustomLayout(report, activePage, true);
                 });
 
                 if (onLoad) onLoad(report, dimensions);
@@ -508,17 +521,18 @@ export const PBIScreen = observer(props => {
             report.on("pageChanged", event => {
               console.log("pageChanged: "+event.detail.newPage.name);
               const newPageName = event.detail.newPage.name;
-              const pages = store.getPages();
-              if (pages.length > 0) {
-                  const firstPage = pages[0];
+              if (store.getPages().length <= 0) {
+                report.getPages().then(function(pages) {
                   let activePages = pages.filter(function(page) {
                     return page.name == newPageName;
                   }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
                   if (activePages.length > 0)
                     store.setCurrentPage(activePages[0]);
                   else {
-                    firstPage.isActive = true;
-                    store.setCurrentPage(firstPage);
+                    const firstPage = pages.filter(function(page) {
+                      return page.isActive;
+                    });
+                    store.setCurrentPage(firstPage[0]);
                   }
 
                   // Ensure the pages array is empty before adding pages
@@ -527,13 +541,35 @@ export const PBIScreen = observer(props => {
                   pages.forEach(function(page) {
                       store.addPage(page);
                   });
+                  // Retrieve active page visuals.
+                  const activePage = store.store.currentPage;
+                  updateCustomLayout(report, activePage, true);
+                });
+              } else {
+                const pages = store.getPages();
+                let activePages = pages.filter(function(page) {
+                  return page.name == newPageName;
+                }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
+                if (activePages.length > 0)
+                  store.setCurrentPage(activePages[0]);
+                else {
+                  const firstPage = pages.filter(function(page) {
+                    return page.isActive;
+                  });
+                  store.setCurrentPage(firstPage[0]);
+                }
+
+                // Ensure the pages array is empty before adding pages
+                store.clearPages();
+
+                pages.forEach(function(page) {
+                    store.addPage(page);
+                });
+
+                // Retrieve active page visuals.
+                const activePage = store.store.currentPage;
+                updateCustomLayout(report, activePage, true);
               }
-
-              // Retrieve active page visuals.
-              const activePage = store.store.currentPage;
-              updateCustomLayout(report, activePage);
-
-
 
                 if (onPageChange) {
                     onPageChange(event.detail);
@@ -545,7 +581,7 @@ export const PBIScreen = observer(props => {
               console.log("bookmarkApplied: "+event.detail.bookmarkName);
               // Retrieve active page visuals.
               const activePage = store.store.currentPage;
-              updateCustomLayout(report, activePage);
+              updateCustomLayout(report, activePage, true);
           });
 
             //if (DEBUG) console.log("Registering event handlers finished ...",rp);
@@ -560,6 +596,7 @@ export const PBIScreen = observer(props => {
     };
 
     useEffect(() => {
+        //powerbi.preload();
         savedHandler.current = source
             .pipe(debounceTime(1500))
             .subscribe(updateWindowDimensions);
