@@ -60,158 +60,6 @@ export const PBIScreen = observer(props => {
     const savedHandler = useRef();
     const dimension = useRef();
 
-    const ColumnsNumber = {
-        One: 1,
-        Two: 2,
-        Three: 3
-    }
-
-    const LayoutShowcaseConsts = {
-        margin: 0,
-        minPageWidth: 270
-    }
-
-    var LayoutShowcaseState = {
-        columns: ColumnsNumber.Three,
-        layoutVisuals: null,
-        layoutReport: null,
-        layoutPageName: null
-    }
-
-    // Create visuals array from the report visuals and update the HTML
-    function createVisualsArray(reportVisuals) {
-        // Remove all visuals without titles (i.e cards)
-        LayoutShowcaseState.layoutVisuals = reportVisuals.filter(function (visual) {
-            return visual.title !== undefined;
-        });
-
-        // Render all visuals
-        renderVisuals();
-    }
-
-    // Render all visuals with current configuration
-    function renderVisuals() {
-
-        // render only if report and visuals initialized
-        if (!LayoutShowcaseState.layoutReport || !LayoutShowcaseState.layoutVisuals)
-            return;
-
-        // Get models. models contains enums that can be used
-        //const models = window['powerbi-client'].models;
-
-        // Get embedContainer width and height
-        let pageWidth = rootElement.current.clientWidth;
-        let pageHeight = rootElement.current.clientHeight;
-
-        let checkedVisuals = LayoutShowcaseState.layoutVisuals;//.filter(function (visual) { return visual.checked; });
-
-        // Calculate the number of lines
-        const lines = Math.ceil(checkedVisuals.length / LayoutShowcaseState.columns);
-
-        // Calculating the overall width of the visuals in each row
-        let visualsTotalWidth = pageWidth - (LayoutShowcaseConsts.margin * (LayoutShowcaseState.columns + 1));
-        let visualsTotalHeight = pageHeight - (LayoutShowcaseConsts.margin * (lines + 1));
-
-
-        // Calculate the width of a single visual, according to the number of columns
-        // For one and three columns visuals width will be a third of visuals total width
-        let width = (LayoutShowcaseState.columns === ColumnsNumber.Two) ? (visualsTotalWidth / 2) : (visualsTotalWidth / 3);
-        let height = pageHeight / lines;
-
-        // For one column, set page width to visual's width with margins
-        if (LayoutShowcaseState.columns === ColumnsNumber.One) {
-            pageWidth = width + 2 * LayoutShowcaseConsts.margin;
-
-            // Check if page width is smaller than minimum width and update accordingly
-            if (pageWidth < LayoutShowcaseConsts.minPageWidth) {
-                pageWidth = LayoutShowcaseConsts.minPageWidth;
-
-                // Visuals width is set to fit minimum page width with margins on both sides
-                width = LayoutShowcaseConsts.minPageWidth - 2 * LayoutShowcaseConsts.margin;
-            }
-        }
-
-        // Set visuals height according to width - 9:16 ratio
-        if (height > width * (9 / 16))
-          height = width * (9 / 16);
-        else {
-          width = height * (16/9);
-        }
-        //const height = width * (9 / 16);
-
-        // Visuals starting point
-        let x = LayoutShowcaseConsts.margin, y = LayoutShowcaseConsts.margin;
-
-        // Filter the visuals list to display only the checked visuals
-
-        // Calculate page height with margins
-        pageHeight = Math.max(pageHeight, ((lines * height) + ((lines + 1) * (LayoutShowcaseConsts.margin))));
-
-        // Building visualsLayout object
-        // You can find more information at https://github.com/Microsoft/PowerBI-JavaScript/wiki/Custom-Layout
-        let visualsLayout = {};
-        for (let i = 0; i < checkedVisuals.length; i++) {
-            visualsLayout[checkedVisuals[i].name] = {
-                x: x,
-                y: y,
-                width: width,
-                height: height,
-                displayState: {
-
-                    // Change the selected visuals display mode to visible
-                    mode: models.VisualContainerDisplayMode.Visible
-                }
-            }
-
-            // Calculating (x,y) position for the next visual
-            x += width + LayoutShowcaseConsts.margin;
-            if (x + width > pageWidth) {
-                x = LayoutShowcaseConsts.margin;
-                y += height + LayoutShowcaseConsts.margin;
-            }
-        }
-
-        // Building pagesLayout object
-        let pagesLayout = {};
-        pagesLayout[LayoutShowcaseState.layoutPageName] = {
-            defaultLayout: {
-                displayState: {
-
-                    // Default display mode for visuals is hidden
-                    mode: models.VisualContainerDisplayMode.Hidden
-                }
-            },
-            visualsLayout: visualsLayout
-        };
-
-        // Building settings object
-        let settings = {
-            layoutType: models.LayoutType.Custom,
-            customLayout: {
-                pageSize: {
-                    type: models.PageSizeType.Custom,
-                    width: pageWidth - 10,
-                    height: pageHeight - 20
-                },
-                displayOption: models.DisplayOption.FitToPage,
-                pagesLayout: pagesLayout
-            }
-        };
-
-        console.log('Setting ',settings);
-
-        // If pageWidth or pageHeight is changed, change display option to actual size to add scroll bar
-        if (pageWidth !== $('#embedContainer').width() || pageHeight !== $('#embedContainer').height()) {
-            settings.customLayout.displayOption = models.DisplayOption.ActualSize;
-        }
-
-        // Change page background to transparent on Two / Three columns configuration
-        settings.background = (LayoutShowcaseState.columns === ColumnsNumber.One) ? models.BackgroundType.Default : models.BackgroundType.Default;
-
-        // Call updateSettings with the new settings object
-        LayoutShowcaseState.layoutReport.updateSettings(settings);
-    }
-
     // useEffect(() => {
     //   savedHandler.current = source.pipe(debounceTime(1500)).subscribe(updateWindowDimensions);
     // });
@@ -426,6 +274,136 @@ export const PBIScreen = observer(props => {
         updateToken(reportID, groupID);
     };
 
+    let updateCustomLayout = (report, activePage, isResize = false) => {
+      activePage.getVisuals().then(function (visuals) {
+        var reportVisuals = visuals.map(function (visual) {
+            return {
+                name: visual.name,
+                title: visual.title,
+                layout: visual.layout,
+                checked: !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
+                  (visual.title == "Language") ||
+                  (visual.title == "active_BT_Thongtinchung") ||
+                  (visual.title == "Lọc phía tiêu đề") ||
+                  (visual.title == "active_ssqt") ||
+                  (visual.title == "Active_BT VĐXH") ||
+                  ((visual.title !== undefined) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
+                )
+            };
+        });
+
+        let checkedVisuals = reportVisuals.filter(function (visual) { return visual.checked; });
+        let visualsLayout = {};
+        let maxY = 0, maxX = 0;
+        const height = rootElement.current.clientHeight;
+        const width = rootElement.current.clientWidth;
+        for (let i = 0; i < visuals.length; i++) {
+          if (visuals[i].layout.x+visuals[i].layout.width > maxX)
+            maxX = visuals[i].layout.x+visuals[i].layout.width;
+          if (visuals[i].layout.y+visuals[i].layout.height > maxY)
+            maxY = visuals[i].layout.y+visuals[i].layout.height;
+        }
+        const rY = maxY / (height);
+        const rX = maxX / (width);
+
+        console.log(maxX/maxY);
+        const newWidth = height*1.776;
+
+        $(rootElement.current).css("padding-left",(width-newWidth)/2);
+        $(rootElement.current).css("padding-right",(width-newWidth)/2);
+        $("iframe", rootElement.current).attr("frameborder", 0);
+
+
+
+        for (let i = 0; i < checkedVisuals.length; i++) {
+          let visual = checkedVisuals[i];
+          if (isResize)
+            visualsLayout[checkedVisuals[i].name] = {
+                x: visual.layout.x/rX,
+                y: visual.layout.y/rY,
+                width: visual.layout.width/rX,
+                height: visual.layout.height/rY,
+                displayState: {
+                    // Change the selected visuals display mode to visible
+                    mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+                }
+            }
+          else
+            visualsLayout[checkedVisuals[i].name] = {
+                // x: visual.layout.x,
+                // y: visual.layout.y,
+                // width: visual.layout.width,
+                // height: visual.layout.height,
+                displayState: {
+                    // Change the selected visuals display mode to visible
+                    mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+                }
+            }
+            // Calculating (x,y) position for the next visual
+            // x += width + LayoutShowcaseConsts.margin;
+            // if (x + width > pageWidth) {
+            //     x = LayoutShowcaseConsts.margin;
+            //     y += height + LayoutShowcaseConsts.margin;
+            // }
+        }
+        let pagesLayout = {};
+        pagesLayout[activePage.name] = {
+            defaultLayout: {
+                displayState: {
+
+                    // Default display mode for visuals is hidden
+                    mode: models.VisualContainerDisplayMode.Hidden
+                }
+            },
+            visualsLayout: visualsLayout
+        };
+
+        //console.log(visualsLayout);
+
+        // Building settings object
+        // enum DisplayOption {
+        //     FitToPage,
+        //     FitToWidth,
+        //     ActualSize
+        // }
+        let settings = {
+            layoutType: models.LayoutType.Custom,
+            customLayout: {
+                // pageSize: {
+                //     type: models.PageSizeType.Custom,
+                //     width: pageWidth,
+                //     height: pageHeight
+                // },
+                displayOption: isResize?models.DisplayOption.ActualSize:models.DisplayOption.FitToPage,
+                pagesLayout: pagesLayout
+            }
+        };
+
+        // If pageWidth or pageHeight is changed, change display option to actual size to add scroll bar
+        // if (pageWidth !== $('#embedContainer').width() || pageHeight !== $('#embedContainer').height()) {
+        //     settings.customLayout.displayOption = models.DisplayOption.ActualSize;
+        // }
+        // Change page background to transparent on Two / Three columns configuration
+
+        //settings.background = (LayoutShowcaseState.columns === ColumnsNumber.One) ? models.BackgroundType.Default : models.BackgroundType.Transparent;
+        settings.background = isResize?models.BackgroundType.Transparent:models.BackgroundType.Default;
+        // console.log(JSON.stringify(settings));
+        // Call updateSettings with the new settings object
+
+        if (!isResize) {
+          report.updateSettings(settings).then(function(){
+            console.log("updateSettings");
+          });
+          store.store.updateCustomLayout = true;
+        } else {
+          report.updateSettings(settings).then(function(){
+            console.log("updateSettings-Resize");
+          });
+          store.store.updateCustomLayout = false;
+        }
+      });
+    }
+
     const performOnEmbed = (report, dimensions) => {
         const {
             embedType,
@@ -444,9 +422,35 @@ export const PBIScreen = observer(props => {
                 console.log("rendered");
 
                 // console.log(store.store.bookmarks);
+                report.getPages().then(function(pages) {
+                    if (pages.length > 0) {
+                        const firstPage = pages[0];
+                        let activePages = pages.filter(function(page) {
+                          return page.isActive;
+                        }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
+                        if (activePages.length > 0)
+                          store.setCurrentPage(activePages[0]);
+                        else {
+                          firstPage.isActive = true;
+                          store.setCurrentPage(firstPage);
+                        }
+
+                        // Ensure the pages array is empty before adding pages
+                        store.clearPages();
+
+                        pages.forEach(function(page) {
+                            store.addPage(page);
+                        });
+                    }
+
+                    // if (store.store.updateCustomLayout) {
+                    //   updateCustomLayout(report, store.store.currentPage, true);
+                    //   store.store.updateCustomLayout = false;
+                    // }
+                });
 
                 // Fix report rendered that is called more than 1 time.
-                report.off("rendered");
+                // report.off("rendered");
             });
 
             // Report.off removes a given event handler if it exists.
@@ -461,21 +465,6 @@ export const PBIScreen = observer(props => {
                     report.config.id,
                     report.config.groupId
                 );
-
-                report.getPages().then(function(pages) {
-                    if (pages.length > 0) {
-                        const firstPage = pages[0];
-                        firstPage.isActive = true;
-                        store.setCurrentPage(firstPage);
-
-                        // Ensure the pages array is empty before adding pages
-                        store.clearPages();
-
-                        pages.forEach(function(page) {
-                            store.addPage(page);
-                        });
-                    }
-                });
 
                 let bookmarks = report.bookmarksManager.getBookmarks().then(function (bookmarks) {
                   // console.log(bookmarks);
@@ -493,26 +482,9 @@ export const PBIScreen = observer(props => {
                     }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
                     let activePage = activePages[0];
 
-                    // Set layoutPageName to active page name
-                    LayoutShowcaseState.layoutPageName = activePage.name;
-                    LayoutShowcaseState.layoutReport = report;
-
                     // Retrieve active page visuals.
-                    activePage.getVisuals().then(function (visuals) {
-                        visuals = visuals.filter(function(visual) {
-                          return visual.title == "CardImg1 Black";
-                        });
-                        var reportVisuals = visuals.map(function (visual) {
-                            return {
-                                name: visual.name,
-                                title: visual.title,
-                                checked: true
-                            };
-                        });
+                    updateCustomLayout(report, activePage);
 
-                        // Create visuals array from the visuals of the active page
-                        createVisualsArray(reportVisuals);
-                    });
                 });
 
                 if (onLoad) onLoad(report, dimensions);
@@ -534,10 +506,47 @@ export const PBIScreen = observer(props => {
 
             report.off("pageChanged");
             report.on("pageChanged", event => {
+              console.log("pageChanged: "+event.detail.newPage.name);
+              const newPageName = event.detail.newPage.name;
+              const pages = store.getPages();
+              if (pages.length > 0) {
+                  const firstPage = pages[0];
+                  let activePages = pages.filter(function(page) {
+                    return page.name == newPageName;
+                  }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
+                  if (activePages.length > 0)
+                    store.setCurrentPage(activePages[0]);
+                  else {
+                    firstPage.isActive = true;
+                    store.setCurrentPage(firstPage);
+                  }
+
+                  // Ensure the pages array is empty before adding pages
+                  store.clearPages();
+
+                  pages.forEach(function(page) {
+                      store.addPage(page);
+                  });
+              }
+
+              // Retrieve active page visuals.
+              const activePage = store.store.currentPage;
+              updateCustomLayout(report, activePage);
+
+
+
                 if (onPageChange) {
                     onPageChange(event.detail);
                 }
             });
+
+            report.off("bookmarkApplied");
+            report.on("bookmarkApplied", (event) => {
+              console.log("bookmarkApplied: "+event.detail.bookmarkName);
+              // Retrieve active page visuals.
+              const activePage = store.store.currentPage;
+              updateCustomLayout(report, activePage);
+          });
 
             //if (DEBUG) console.log("Registering event handlers finished ...",rp);
         } else if (embedType === "dashboard") {
@@ -576,9 +585,11 @@ export const PBIScreen = observer(props => {
     });
 
     return (
+      <div style={{backgroundImage: "linear-gradient(#21224d, #000000)"}}>
         <div id="PBI" ref={rootElement} style={{width:W, height: H, margin:0 , padding:0}}>
             <h2> A Todo App yet again! </h2>{" "}
         </div>
+      </div>
     );
 });
 

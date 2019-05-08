@@ -63,7 +63,8 @@ export class PBIStore {
     bookmarks: [],
     error: "",
     loaded: false,
-    dimension: {}
+    dimension: {},
+    updateCustomLayout: false
   };
 
 
@@ -71,7 +72,7 @@ export class PBIStore {
   titleKey = observable.box("GENERAL_INFO");
   firstT = observable.box(true);
 
-  
+
   searchDrawer = {
     visible: false
   };
@@ -118,11 +119,11 @@ export class PBIStore {
           let tit = this.locales.obj.get(key);
           console.log("Replacing title to ", tit);
           this.title.set(tit);
-        }  
+        }
       } ).catch((err) => {
         console.log('Caught err ',err);
       });
-      
+
     }
   };
 
@@ -162,7 +163,7 @@ export class PBIStore {
   };
 
   addTab = tab => {
-    this.tabs.panes.push(tab);    
+    this.tabs.panes.push(tab);
   };
 
   clearTabPane = () =>{
@@ -171,7 +172,7 @@ export class PBIStore {
   }
 
   get activeTabKey(){
-    return this.tabs.activeKey.get();  
+    return this.tabs.activeKey.get();
   }
 
   setActiveKey = key => {
@@ -186,7 +187,7 @@ export class PBIStore {
         lastIndex = i - 1;
       }
     });
-    
+
     const panes = tabs.panes.filter(pane => pane.key !== targetKey);
     if (panes.length && activeKey === targetKey) {
       if (lastIndex >= 0) {
@@ -277,7 +278,7 @@ decorate(PBIStore, {
   searchDrawer: observable,
   locales: observable,
   tabs: observable,
-  firstT: observable,  
+  firstT: observable,
   setFirstTime: action,
   changeLanguage: action,
   setDimension: action,
