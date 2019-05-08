@@ -463,14 +463,6 @@ export const PBIScreen = observer(props => {
                     // }
                 });
 
-                let bookmarks = report.bookmarksManager.getBookmarks().then(function (bookmarks) {
-                  // console.log(bookmarks);
-                  store.clearBookmarks();
-                  bookmarks.forEach(function(bookmark) {
-                      store.addBookmark(bookmark);
-                  });
-                });
-
                 // Fix report rendered that is called more than 1 time.
                 // report.off("rendered");
             });
@@ -500,6 +492,14 @@ export const PBIScreen = observer(props => {
                     updateCustomLayout(report, activePage, true);
                 });
 
+                let bookmarks = report.bookmarksManager.getBookmarks().then(function (bookmarks) {
+                  // console.log(bookmarks);
+                  store.clearBookmarks();
+                  bookmarks.forEach(function(bookmark) {
+                      store.addBookmark(bookmark);
+                  });
+                });
+
                 if (onLoad) onLoad(report, dimensions);
             });
 
@@ -522,29 +522,29 @@ export const PBIScreen = observer(props => {
               console.log("pageChanged: "+event.detail.newPage.name);
               const newPageName = event.detail.newPage.name;
               if (store.getPages().length <= 0) {
-                report.getPages().then(function(pages) {
-                  let activePages = pages.filter(function(page) {
-                    return page.name == newPageName;
-                  }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
-                  if (activePages.length > 0)
-                    store.setCurrentPage(activePages[0]);
-                  else {
-                    const firstPage = pages.filter(function(page) {
-                      return page.isActive;
-                    });
-                    store.setCurrentPage(firstPage[0]);
-                  }
-
-                  // Ensure the pages array is empty before adding pages
-                  store.clearPages();
-
-                  pages.forEach(function(page) {
-                      store.addPage(page);
-                  });
-                  // Retrieve active page visuals.
-                  const activePage = store.store.currentPage;
-                  updateCustomLayout(report, activePage, true);
-                });
+                // report.getPages().then(function(pages) {
+                //   let activePages = pages.filter(function(page) {
+                //     return page.name == newPageName;
+                //   }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
+                //   if (activePages.length > 0)
+                //     store.setCurrentPage(activePages[0]);
+                //   else {
+                //     const firstPage = pages.filter(function(page) {
+                //       return page.isActive;
+                //     });
+                //     store.setCurrentPage(firstPage[0]);
+                //   }
+                //
+                //   // Ensure the pages array is empty before adding pages
+                //   store.clearPages();
+                //
+                //   pages.forEach(function(page) {
+                //       store.addPage(page);
+                //   });
+                //   // Retrieve active page visuals.
+                //   const activePage = store.store.currentPage;
+                //   updateCustomLayout(report, activePage, true);
+                // });
               } else {
                 const pages = store.getPages();
                 let activePages = pages.filter(function(page) {
@@ -559,12 +559,12 @@ export const PBIScreen = observer(props => {
                   store.setCurrentPage(firstPage[0]);
                 }
 
-                // Ensure the pages array is empty before adding pages
-                store.clearPages();
-
-                pages.forEach(function(page) {
-                    store.addPage(page);
-                });
+                // // Ensure the pages array is empty before adding pages
+                // store.clearPages();
+                //
+                // pages.forEach(function(page) {
+                //     store.addPage(page);
+                // });
 
                 // Retrieve active page visuals.
                 const activePage = store.store.currentPage;
