@@ -301,44 +301,81 @@ export const PBIScreen = observer(props => {
 
     };
 
-    let updateCustomLayout = (report, activePage, isResize = false) => {
-        if (activePage) activePage.getVisuals().then(function(visuals) {
-            var reportVisuals = visuals.map(function(visual) {
-                console.log('Visual ', visual.title);
-                return {
-                    name: visual.name,
-                    title: visual.title,
-                    layout: visual.layout,
-                    checked: !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
-                        (visual.title == "Language") ||
-                        (visual.title == "active_BT_Thongtinchung") ||
-                        (visual.title == "Lọc phía tiêu đề") ||
-                        (visual.title == "active_ssqt") ||
-                        (visual.title == "Active_BT VĐXH") ||
-                        ((visual.title !== undefined) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
-                    )
-                };
-            });
 
-            let checkedVisuals = reportVisuals.filter(function(visual) {
-                return visual.checked;
-            });
-            let visualsLayout = {};
+    const updateCustomLayout = (report, activePage, isResize = false) => {
+      activePage.getVisuals().then(function (visuals) {
+        console.log(visuals);
+        var reportVisuals = visuals.map(function (visual) {
+            return {
+                name: visual.name,
+                title: visual.title,
+                layout: visual.layout,
+                checked: !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
+                  (visual.title == "Language") ||
+                  (visual.title == "active_BT_Thongtinchung") ||
+                  (visual.title == "Lọc phía tiêu đề") ||
+                  (visual.title == "active_ssqt") ||
+                  (visual.title == "Active_BT VĐXH") ||
+                  ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
+                )
+            };
+        });
 
-            const height = rootElement.current.clientHeight;
-            const width = rootElement.current.clientWidth;
-            let ratio = store.ratio;
-            let rX = (!isResize) ? ratio.rX : 1;
-            let rY = (!isResize) ? ratio.rY : 1;
+        let checkedVisuals = reportVisuals.filter(function (visual) { return visual.checked; });
+        let visualsLayout = {};
+        let maxY = 0, maxX = 0;
+        const height = rootElement.current.clientHeight;
+        const width = rootElement.current.clientWidth;
+        for (let i = 0; i < visuals.length; i++) {
+          if (visuals[i].layout.x+visuals[i].layout.width > maxX)
+            maxX = visuals[i].layout.x+visuals[i].layout.width;
+          if (visuals[i].layout.y+visuals[i].layout.height > maxY)
+            maxY = visuals[i].layout.y+visuals[i].layout.height;
+        }
+        const rY = 1;//1.776; //maxY / (height);
+        const rX = 1;//1.776; //maxX / (width);
 
-            if (rX < 0) {
-                let maxY = 0,
-                    maxX = 0;
-                for (let i = 0; i < visuals.length; i++) {
-                    if (visuals[i].layout.x + visuals[i].layout.width > maxX)
-                        maxX = visuals[i].layout.x + visuals[i].layout.width;
-                    if (visuals[i].layout.y + visuals[i].layout.height > maxY)
-                        maxY = visuals[i].layout.y + visuals[i].layout.height;
+        // console.log(maxX/maxY);
+        // const newWidth = height*1.776;
+        //
+        //
+        // $(rootElement.current).css("padding-left",(width-newWidth)/2);
+        // $(rootElement.current).css("padding-right",(width-newWidth)/2);
+        // $("iframe", rootElement.current).attr("frameborder", 0);
+
+
+
+        for (let i = 0; i < visuals.length; i++) {
+          let visual = visuals[i];
+          let checked = !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
+            (visual.layout.x == 0) ||
+            (visual.title == "Language") ||
+            (visual.title == "active_BT_Thongtinchung") ||
+            (visual.title == "Lọc phía tiêu đề") ||
+            (visual.title == "active_ssqt") ||
+            (visual.title == "Active_BT VĐXH") ||
+            ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
+          );
+          if (isResize)
+            visualsLayout[visual.name] = {
+                x: visual.layout.x/rX,
+                y: visual.layout.y/rY,
+                width: visual.layout.width/rX,
+                height: visual.layout.height/rY,
+                displayState: {
+                    // Change the selected visuals display mode to visible
+                    mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+                }
+            }
+          else
+            visualsLayout[visual.name] = {
+                // x: visual.layout.x,
+                // y: visual.layout.y,
+                // width: visual.layout.width,
+                // height: visual.layout.height,
+                displayState: {
+                    // Change the selected visuals display mode to visible
+                    mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
                 }
                 rX = maxX / (width);
                 rY = maxY / (height);                              
@@ -517,6 +554,7 @@ export const PBIScreen = observer(props => {
                     report.config.groupId
                 );
 
+
                 let bookmarks = report.bookmarksManager.getBookmarks().then(function(bookmarks) {
                     // console.log(bookmarks);
                     store.clearBookmarks();
@@ -564,6 +602,7 @@ export const PBIScreen = observer(props => {
 
             report.off("pageChanged");
             report.on("pageChanged", event => {
+
                 console.log("pageChanged: " + event.detail.newPage.name);
                 const newPageName = event.detail.newPage.name;
                 const pages = store.getPages();
@@ -587,7 +626,6 @@ export const PBIScreen = observer(props => {
                         store.addPage(page);
                     });
                 }
-
                 // Retrieve active page visuals.
                 const activePage = store.store.currentPage;
                 updateCustomLayout(report, activePage, true);
@@ -600,7 +638,6 @@ export const PBIScreen = observer(props => {
 
             report.off("bookmarkApplied");
             report.on("bookmarkApplied", (event) => {
-
               console.log("bookmarkApplied: "+event.detail.bookmarkName);
               // Retrieve active page visuals.
               const activePage = store.store.currentPage;
@@ -617,6 +654,7 @@ export const PBIScreen = observer(props => {
             });
         }
     };
+
 
     useLayoutEffect(() => {
         savedHandler.current = source
