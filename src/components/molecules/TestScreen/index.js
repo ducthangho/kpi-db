@@ -7,18 +7,37 @@ import React, {
     useRef
 } from "react";
 import PropTypes from "prop-types";
-import { getState, getStore } from "state";
-import { Row, Col, Card, Layout } from "antd";
-import { observer, useDisposable } from "mobx-react-lite";
+import {
+    getState,
+    getStore
+} from "state";
+import {
+    Row,
+    Col,
+    Card,
+    Layout
+} from "antd";
+import {
+    observer,
+    useDisposable
+} from "mobx-react-lite";
 import * as mobx from "mobx";
 import $ from "jquery";
 import jsonp from "jsonp";
-import { fromEvent } from "rxjs";
-import pbi, { models } from "powerbi-client";
-import { debounceTime } from "rxjs/operators";
+import {
+    fromEvent
+} from "rxjs";
+import pbi, {
+    models
+} from "powerbi-client";
+import {
+    debounceTime
+} from "rxjs/operators";
 import root from "window-or-global";
 
-const { Content } = Layout;
+const {
+    Content
+} = Layout;
 // const right1 = (
 //   <Col span={18} style={{ height: "calc(100vh - 100xp)", padding: "10px" }}>
 //     {viewContent["cesium"]}
@@ -110,13 +129,14 @@ export const PBIScreen = observer(props => {
         if (store) {
             // console.log('Resetting ',store);
             let powerbi = store.store.powerbi;
-            powerbi.reset(rootElement.current);
+            if (powerbi && rootElement.current) powerbi.reset(rootElement.current);
         }
         store.report = null;
     };
 
     const embed = config => {
         let report = powerbi.embed(rootElement.current, config);
+        //let report = powerbi.load(rootElement.current, config);
         console.log("store.saveEmbed(powerbi,config,report);");
         store.saveEmbed(powerbi, config, report);
         report.setAccessToken(config.accessToken).then(() => {
@@ -175,8 +195,7 @@ export const PBIScreen = observer(props => {
             "&groupId=" +
             groupId;
         jsonp(
-            url,
-            {
+            url, {
                 name: "callback"
             },
             (error, json) => {
@@ -189,6 +208,7 @@ export const PBIScreen = observer(props => {
                     //this.updateState(this.props);
                     // const obj = (this.status===null || this.status.length===0) ? null : JSON.parse(this.status);
                     //console.log('JSON = ',json);
+                    console.log('Update token');
 
                     var config = createConfig({
                         isLoaded: true,
@@ -202,7 +222,7 @@ export const PBIScreen = observer(props => {
                         permissions: models.Permissions.All,
                         expiration: json.Expiry,
                         ellapse: json.Ellapse,
-                        // pageView: PAGEVIEW,
+                        pageView: PAGEVIEW,
                         settings: {
                             filterPaneEnabled: false,
                             navContentPaneEnabled: false,
@@ -259,8 +279,8 @@ export const PBIScreen = observer(props => {
         else {
             console.log(
                 "Report Embed Token will be updated in " +
-                    timeout +
-                    " milliseconds."
+                timeout +
+                " milliseconds."
             );
             // setTimeout(() => {
             //   this.updateToken(reportId, groupId);
@@ -270,90 +290,119 @@ export const PBIScreen = observer(props => {
 
     const updateWindowDimensions = () => {
         console.log("updateWindowDimensions");
-        if (store.isLoaded()) reset();
-        updateToken(reportID, groupID);
+        // if (store.isLoaded()) reset();
+        // updateToken(reportID, groupID);
+        let activePages = (store.pages) ? store.pages.filter(function(page) {
+            return page.isActive;
+        }) : null; //jQuery.grep(pages, function (page) { return page.isActive })[0];
+        let activePage = (activePages) ? activePages[0] : null;
+        console.log(activePage);
+        if (store.report) updateCustomLayout(store.report, activePage, true);
+
     };
 
     let updateCustomLayout = (report, activePage, isResize = false) => {
-      activePage.getVisuals().then(function (visuals) {
-        var reportVisuals = visuals.map(function (visual) {
-            return {
-                name: visual.name,
-                title: visual.title,
-                layout: visual.layout,
-                checked: !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
-                  (visual.title == "Language") ||
-                  (visual.title == "active_BT_Thongtinchung") ||
-                  (visual.title == "Lọc phía tiêu đề") ||
-                  (visual.title == "active_ssqt") ||
-                  (visual.title == "Active_BT VĐXH") ||
-                  ((visual.title !== undefined) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
-                )
-            };
-        });
+        if (activePage) activePage.getVisuals().then(function(visuals) {
+            var reportVisuals = visuals.map(function(visual) {
+                console.log('Visual ', visual.title);
+                return {
+                    name: visual.name,
+                    title: visual.title,
+                    layout: visual.layout,
+                    checked: !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
+                        (visual.title == "Language") ||
+                        (visual.title == "active_BT_Thongtinchung") ||
+                        (visual.title == "Lọc phía tiêu đề") ||
+                        (visual.title == "active_ssqt") ||
+                        (visual.title == "Active_BT VĐXH") ||
+                        ((visual.title !== undefined) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
+                    )
+                };
+            });
 
-        let checkedVisuals = reportVisuals.filter(function (visual) { return visual.checked; });
-        let visualsLayout = {};
-        let maxY = 0, maxX = 0;
-        const height = rootElement.current.clientHeight;
-        const width = rootElement.current.clientWidth;
-        for (let i = 0; i < visuals.length; i++) {
-          if (visuals[i].layout.x+visuals[i].layout.width > maxX)
-            maxX = visuals[i].layout.x+visuals[i].layout.width;
-          if (visuals[i].layout.y+visuals[i].layout.height > maxY)
-            maxY = visuals[i].layout.y+visuals[i].layout.height;
-        }
-        const rY = maxY / (height);
-        const rX = maxX / (width);
+            let checkedVisuals = reportVisuals.filter(function(visual) {
+                return visual.checked;
+            });
+            let visualsLayout = {};
 
-        console.log(maxX/maxY);
-        const newWidth = height*1.776;
+            const height = rootElement.current.clientHeight;
+            const width = rootElement.current.clientWidth;
+            let ratio = store.ratio;
+            let rX = (!isResize) ? ratio.rX : 1;
+            let rY = (!isResize) ? ratio.rY : 1;
 
-        $(rootElement.current).css("padding-left",(width-newWidth)/2);
-        $(rootElement.current).css("padding-right",(width-newWidth)/2);
-        $("iframe", rootElement.current).attr("frameborder", 0);
-
-
-
-        for (let i = 0; i < checkedVisuals.length; i++) {
-          let visual = checkedVisuals[i];
-          if (isResize)
-            visualsLayout[checkedVisuals[i].name] = {
-                x: visual.layout.x/rX,
-                y: visual.layout.y/rY,
-                width: visual.layout.width/rX,
-                height: visual.layout.height/rY,
-                displayState: {
-                    // Change the selected visuals display mode to visible
-                    mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+            if (rX < 0) {
+                let maxY = 0,
+                    maxX = 0;
+                for (let i = 0; i < visuals.length; i++) {
+                    if (visuals[i].layout.x + visuals[i].layout.width > maxX)
+                        maxX = visuals[i].layout.x + visuals[i].layout.width;
+                    if (visuals[i].layout.y + visuals[i].layout.height > maxY)
+                        maxY = visuals[i].layout.y + visuals[i].layout.height;
                 }
+                rX = maxX / (width);
+                rY = maxY / (height);                              
+                console.log(maxX / maxY);
+            } 
+
+            const newWidth = height * 1.776;
+
+            $(rootElement.current).css("padding-left", 0);
+            $(rootElement.current).css("padding-right", 0);
+            $("iframe", rootElement.current).attr("frameborder", 0);
+
+            let dim = store.ContainerSize;
+            let tx = (isResize) ? width / dim.width : 1;
+            let ty = (isResize) ? height / dim.height : 1;
+            console.log('rX ',rX,'rY',rY);
+            console.log('tx', tx,'ty',ty);
+
+
+            for (let i = 0; i < checkedVisuals.length; i++) {
+                let visual = checkedVisuals[i];
+                if (isResize)
+                    visualsLayout[checkedVisuals[i].name] = {
+                        x: visual.layout.x /tx / rX,
+                        y: visual.layout.y /ty / rY,
+                        width: visual.layout.width / tx  / rX,
+                        height: visual.layout.height / ty  / rY,
+                        displayState: {
+                            // Change the selected visuals display mode to visible
+                            mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+                        }
+                    }
+                else
+                    visualsLayout[checkedVisuals[i].name] = {
+                        // x: visual.layout.x,
+                        // y: visual.layout.y,
+                        // width: visual.layout.width,
+                        // height: visual.layout.height,
+                        displayState: {
+                            // Change the selected visuals display mode to visible
+                            mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
+                        }
+                    }
+                    // Calculating (x,y) position for the next visual
+                    // x += width + LayoutShowcaseConsts.margin;
+                    // if (x + width > pageWidth) {
+                    //     x = LayoutShowcaseConsts.margin;
+                    //     y += height + LayoutShowcaseConsts.margin;
+                    // }
             }
-          else
-            visualsLayout[checkedVisuals[i].name] = {
-                // x: visual.layout.x,
-                // y: visual.layout.y,
-                // width: visual.layout.width,
-                // height: visual.layout.height,
-                displayState: {
-                    // Change the selected visuals display mode to visible
-                    mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
-                }
-            }
-            // Calculating (x,y) position for the next visual
-            // x += width + LayoutShowcaseConsts.margin;
-            // if (x + width > pageWidth) {
+
             //     x = LayoutShowcaseConsts.margin;
             //     y += height + LayoutShowcaseConsts.margin;
             // }
-        }
-        let pagesLayout = {};
-        pagesLayout[activePage.name] = {
-            defaultLayout: {
-                displayState: {
+            store.updateRatio(rX, rY);
+            store.setContainerSize(width, height);
+            let pagesLayout = {};
+            pagesLayout[activePage.name] = {
+                defaultLayout: {
+                    displayState: {
 
-                    // Default display mode for visuals is hidden
-                    mode: models.VisualContainerDisplayMode.Hidden
-                }
+                        // Default display mode for visuals is hidden
+                        mode: models.VisualContainerDisplayMode.Hidden
+            };
             },
             visualsLayout: visualsLayout
         };
@@ -374,7 +423,7 @@ export const PBIScreen = observer(props => {
                 //     width: pageWidth,
                 //     height: pageHeight
                 // },
-                displayOption: isResize?models.DisplayOption.ActualSize:models.DisplayOption.FitToPage,
+                displayOption: isResize?models.DisplayOption.FitToPage:models.DisplayOption.FitToPage,
                 pagesLayout: pagesLayout
             }
         };
@@ -398,9 +447,11 @@ export const PBIScreen = observer(props => {
         } else {
           report.updateSettings(settings).then(function(){
             console.log("updateSettings-Resize");
+            // powerbi.get(rootElement.current).reload();
           });
           store.store.updateCustomLayout = false;
         }
+        return settings;
       });
     }
 
@@ -426,13 +477,13 @@ export const PBIScreen = observer(props => {
                     if (pages.length > 0) {
                         const firstPage = pages[0];
                         let activePages = pages.filter(function(page) {
-                          return page.isActive;
+                            return page.isActive;
                         }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
                         if (activePages.length > 0)
-                          store.setCurrentPage(activePages[0]);
+                            store.setCurrentPage(activePages[0]);
                         else {
-                          firstPage.isActive = true;
-                          store.setCurrentPage(firstPage);
+                            firstPage.isActive = true;
+                            store.setCurrentPage(firstPage);
                         }
 
                         // Ensure the pages array is empty before adding pages
@@ -461,10 +512,30 @@ export const PBIScreen = observer(props => {
                 var ellapse = report.config.ellapse;
                 setTokenExpirationListener(
                     ellapse,
-                    2 /*minutes before expiration*/,
+                    2 /*minutes before expiration*/ ,
                     report.config.id,
                     report.config.groupId
                 );
+
+                let bookmarks = report.bookmarksManager.getBookmarks().then(function(bookmarks) {
+                    // console.log(bookmarks);
+                    store.clearBookmarks();
+                    bookmarks.forEach(function(bookmark) {
+                        store.addBookmark(bookmark);
+                    });
+                });
+
+                report.getPages().then(function(pages) {
+                    console.log("Set layoutPageName to active page name");
+                    // Retrieve active page
+                    let activePages = pages.filter(function(page) {
+                        return page.isActive;
+                    }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
+                    let activePage = activePages[0];
+
+                    // Retrieve active page visuals.
+                    updateCustomLayout(report, activePage, true);
+                });
 
                 let bookmarks = report.bookmarksManager.getBookmarks().then(function (bookmarks) {
                   // console.log(bookmarks);
@@ -472,19 +543,6 @@ export const PBIScreen = observer(props => {
                   bookmarks.forEach(function(bookmark) {
                       store.addBookmark(bookmark);
                   });
-                });
-
-                report.getPages().then(function (pages) {
-                    console.log("Set layoutPageName to active page name");
-                    // Retrieve active page
-                    let activePages = pages.filter(function(page) {
-                      return page.isActive;
-                    }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
-                    let activePage = activePages[0];
-
-                    // Retrieve active page visuals.
-                    updateCustomLayout(report, activePage);
-
                 });
 
                 if (onLoad) onLoad(report, dimensions);
@@ -506,34 +564,34 @@ export const PBIScreen = observer(props => {
 
             report.off("pageChanged");
             report.on("pageChanged", event => {
-              console.log("pageChanged: "+event.detail.newPage.name);
-              const newPageName = event.detail.newPage.name;
-              const pages = store.getPages();
-              if (pages.length > 0) {
-                  const firstPage = pages[0];
-                  let activePages = pages.filter(function(page) {
-                    return page.name == newPageName;
-                  }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
-                  if (activePages.length > 0)
-                    store.setCurrentPage(activePages[0]);
-                  else {
-                    firstPage.isActive = true;
-                    store.setCurrentPage(firstPage);
-                  }
+                console.log("pageChanged: " + event.detail.newPage.name);
+                const newPageName = event.detail.newPage.name;
+                const pages = store.getPages();
+                if (pages.length > 0) {
+                    const firstPage = pages[0];
+                    let activePages = pages.filter(function(page) {
+                        return page.name == newPageName;
+                    }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
+                    if (activePages.length > 0)
+                        store.setCurrentPage(activePages[0]);
+                    else {
+                        firstPage.isActive = true;
+                        store.setCurrentPage(firstPage);
+                    }
 
-                  // Ensure the pages array is empty before adding pages
-                  store.clearPages();
+                    // Ensure the pages array is empty before adding pages
 
-                  pages.forEach(function(page) {
-                      store.addPage(page);
-                  });
+                    store.clearPages();
+
+                    pages.forEach(function(page) {
+                        store.addPage(page);
+                    });
+                }
+
+                // Retrieve active page visuals.
+                const activePage = store.store.currentPage;
+                updateCustomLayout(report, activePage, true);
               }
-
-              // Retrieve active page visuals.
-              const activePage = store.store.currentPage;
-              updateCustomLayout(report, activePage);
-
-
 
                 if (onPageChange) {
                     onPageChange(event.detail);
@@ -542,10 +600,11 @@ export const PBIScreen = observer(props => {
 
             report.off("bookmarkApplied");
             report.on("bookmarkApplied", (event) => {
+
               console.log("bookmarkApplied: "+event.detail.bookmarkName);
               // Retrieve active page visuals.
               const activePage = store.store.currentPage;
-              updateCustomLayout(report, activePage);
+              updateCustomLayout(report, activePage, true);
           });
 
             //if (DEBUG) console.log("Registering event handlers finished ...",rp);
@@ -559,7 +618,7 @@ export const PBIScreen = observer(props => {
         }
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         savedHandler.current = source
             .pipe(debounceTime(1500))
             .subscribe(updateWindowDimensions);
@@ -571,9 +630,12 @@ export const PBIScreen = observer(props => {
         //     height: H
         // };
 
-        store.setDimension( {width:W, height : H} );
+        store.setDimension({
+            width: W,
+            height: H
+        });
         // var subscription = source.pipe(debounceTime(1500)).subscribe(updateWindowDimensions);
-        // rootElement.current.style.height = H;
+        // rootElement.current.style.height = H;        
         updateToken(reportID, groupID);
         // console.log("HH = ", h, top);
 
@@ -584,12 +646,29 @@ export const PBIScreen = observer(props => {
         };
     });
 
-    return (
-      <div style={{backgroundImage: "linear-gradient(#21224d, #000000)"}}>
-        <div id="PBI" ref={rootElement} style={{width:W, height: H, margin:0 , padding:0}}>
-            <h2> A Todo App yet again! </h2>{" "}
-        </div>
-      </div>
+    return ( <
+        div style = {
+            {
+                backgroundImage: "linear-gradient(#21224d, #000000)"
+            }
+        } >
+        <
+        div id = "PBI"
+        ref = {
+            rootElement
+        }
+        style = {
+            {
+                width: W,
+                height: H,
+                margin: 0,
+                padding: 0
+            }
+        } >
+        <
+        h2 > A Todo App yet again! < /h2>{" "} < /
+        div > <
+        /div>
     );
 });
 
@@ -601,10 +680,13 @@ const TestScreen = props => {
     //     leftContent: <div> No info </div>
     // });
     // const [bgColor, setbgColor] = useState("white");
-    const [{ dashboard, theme }, dispatch] = getState();
+    const [{
+        dashboard,
+        theme
+    }, dispatch] = getState();
 
 
-    return <PBIScreen embedType="report" />;
+    return <PBIScreen embedType = "report" / > ;
 };
 
 TestScreen.propTypes = {};

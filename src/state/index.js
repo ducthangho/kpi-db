@@ -64,7 +64,11 @@ export class PBIStore {
     error: "",
     loaded: false,
     dimension: {},
-    updateCustomLayout: false
+    updateCustomLayout: false,
+    rX : -1,
+    rY : -1,
+    containerW : 0,
+    containerH : 0,
   };
 
 
@@ -72,6 +76,23 @@ export class PBIStore {
   titleKey = observable.box("GENERAL_INFO");
   firstT = observable.box(true);
 
+  updateRatio = (rx,ry) => {
+    this.store.rX = rx;
+    this.store.rY = ry;
+  }
+
+  setContainerSize = (w,h) => {
+    this.store.containerW = w;
+    this.store.containerH = h;
+  }
+
+  get ContainerSize() {
+    return {width : this.store.containerW, height: this.store.containerH}  
+  }
+
+  get ratio() {
+    return {rX : this.store.rX, rY: this.store.rY}
+  }
 
   searchDrawer = {
     visible: false
@@ -85,6 +106,14 @@ export class PBIStore {
 
   get text() {
     return this.locales.obj;
+  }
+
+  get pages() {
+    return this.store.pages;
+  }
+
+  get report() {
+    return this.store.report;
   }
 
   tabs = {
@@ -280,6 +309,8 @@ decorate(PBIStore, {
   tabs: observable,
   firstT: observable,
   setFirstTime: action,
+  updateRatio: action,
+  setContainerSize: action,
   changeLanguage: action,
   setDimension: action,
   saveIntl: action,
