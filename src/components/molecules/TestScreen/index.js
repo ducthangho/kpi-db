@@ -333,8 +333,8 @@ export const PBIScreen = observer(props => {
           if (visuals[i].layout.y+visuals[i].layout.height > maxY)
             maxY = visuals[i].layout.y+visuals[i].layout.height;
         }
-        const rY = 1;//1.776; //maxY / (height);
-        const rX = 1;//1.776; //maxX / (width);
+        let rY = 1;//1.776; //maxY / (height);
+        let rX = 1;//1.776; //maxX / (width);
 
         // console.log(maxX/maxY);
         // const newWidth = height*1.776;
