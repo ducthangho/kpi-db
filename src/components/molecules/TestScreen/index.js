@@ -1,6 +1,7 @@
 import React, {
     useReducer,
     useEffect,
+    useLayoutEffect,
     useState,
     Fragment,
     useContext,
@@ -377,11 +378,11 @@ export const PBIScreen = observer(props => {
                     // Change the selected visuals display mode to visible
                     mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
                 }
-                rX = maxX / (width);
-                rY = maxY / (height);                              
-                console.log(maxX / maxY);
-            } 
-
+              }
+            }
+            rX = maxX / (width);
+            rY = maxY / (height);
+            console.log(maxX / maxY);
             const newWidth = height * 1.776;
 
             $(rootElement.current).css("padding-left", 0);
@@ -439,10 +440,10 @@ export const PBIScreen = observer(props => {
 
                         // Default display mode for visuals is hidden
                         mode: models.VisualContainerDisplayMode.Hidden
+                    }
+                },
+                visualsLayout: visualsLayout
             };
-            },
-            visualsLayout: visualsLayout
-        };
 
         //console.log(visualsLayout);
 
@@ -554,15 +555,6 @@ export const PBIScreen = observer(props => {
                     report.config.groupId
                 );
 
-
-                let bookmarks = report.bookmarksManager.getBookmarks().then(function(bookmarks) {
-                    // console.log(bookmarks);
-                    store.clearBookmarks();
-                    bookmarks.forEach(function(bookmark) {
-                        store.addBookmark(bookmark);
-                    });
-                });
-
                 report.getPages().then(function(pages) {
                     console.log("Set layoutPageName to active page name");
                     // Retrieve active page
@@ -617,20 +609,10 @@ export const PBIScreen = observer(props => {
                         firstPage.isActive = true;
                         store.setCurrentPage(firstPage);
                     }
-
-                    // Ensure the pages array is empty before adding pages
-
-                    store.clearPages();
-
-                    pages.forEach(function(page) {
-                        store.addPage(page);
-                    });
+                    // Retrieve active page visuals.
+                    const activePage = store.store.currentPage;
+                    updateCustomLayout(report, activePage, true);
                 }
-                // Retrieve active page visuals.
-                const activePage = store.store.currentPage;
-                updateCustomLayout(report, activePage, true);
-              }
-
                 if (onPageChange) {
                     onPageChange(event.detail);
                 }
@@ -642,7 +624,7 @@ export const PBIScreen = observer(props => {
               // Retrieve active page visuals.
               const activePage = store.store.currentPage;
               updateCustomLayout(report, activePage, true);
-          });
+            });
 
             //if (DEBUG) console.log("Registering event handlers finished ...",rp);
         } else if (embedType === "dashboard") {
@@ -673,7 +655,7 @@ export const PBIScreen = observer(props => {
             height: H
         });
         // var subscription = source.pipe(debounceTime(1500)).subscribe(updateWindowDimensions);
-        // rootElement.current.style.height = H;        
+        // rootElement.current.style.height = H;
         updateToken(reportID, groupID);
         // console.log("HH = ", h, top);
 
