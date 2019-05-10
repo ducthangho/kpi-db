@@ -62,6 +62,7 @@ export class PBIStore {
     pages: [],
     bookmarks: [],
     visuals: {},
+    pageDefaultSize: null,
     error: "",
     loaded: false,
     dimension: {},

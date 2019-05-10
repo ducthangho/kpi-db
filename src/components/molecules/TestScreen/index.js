@@ -329,14 +329,19 @@ export const PBIScreen = observer(props => {
         const width = rootElement.current.clientWidth;
         const pageHeight = height-4;
         const pageWidth = width-4;
-        for (let i = 0; i < visuals.length; i++) {
-          if (visuals[i].layout.x+visuals[i].layout.width > maxX)
-            maxX = visuals[i].layout.x+visuals[i].layout.width;
-          if (visuals[i].layout.y+visuals[i].layout.height > maxY)
-            maxY = visuals[i].layout.y+visuals[i].layout.height;
-        }
-        let rY = (activePage.defaultSize.height)/(pageHeight);
-        let rX = (activePage.defaultSize.width)/(pageWidth);
+        console.log(pageWidth, pageHeight);
+        // for (let i = 0; i < visuals.length; i++) {
+        //   if (visuals[i].layout.x+visuals[i].layout.width > maxX)
+        //     maxX = visuals[i].layout.x+visuals[i].layout.width;
+        //   if (visuals[i].layout.y+visuals[i].layout.height > maxY)
+        //     maxY = visuals[i].layout.y+visuals[i].layout.height;
+        // }
+        if (!store.store.pageDefaultSize)
+          store.store.pageDefaultSize = activePage.defaultSize
+        console.log(store.store.pageDefaultSize.width, store.store.pageDefaultSize.height);
+        let rY = (store.store.pageDefaultSize.height)/(pageHeight);
+        let rX = (store.store.pageDefaultSize.width)/(pageWidth);
+        console.log(rX, rY);
         if (rX > rY)
           rY = rX
         else rX = rY;
