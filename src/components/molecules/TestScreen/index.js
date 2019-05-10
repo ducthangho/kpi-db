@@ -305,7 +305,7 @@ export const PBIScreen = observer(props => {
 
     const updateCustomLayout = (report, activePage, isResize = false) => {
       if (activePage) activePage.getVisuals().then(function (visuals) {
-        
+
         // var reportVisuals = visuals.map(function (visual) {
         //     console.log(visual);
         //     return {
@@ -328,15 +328,8 @@ export const PBIScreen = observer(props => {
         let maxY = 0, maxX = 0;
         const height = rootElement.current.clientHeight;
         const width = rootElement.current.clientWidth;
-        const pageHeight = 0.95*height;
-        const pageWidth = width*0.97;
+        let pageHeight = 0.95*height, pageWidth = width*0.97;
         console.log(pageWidth, pageHeight);
-        // for (let i = 0; i < visuals.length; i++) {
-        //   if (visuals[i].layout.x+visuals[i].layout.width > maxX)
-        //     maxX = visuals[i].layout.x+visuals[i].layout.width;
-        //   if (visuals[i].layout.y+visuals[i].layout.height > maxY)
-        //     maxY = visuals[i].layout.y+visuals[i].layout.height;
-        // }
         console.log("Active Page ",activePage);
         if (!store.store.pageDefaultSize)
           store.setDefaultSize(activePage.defaultSize);
@@ -344,20 +337,13 @@ export const PBIScreen = observer(props => {
         let rY = (store.defaultSize.height)/(pageHeight);
         let rX = (store.defaultSize.width)/(pageWidth);
         console.log(rX, rY);
-        if (rX > rY)
-          rY = rX
-        else rX = rY;
-
-        // console.log(maxX/maxY);
-        // const newWidth = height*1.776;
-        //
-        //
-        // $(rootElement.current).css("padding-left",(width-newWidth)/2);
-        // $(rootElement.current).css("padding-right",(width-newWidth)/2);
-        // $("iframe", rootElement.current).attr("frameborder", 0);
-
-        console.log(width);
-        console.log(height);
+        if (rX > rY) {
+          rY = rX;
+          pageHeight = pageWidth*store.defaultSize.height/store.defaultSize.width;
+        } else {
+          rX = rY;
+          pageWidth = pageHeight*store.defaultSize.width/store.defaultSize.height;
+        }
 
         for (let i = 0; i < visuals.length; i++) {
           let visual = visuals[i];
@@ -372,9 +358,10 @@ export const PBIScreen = observer(props => {
             (visual.title == undefined && visual.type != "slicer") ||
             ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
           );
-          console.log(checked,visual.type);
-          if (!store.store.visuals[vName]) {
-            store.store.visuals[vName] = {
+          // console.log(checked,visual.type);
+          let vHash = activePage.pageName+"_"+vName;
+          if (!store.store.visuals[vHash]) {
+            store.store.visuals[vHash] = {
               layout: visual.layout
             };
             // store.store.visuals[vName].layout.x = visual.layout.x;
@@ -382,10 +369,10 @@ export const PBIScreen = observer(props => {
             // store.store.visuals[vName].layout.width = visual.layout.width;
             // store.store.visuals[vName].layout.height = visual.layout.height;
           }
-          let vX = store.store.visuals[vName].layout.x/rX,
-              vY = store.store.visuals[vName].layout.y/rY,
-              vWidth = store.store.visuals[vName].layout.width/rX,
-              vHeight = store.store.visuals[vName].layout.height/rY;
+          let vX = store.store.visuals[vHash].layout.x/rX,
+              vY = store.store.visuals[vHash].layout.y/rY,
+              vWidth = store.store.visuals[vHash].layout.width/rX,
+              vHeight = store.store.visuals[vHash].layout.height/rY;
           if (isResize)
             visualsLayout[visual.name] = {
                 x: vX,
@@ -445,7 +432,7 @@ export const PBIScreen = observer(props => {
                       width: pageWidth,
                       height: pageHeight
                   },
-                  displayOption: isResize?models.DisplayOption.ActualSize:models.DisplayOption.FitToPage,
+                  displayOption: isResize?models.DisplayOption.FitToPage:models.DisplayOption.FitToPage,
                   pagesLayout: pagesLayout
               }
           };
@@ -525,11 +512,6 @@ export const PBIScreen = observer(props => {
                             store.addPage(page);
                         });
                     }
-
-                    // if (store.store.updateCustomLayout) {
-                    //   updateCustomLayout(report, store.store.currentPage, true);
-                    //   store.store.updateCustomLayout = false;
-                    // }
                 });
 
                 // Fix report rendered that is called more than 1 time.
@@ -600,11 +582,10 @@ export const PBIScreen = observer(props => {
                     if (activePages.length > 0)
                         store.setCurrentPage(activePages[0]);
                     else {
-const firstPage = pages.filter(function(page) {
-                    return page.isActive;
-                  });
-                  store.setCurrentPage(firstPage[0]);
-
+                      const firstPage = pages.filter(function(page) {
+                        return page.isActive;
+                      });
+                      store.setCurrentPage(firstPage[0]);
                     }
                     // Retrieve active page visuals.
                     const activePage = store.store.currentPage;
