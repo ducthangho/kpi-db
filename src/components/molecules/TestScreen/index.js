@@ -304,31 +304,32 @@ export const PBIScreen = observer(props => {
 
 
     const updateCustomLayout = (report, activePage, isResize = false) => {
-      activePage.getVisuals().then(function (visuals) {
-        console.log(visuals);
-        var reportVisuals = visuals.map(function (visual) {
-            return {
-                name: visual.name,
-                title: visual.title,
-                layout: visual.layout,
-                checked: !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
-                  (visual.title == "Language") ||
-                  (visual.title == "active_BT_Thongtinchung") ||
-                  (visual.title == "Lọc phía tiêu đề") ||
-                  (visual.title == "active_ssqt") ||
-                  (visual.title == "Active_BT VĐXH") ||
-                  ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
-                )
-            };
-        });
+      if (activePage) activePage.getVisuals().then(function (visuals) {
+        
+        // var reportVisuals = visuals.map(function (visual) {
+        //     console.log(visual);
+        //     return {
+        //         name: visual.name,
+        //         title: visual.title,
+        //         layout: visual.layout,
+        //         checked: !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
+        //           (visual.title == "Language") ||
+        //           (visual.title == "active_BT_Thongtinchung") ||
+        //           (visual.title == "Lọc phía tiêu đề") ||
+        //           (visual.title == "active_ssqt") ||
+        //           (visual.title == "Active_BT VĐXH") ||
+        //           ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
+        //         )
+        //     };
+        // });
 
-        let checkedVisuals = reportVisuals.filter(function (visual) { return visual.checked; });
+        // let checkedVisuals = reportVisuals.filter(function (visual) { return visual.checked; });
         let visualsLayout = {};
         let maxY = 0, maxX = 0;
         const height = rootElement.current.clientHeight;
         const width = rootElement.current.clientWidth;
-        const pageHeight = height-4;
-        const pageWidth = width-4;
+        const pageHeight = 0.95*height;
+        const pageWidth = width*0.97;
         console.log(pageWidth, pageHeight);
         // for (let i = 0; i < visuals.length; i++) {
         //   if (visuals[i].layout.x+visuals[i].layout.width > maxX)
@@ -336,11 +337,12 @@ export const PBIScreen = observer(props => {
         //   if (visuals[i].layout.y+visuals[i].layout.height > maxY)
         //     maxY = visuals[i].layout.y+visuals[i].layout.height;
         // }
+        console.log("Active Page ",activePage);
         if (!store.store.pageDefaultSize)
-          store.store.pageDefaultSize = activePage.defaultSize
-        console.log(store.store.pageDefaultSize.width, store.store.pageDefaultSize.height);
-        let rY = (store.store.pageDefaultSize.height)/(pageHeight);
-        let rX = (store.store.pageDefaultSize.width)/(pageWidth);
+          store.setDefaultSize(activePage.defaultSize);
+        console.log(store.defaultSize.width, store.defaultSize.height);
+        let rY = (store.defaultSize.height)/(pageHeight);
+        let rX = (store.defaultSize.width)/(pageWidth);
         console.log(rX, rY);
         if (rX > rY)
           rY = rX
@@ -367,8 +369,10 @@ export const PBIScreen = observer(props => {
             (visual.title == "Lọc phía tiêu đề") ||
             (visual.title == "active_ssqt") ||
             (visual.title == "Active_BT VĐXH") ||
+            (visual.title == undefined && visual.type != "slicer") ||
             ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
           );
+          console.log(checked,visual.type);
           if (!store.store.visuals[vName]) {
             store.store.visuals[vName] = {
               layout: visual.layout

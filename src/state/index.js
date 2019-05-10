@@ -83,6 +83,14 @@ export class PBIStore {
     this.store.rY = ry;
   }
 
+  setDefaultSize = (pageDefaultSize) => {
+    this.store.pageDefaultSize = pageDefaultSize;
+  }
+
+  get defaultSize(){
+    return this.store.pageDefaultSize;
+  }
+
   setContainerSize = (w,h) => {
     this.store.containerW = w;
     this.store.containerH = h;
@@ -313,6 +321,7 @@ decorate(PBIStore, {
   setFirstTime: action,
   updateRatio: action,
   setContainerSize: action,
+  setDefaultSize: action,
   changeLanguage: action,
   setDimension: action,
   saveIntl: action,
