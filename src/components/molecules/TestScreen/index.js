@@ -346,11 +346,11 @@ export const PBIScreen = observer(props => {
         }
 
         for (let i = 0; i < visuals.length; i++) {
-          let visual = visuals[i];
+          let visual = visuals[i];          
           let vName = visual.name;
           let checked = !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
             (visual.layout.x == 0) ||
-            // (visual.title == "Language") ||
+            (visual.title == "Language") ||
             // (visual.title == "active_BT_Thongtinchung") ||
             // (visual.title == "Lọc phía tiêu đề") ||
             // (visual.title == "active_ssqt") ||
@@ -358,10 +358,10 @@ export const PBIScreen = observer(props => {
             // (visual.title == undefined && visual.type != "slicer") ||
             ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
           );
-          // console.log(checked,visual.type);
-          // let vHash = activePage.pageName+"_"+vName;
-          if (!store.store.visuals[vName]) {
-            store.store.visuals[vName] = {
+          // console.log(checked,visual.type,visual);
+          let vHash = activePage.pageName+"_"+vName;
+          if (!store.store.visuals[vHash]) {
+            store.store.visuals[vHash] = {
               layout: visual.layout
             };
             // store.store.visuals[vName].layout.x = visual.layout.x;
@@ -369,35 +369,30 @@ export const PBIScreen = observer(props => {
             // store.store.visuals[vName].layout.width = visual.layout.width;
             // store.store.visuals[vName].layout.height = visual.layout.height;
           }
-          let vX = Math.floor(store.store.visuals[vName].layout.x/rX),
-              vY = Math.floor(store.store.visuals[vName].layout.y/rY),
-              vWidth = Math.floor(store.store.visuals[vName].layout.width/rX),
-              vHeight = Math.floor(store.store.visuals[vName].layout.height/rY);
-          if (checked)
+          let vX = Math.floor(store.store.visuals[vHash].layout.x*rX),
+              vY = Math.floor(store.store.visuals[vHash].layout.y*rY),
+              vWidth = Math.floor(store.store.visuals[vHash].layout.width*rX),
+              vHeight = Math.floor(store.store.visuals[vHash].layout.height*rY);
+          if (checked){
             console.log(vX, vY, vWidth, vHeight);
+            console.log("Check ",visual);  
+          }
+            
 
-          if (isResize)
+
+            let layout = store.store.visuals[vHash].layout;
             visualsLayout[visual.name] = {
-                // x: vX,
-                // y: vY,
-                //width: vWidth,
-                //height: vHeight,
+                x: layout.x-30,
+                y: layout.y-30,
+                z: layout.z,
+                width: layout.width,
+                height: layout.height,
                 displayState: {
                     // Change the selected visuals display mode to visible
                     mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
                 }
             }
-          else
-            visualsLayout[visual.name] = {
-                // x: visual.layout.x,
-                // y: visual.layout.y,
-                // width: visual.layout.width,
-                // height: visual.layout.height,
-                displayState: {
-                    // Change the selected visuals display mode to visible
-                    mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
-                }
-            }
+          
             // Calculating (x,y) position for the next visual
             // x += width + LayoutShowcaseConsts.margin;
             // if (x + width > pageWidth) {
