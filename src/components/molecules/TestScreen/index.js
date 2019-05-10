@@ -350,18 +350,18 @@ export const PBIScreen = observer(props => {
           let vName = visual.name;
           let checked = !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
             (visual.layout.x == 0) ||
-            (visual.title == "Language") ||
-            (visual.title == "active_BT_Thongtinchung") ||
-            (visual.title == "Lọc phía tiêu đề") ||
-            (visual.title == "active_ssqt") ||
-            (visual.title == "Active_BT VĐXH") ||
-            (visual.title == undefined && visual.type != "slicer") ||
+            // (visual.title == "Language") ||
+            // (visual.title == "active_BT_Thongtinchung") ||
+            // (visual.title == "Lọc phía tiêu đề") ||
+            // (visual.title == "active_ssqt") ||
+            // (visual.title == "Active_BT VĐXH") ||
+            // (visual.title == undefined && visual.type != "slicer") ||
             ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
           );
           // console.log(checked,visual.type);
-          let vHash = activePage.pageName+"_"+vName;
-          if (!store.store.visuals[vHash]) {
-            store.store.visuals[vHash] = {
+          // let vHash = activePage.pageName+"_"+vName;
+          if (!store.store.visuals[vName]) {
+            store.store.visuals[vName] = {
               layout: visual.layout
             };
             // store.store.visuals[vName].layout.x = visual.layout.x;
@@ -369,16 +369,19 @@ export const PBIScreen = observer(props => {
             // store.store.visuals[vName].layout.width = visual.layout.width;
             // store.store.visuals[vName].layout.height = visual.layout.height;
           }
-          let vX = store.store.visuals[vHash].layout.x/rX,
-              vY = store.store.visuals[vHash].layout.y/rY,
-              vWidth = store.store.visuals[vHash].layout.width/rX,
-              vHeight = store.store.visuals[vHash].layout.height/rY;
+          let vX = Math.floor(store.store.visuals[vName].layout.x/rX),
+              vY = Math.floor(store.store.visuals[vName].layout.y/rY),
+              vWidth = Math.floor(store.store.visuals[vName].layout.width/rX),
+              vHeight = Math.floor(store.store.visuals[vName].layout.height/rY);
+          if (checked)
+            console.log(vX, vY, vWidth, vHeight);
+
           if (isResize)
             visualsLayout[visual.name] = {
-                x: vX,
-                y: vY,
-                width: vWidth,
-                height: vHeight,
+                // x: vX,
+                // y: vY,
+                //width: vWidth,
+                //height: vHeight,
                 displayState: {
                     // Change the selected visuals display mode to visible
                     mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
@@ -427,11 +430,11 @@ export const PBIScreen = observer(props => {
           settings = {
               layoutType: models.LayoutType.Custom,
               customLayout: {
-                  pageSize: {
-                      type: models.PageSizeType.Custom,
-                      width: pageWidth,
-                      height: pageHeight
-                  },
+                  // pageSize: {
+                  //     type: models.PageSizeType.Custom,
+                  //     width: Math.floor(pageWidth),
+                  //     height: Math.floor(pageHeight)
+                  // },
                   displayOption: isResize?models.DisplayOption.FitToPage:models.DisplayOption.FitToPage,
                   pagesLayout: pagesLayout
               }
