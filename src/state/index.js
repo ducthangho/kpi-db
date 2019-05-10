@@ -61,6 +61,7 @@ export class PBIStore {
     currentPage: null,
     pages: [],
     bookmarks: [],
+    visuals: {},
     error: "",
     loaded: false,
     dimension: {},
@@ -87,7 +88,7 @@ export class PBIStore {
   }
 
   get ContainerSize() {
-    return {width : this.store.containerW, height: this.store.containerH}  
+    return {width : this.store.containerW, height: this.store.containerH}
   }
 
   get ratio() {

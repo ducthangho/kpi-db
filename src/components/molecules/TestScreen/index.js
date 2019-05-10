@@ -327,14 +327,19 @@ export const PBIScreen = observer(props => {
         let maxY = 0, maxX = 0;
         const height = rootElement.current.clientHeight;
         const width = rootElement.current.clientWidth;
+        const pageHeight = height-4;
+        const pageWidth = width-4;
         for (let i = 0; i < visuals.length; i++) {
           if (visuals[i].layout.x+visuals[i].layout.width > maxX)
             maxX = visuals[i].layout.x+visuals[i].layout.width;
           if (visuals[i].layout.y+visuals[i].layout.height > maxY)
             maxY = visuals[i].layout.y+visuals[i].layout.height;
         }
-        let rY = 1;//1.776; //maxY / (height);
-        let rX = 1;//1.776; //maxX / (width);
+        let rY = (activePage.defaultSize.height)/(pageHeight);
+        let rX = (activePage.defaultSize.width)/(pageWidth);
+        if (rX > rY)
+          rY = rX
+        else rX = rY;
 
         // console.log(maxX/maxY);
         // const newWidth = height*1.776;
@@ -344,10 +349,12 @@ export const PBIScreen = observer(props => {
         // $(rootElement.current).css("padding-right",(width-newWidth)/2);
         // $("iframe", rootElement.current).attr("frameborder", 0);
 
-
+        console.log(width);
+        console.log(height);
 
         for (let i = 0; i < visuals.length; i++) {
           let visual = visuals[i];
+          let vName = visual.name;
           let checked = !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
             (visual.layout.x == 0) ||
             (visual.title == "Language") ||
@@ -357,12 +364,25 @@ export const PBIScreen = observer(props => {
             (visual.title == "Active_BT VĐXH") ||
             ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
           );
+          if (!store.store.visuals[vName]) {
+            store.store.visuals[vName] = {
+              layout: visual.layout
+            };
+            // store.store.visuals[vName].layout.x = visual.layout.x;
+            // store.store.visuals[vName].layout.y = visual.layout.y;
+            // store.store.visuals[vName].layout.width = visual.layout.width;
+            // store.store.visuals[vName].layout.height = visual.layout.height;
+          }
+          let vX = store.store.visuals[vName].layout.x/rX,
+              vY = store.store.visuals[vName].layout.y/rY,
+              vWidth = store.store.visuals[vName].layout.width/rX,
+              vHeight = store.store.visuals[vName].layout.height/rY;
           if (isResize)
             visualsLayout[visual.name] = {
-                x: visual.layout.x/rX,
-                y: visual.layout.y/rY,
-                width: visual.layout.width/rX,
-                height: visual.layout.height/rY,
+                x: vX,
+                y: vY,
+                width: vWidth,
+                height: vHeight,
                 displayState: {
                     // Change the selected visuals display mode to visible
                     mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
@@ -378,65 +398,18 @@ export const PBIScreen = observer(props => {
                     // Change the selected visuals display mode to visible
                     mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
                 }
-              }
             }
-            rX = maxX / (width);
-            rY = maxY / (height);
-            console.log(maxX / maxY);
-            const newWidth = height * 1.776;
-
-            $(rootElement.current).css("padding-left", 0);
-            $(rootElement.current).css("padding-right", 0);
-            $("iframe", rootElement.current).attr("frameborder", 0);
-
-            let dim = store.ContainerSize;
-            let tx = (isResize) ? width / dim.width : 1;
-            let ty = (isResize) ? height / dim.height : 1;
-            console.log('rX ',rX,'rY',rY);
-            console.log('tx', tx,'ty',ty);
-
-
-            for (let i = 0; i < checkedVisuals.length; i++) {
-                let visual = checkedVisuals[i];
-                if (isResize)
-                    visualsLayout[checkedVisuals[i].name] = {
-                        x: visual.layout.x /tx / rX,
-                        y: visual.layout.y /ty / rY,
-                        width: visual.layout.width / tx  / rX,
-                        height: visual.layout.height / ty  / rY,
-                        displayState: {
-                            // Change the selected visuals display mode to visible
-                            mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
-                        }
-                    }
-                else
-                    visualsLayout[checkedVisuals[i].name] = {
-                        // x: visual.layout.x,
-                        // y: visual.layout.y,
-                        // width: visual.layout.width,
-                        // height: visual.layout.height,
-                        displayState: {
-                            // Change the selected visuals display mode to visible
-                            mode: visual.checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
-                        }
-                    }
-                    // Calculating (x,y) position for the next visual
-                    // x += width + LayoutShowcaseConsts.margin;
-                    // if (x + width > pageWidth) {
-                    //     x = LayoutShowcaseConsts.margin;
-                    //     y += height + LayoutShowcaseConsts.margin;
-                    // }
-            }
-
+            // Calculating (x,y) position for the next visual
+            // x += width + LayoutShowcaseConsts.margin;
+            // if (x + width > pageWidth) {
             //     x = LayoutShowcaseConsts.margin;
             //     y += height + LayoutShowcaseConsts.margin;
             // }
-            store.updateRatio(rX, rY);
-            store.setContainerSize(width, height);
-            let pagesLayout = {};
-            pagesLayout[activePage.name] = {
-                defaultLayout: {
-                    displayState: {
+        }
+        let pagesLayout = {};
+        pagesLayout[activePage.name] = {
+            defaultLayout: {
+                displayState: {
 
                         // Default display mode for visuals is hidden
                         mode: models.VisualContainerDisplayMode.Hidden
@@ -453,18 +426,29 @@ export const PBIScreen = observer(props => {
         //     FitToWidth,
         //     ActualSize
         // }
-        let settings = {
-            layoutType: models.LayoutType.Custom,
-            customLayout: {
-                // pageSize: {
-                //     type: models.PageSizeType.Custom,
-                //     width: pageWidth,
-                //     height: pageHeight
-                // },
-                displayOption: isResize?models.DisplayOption.FitToPage:models.DisplayOption.FitToPage,
-                pagesLayout: pagesLayout
-            }
-        };
+        let settings = {};
+        if (isResize)
+          settings = {
+              layoutType: models.LayoutType.Custom,
+              customLayout: {
+                  pageSize: {
+                      type: models.PageSizeType.Custom,
+                      width: pageWidth,
+                      height: pageHeight
+                  },
+                  displayOption: isResize?models.DisplayOption.ActualSize:models.DisplayOption.FitToPage,
+                  pagesLayout: pagesLayout
+              }
+          };
+        else {
+          settings = {
+              layoutType: models.LayoutType.Custom,
+              customLayout: {
+                  displayOption: isResize?models.DisplayOption.FitToWidth:models.DisplayOption.FitToPage,
+                  pagesLayout: pagesLayout
+              }
+          };
+        }
 
         // If pageWidth or pageHeight is changed, change display option to actual size to add scroll bar
         // if (pageWidth !== $('#embedContainer').width() || pageHeight !== $('#embedContainer').height()) {
@@ -483,6 +467,7 @@ export const PBIScreen = observer(props => {
           });
           store.store.updateCustomLayout = true;
         } else {
+          console.log(settings);
           report.updateSettings(settings).then(function(){
             console.log("updateSettings-Resize");
             // powerbi.get(rootElement.current).reload();
@@ -547,6 +532,7 @@ export const PBIScreen = observer(props => {
             report.on("loaded", () => {
                 // var expiration = report.config.expiration;
                 // console.log(expiration+"   ;   "+report.config.id+"    ;   "+report.config.groupId);
+                console.log("Report-loaded");
                 var ellapse = report.config.ellapse;
                 setTokenExpirationListener(
                     ellapse,
@@ -599,15 +585,17 @@ export const PBIScreen = observer(props => {
                 const newPageName = event.detail.newPage.name;
                 const pages = store.getPages();
                 if (pages.length > 0) {
-                    const firstPage = pages[0];
                     let activePages = pages.filter(function(page) {
                         return page.name == newPageName;
                     }); //jQuery.grep(pages, function (page) { return page.isActive })[0];
                     if (activePages.length > 0)
                         store.setCurrentPage(activePages[0]);
                     else {
-                        firstPage.isActive = true;
-                        store.setCurrentPage(firstPage);
+const firstPage = pages.filter(function(page) {
+                    return page.isActive;
+                  });
+                  store.setCurrentPage(firstPage[0]);
+
                     }
                     // Retrieve active page visuals.
                     const activePage = store.store.currentPage;
