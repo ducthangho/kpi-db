@@ -382,7 +382,7 @@ export const PBIScreen = observer(props => {
 
             let layout = store.store.visuals[vHash].layout;
             visualsLayout[visual.name] = {
-                x: layout.x-30,
+                x: layout.x,
                 y: layout.y-30,
                 z: layout.z,
                 width: layout.width,
