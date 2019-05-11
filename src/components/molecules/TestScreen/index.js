@@ -359,7 +359,8 @@ export const PBIScreen = observer(props => {
             ((visual.title !== undefined) && (visual.title !== null) && (visual.title.substr(0, 3).toLowerCase() == "bt_"))
           );
           // console.log(checked,visual.type,visual);
-          let vHash = activePage.pageName+"_"+vName;
+          let vHash = activePage.displayName+"_"+vName;
+
           if (!store.store.visuals[vHash]) {
             store.store.visuals[vHash] = {
               layout: visual.layout
@@ -369,16 +370,16 @@ export const PBIScreen = observer(props => {
             // store.store.visuals[vName].layout.width = visual.layout.width;
             // store.store.visuals[vName].layout.height = visual.layout.height;
           }
-          let vX = Math.floor(store.store.visuals[vHash].layout.x*rX),
-              vY = Math.floor(store.store.visuals[vHash].layout.y*rY),
-              vWidth = Math.floor(store.store.visuals[vHash].layout.width*rX),
-              vHeight = Math.floor(store.store.visuals[vHash].layout.height*rY);
-          if (checked){
-            console.log(vX, vY, vWidth, vHeight);
-            console.log("Check ",visual);  
-          }
+          // let vX = Math.floor(store.store.visuals[vHash].layout.x*rX),
+          //     vY = Math.floor(store.store.visuals[vHash].layout.y*rY),
+          //     vWidth = Math.floor(store.store.visuals[vHash].layout.width*rX),
+          //     vHeight = Math.floor(store.store.visuals[vHash].layout.height*rY);
+          // if (checked){
+          //   console.log(vX, vY, vWidth, vHeight);
+          //   console.log("Check ",visual);  
+          // }
             
-
+          console.log(vHash);
 
             let layout = store.store.visuals[vHash].layout;
             visualsLayout[visual.name] = {
@@ -430,7 +431,7 @@ export const PBIScreen = observer(props => {
                   //     width: Math.floor(pageWidth),
                   //     height: Math.floor(pageHeight)
                   // },
-                  displayOption: isResize?models.DisplayOption.FitToPage:models.DisplayOption.FitToPage,
+                  displayOption: models.DisplayOption.FitToPage,
                   pagesLayout: pagesLayout
               }
           };
