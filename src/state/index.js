@@ -66,7 +66,7 @@ export class PBIStore {
     error: "",
     loaded: false,
     dimension: {},
-    viewMode: null,
+    viewMode: observable.box(models.ViewMode.View),
     updateCustomLayout: false,
     rX : -1,
     rY : -1,
@@ -80,15 +80,15 @@ export class PBIStore {
   firstT = observable.box(true);
 
   setViewMode = (mode) => {
-    this.store.viewMode = mode;
+    this.store.viewMode.set(mode);
   }
 
   toggleViewMode = () => {
-    this.store.viewMode = (this.store.viewMode==models.ViewMode.View) ? models.ViewMode.Edit : models.ViewMode.View;
+    this.store.viewMode.set((this.store.viewMode==models.ViewMode.View) ? models.ViewMode.Edit : models.ViewMode.View);
   }
 
   get ViewMode(){
-    return this.store.viewMode;
+    return this.store.viewMode.get();
   }
 
   updateRatio = (rx,ry) => {

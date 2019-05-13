@@ -655,8 +655,9 @@ const MainSidebar = observer ( ( {lang} ) => {
         <Menu.Item className="modified-item"
           selectable
           key="14"
-          onClick={() => {
-            navigateTo(TaoBaoCao);
+          style= {{ backgroundColor: (store.ViewMode==models.ViewMode.View) ? '#21224d' : '#deddb2' }}
+          onClick={(event) => {            
+            navigateTo(TaoBaoCao);            
           }}
         >
           <EditIcon style={{fontSize:FONTSIZE,  marginRight: '10px', marginTop: '-20px' , padding:'0px'}}/>
