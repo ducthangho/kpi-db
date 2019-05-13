@@ -79,6 +79,7 @@ export const PBIScreen = observer(props => {
     const rootElement = React.useRef();
     const savedHandler = useRef();
     const dimension = useRef();
+    store.setViewMode(models.ViewMode.View);
 
     // useEffect(() => {
     //   savedHandler.current = source.pipe(debounceTime(1500)).subscribe(updateWindowDimensions);
@@ -116,6 +117,8 @@ export const PBIScreen = observer(props => {
             expiration: config.expiration,
             ellapse: config.ellapse,
             pageView: PAGEVIEW,
+            permissions: models.Permissions.All,
+            viewMode: store.ViewMode,
             settings: {
                 filterPaneEnabled: false,
                 navContentPaneEnabled: false,
@@ -224,6 +227,7 @@ export const PBIScreen = observer(props => {
                         expiration: json.Expiry,
                         ellapse: json.Ellapse,
                         pageView: PAGEVIEW,
+                        viewMode: store.ViewMode,
                         settings: {
                             filterPaneEnabled: false,
                             navContentPaneEnabled: false,
@@ -330,7 +334,7 @@ export const PBIScreen = observer(props => {
         const width = rootElement.current.clientWidth;
         let pageHeight = 0.95*height, pageWidth = width*0.97;
         console.log(pageWidth, pageHeight);
-        console.log("Active Page ",activePage);
+        // console.log("Active Page ",activePage);
         if (!store.store.pageDefaultSize)
           store.setDefaultSize(activePage.defaultSize);
         console.log(store.defaultSize.width, store.defaultSize.height);
@@ -349,7 +353,7 @@ export const PBIScreen = observer(props => {
           let visual = visuals[i];          
           let vName = visual.name;
           let checked = !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
-            (visual.layout.x == 0) ||
+            (visual.layout.x == 0 && visual.title!="Search") ||
             (visual.title == "Language") ||
             // (visual.title == "active_BT_Thongtinchung") ||
             // (visual.title == "Lọc phía tiêu đề") ||
@@ -379,7 +383,7 @@ export const PBIScreen = observer(props => {
           //   console.log("Check ",visual);  
           // }
             
-          console.log(vHash);
+          // console.log(vHash);
 
             let layout = store.store.visuals[vHash].layout;
             visualsLayout[visual.name] = {

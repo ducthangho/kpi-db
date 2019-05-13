@@ -14,6 +14,10 @@ import {
 } from 'mobx-react-lite';
 import {GeneralInfoIcon,TriggerIcon,RiseIcon,BalanceIcon,FinanceIcon,InstitutionIcon,BusinessEnvIcon,LabourIcon,SocialIcon,EnvIcon,InfraIcon,InternationalIcon,SearchIcon,InfoIcon,EditIcon} from "components/icons";
 import QNAPane from "components/pages/QNAPane";
+import pbi, {
+    models
+} from "powerbi-client";
+
 
 const { Content } = Layout;
 
@@ -180,7 +184,25 @@ const MainSidebar = observer ( ( {lang} ) => {
         let page = pages[pageIndx];
         console.log(page.name + " - " + page.displayName);
         // console.log('Goto : ',pages);
-        report.setPage(page.name);
+        if (pageIndx!=TaoBaoCao) 
+          report.setPage(page.name);
+        else {
+          store.toggleViewMode();
+          switch (store.ViewMode){
+            case models.ViewMode.View: 
+              report.switchMode("view");
+              console.log("switchMode to view");
+              break;  
+            case models.ViewMode.Edit: 
+              report.switchMode("edit");
+              console.log("switchMode to edit");
+              break;
+            default:
+              report.switchMode("view");
+              break; 
+          }
+          
+        }
       }
     } else {
       let bookmarks = store.store.bookmarks;

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { decorate, observable, computed, action } from "mobx";
 import PropTypes from "prop-types";
-import { service, Report, Page, IEmbedConfiguration } from "powerbi-client";
+import { service, Report, Page, IEmbedConfiguration,models } from "powerbi-client";
 import { useObservable } from "mobx-react-lite";
 import intl from "react-intl-universal";
 import IntlPolyfill from "intl";
@@ -66,6 +66,7 @@ export class PBIStore {
     error: "",
     loaded: false,
     dimension: {},
+    viewMode: null,
     updateCustomLayout: false,
     rX : -1,
     rY : -1,
@@ -77,6 +78,18 @@ export class PBIStore {
   title = observable.box("");
   titleKey = observable.box("GENERAL_INFO");
   firstT = observable.box(true);
+
+  setViewMode = (mode) => {
+    this.store.viewMode = mode;
+  }
+
+  toggleViewMode = () => {
+    this.store.viewMode = (this.store.viewMode==models.ViewMode.View) ? models.ViewMode.Edit : models.ViewMode.View;
+  }
+
+  get ViewMode(){
+    return this.store.viewMode;
+  }
 
   updateRatio = (rx,ry) => {
     this.store.rX = rx;
@@ -318,6 +331,8 @@ decorate(PBIStore, {
   locales: observable,
   tabs: observable,
   firstT: observable,
+  toggleViewMode: action,
+  setViewMode: action,
   setFirstTime: action,
   updateRatio: action,
   setContainerSize: action,
