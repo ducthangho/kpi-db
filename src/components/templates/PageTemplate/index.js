@@ -134,47 +134,58 @@ const PageTemplate = observer( props => {
   // </Drawer>
 
 
-  if (firstTime) {
-    console.log('Add Tab ',firstTime)
-    let tab = tabPanes[0];
-    let stabPanes = store.tabPanes;
+  // if (firstTime) {
+  //   console.log('Add Tab ',firstTime)
+  //   let tab = tabPanes[0];
+  //   let stabPanes = store.tabPanes;
+  //
+  //   let found = false;
+  //   for (let i=0;i<stabPanes.length;++i){
+  //     let tb = stabPanes[i];
+  //     if (tb.key==tab.key) {
+  //       found=true;
+  //       break;
+  //     }
+  //   }
+  //
+  //   if (!found){
+  //     store.addTab(tab);
+  //     store.setActiveKey(tab.key);
+  //     console.log('TAB PANE ',stabPanes);
+  //   }
+  //   setFirstTime(false);
+  // }
 
-    let found = false;
-    for (let i=0;i<stabPanes.length;++i){
-      let tb = stabPanes[i];
-      if (tb.key==tab.key) {
-        found=true;
-        break;
-      }
-    }
-
-    if (!found){
-      store.addTab(tab);
-      store.setActiveKey(tab.key);
-      console.log('TAB PANE ',stabPanes);
-    }
-    setFirstTime(false);
-  }
+  // <StyledTabs
+  //   hideAdd
+  //   onChange={onChange}
+  //   type="line"
+  //   size="default"
+  //   tabPosition="bottom"
+  //   tabBarGutter={0}
+  //   activeKey={store.activeTabKey}
+  //   tabBarStyle={{height: "5vh",margin:0,padding:0, color:"white",backgroundColor: "#21224d"}}
+  // >
+  //
+  //
+  // {store.tabPanes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
+  // </StyledTabs>
 
   return (
     <Layout>
       <MainSidebar lang={store.language} />
       <Layout style={{ background: "#eee", padding: 0 }}>
         <MainHeader />
-        <StyledTabs
-          hideAdd
-          onChange={onChange}
-          type="line"
-          size="default"
-          tabPosition="bottom"
-          tabBarGutter={0}
-          activeKey={store.activeTabKey}
-          tabBarStyle={{height: "5vh",margin:0,padding:0, color:"white",backgroundColor: "#21224d"}}
-        >
-
-
-        {store.tabPanes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
-        </StyledTabs>
+        <Layout>
+          <Content style = {
+                  {
+                      backgroundImage: "linear-gradient(#21224d, #000000)",
+                      zIndex: 1
+                  }
+              }>
+            {props.children}
+          </Content>
+        </Layout>
       </Layout>
     </Layout>
   );

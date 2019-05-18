@@ -49,7 +49,7 @@ const PBIStore = getStore();
 const PAGEVIEW = "fitToWidth";
 const DEBUG = true;
 const W = "100%";
-const H = "90vh";
+const H = "94vh";
 const powerbi = new pbi.service.Service(
     pbi.factories.hpmFactory,
     pbi.factories.wpmpFactory,
@@ -170,6 +170,13 @@ export const PBIScreen = observer(props => {
         let qna = powerbi.embed(panel, configQNA);
         console.log("store.saveEmbed(powerbi,config,report);");
         store.saveEmbedQNA(powerbi, configQNA, qna);
+
+        console.log(qna.powerBiEmbed);
+
+        qna.getPages().then(function(pages) {
+          console.log(pages);
+        });
+
         // qna.off removes a given event listener if it exists.
         qna.off("visualRendered");
 
@@ -350,8 +357,10 @@ export const PBIScreen = observer(props => {
         }
 
         for (let i = 0; i < visuals.length; i++) {
-          let visual = visuals[i];          
+          let visual = visuals[i];
           let vName = visual.name;
+          if (visual.title == "Search")
+            console.log(visual);
           let checked = !((visual.layout.displayState.mode == models.VisualContainerDisplayMode.Hidden) ||
             (visual.layout.x == 0 && visual.title!="Search") ||
             (visual.title == "Language") ||
@@ -380,15 +389,15 @@ export const PBIScreen = observer(props => {
           //     vHeight = Math.floor(store.store.visuals[vHash].layout.height*rY);
           // if (checked){
           //   console.log(vX, vY, vWidth, vHeight);
-          //   console.log("Check ",visual);  
+          //   console.log("Check ",visual);
           // }
-            
+
           // console.log(vHash);
 
             let layout = store.store.visuals[vHash].layout;
             visualsLayout[visual.name] = {
                 x: layout.x,
-                y: layout.y-30,
+                y: layout.y,
                 z: layout.z,
                 width: layout.width,
                 height: layout.height,
@@ -397,7 +406,7 @@ export const PBIScreen = observer(props => {
                     mode: checked == true ? models.VisualContainerDisplayMode.Visible : models.VisualContainerDisplayMode.Hidden
                 }
             }
-          
+
             // Calculating (x,y) position for the next visual
             // x += width + LayoutShowcaseConsts.margin;
             // if (x + width > pageWidth) {
@@ -491,6 +500,9 @@ export const PBIScreen = observer(props => {
 
             report.off("rendered");
             report.on("rendered", () => {
+                    let tttt = $("#pvExplorationHost > div > div > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToPage > div.visualContainerHost > div > visual-container:nth-child(17) > transform > div > div.vcBody.themableBackgroundColor.themableBorderColorSolid > visual > div > div");
+              if (tttt)
+                tttt.trigger("click");
                 //window.alert("rendered EVENT");
                 console.log("rendered");
 
@@ -513,6 +525,11 @@ export const PBIScreen = observer(props => {
 
                         pages.forEach(function(page) {
                             store.addPage(page);
+                        });
+
+                        store.store.currentPage.getVisuals().then(function (visuals) {
+                          let search = visuals.filter(visual => visual.title == "Search");
+                          console.log(search);
                         });
                     }
                 });
@@ -646,13 +663,13 @@ export const PBIScreen = observer(props => {
             savedHandler.current.unsubscribe();
         };
     });
-
-    return ( <
-        div style = {
-            {
-                backgroundImage: "linear-gradient(#21224d, #000000)"
-            }
-        } >
+    // <
+    //     div style = {
+    //         {
+    //             backgroundImage: "linear-gradient(#21224d, #000000)"
+    //         }
+    //     } >
+    return (
         <
         div id = "PBI"
         ref = {
@@ -668,8 +685,7 @@ export const PBIScreen = observer(props => {
         } >
         <
         h2 > A Todo App yet again! < /h2>{" "} < /
-        div > <
-        /div>
+        div >
     );
 });
 

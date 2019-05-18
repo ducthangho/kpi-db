@@ -11,11 +11,13 @@ const PBIStore = getStore();
 
 function MainPage() {
   const store = useContext(PBIStore);
-
+  //   <PageTemplate key={store.activeTabKey}>
+  //   <TestScreen/>
+  // </PageTemplate>
   return (
-    <PageTemplate key={store.activeTabKey}>
-    <TestScreen/>
-  </PageTemplate>
+  <PageTemplate>
+  <TestScreen/>
+</PageTemplate>
   )
 }
 
